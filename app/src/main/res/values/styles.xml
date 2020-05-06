@@ -1,0 +1,53 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">?android:attr/colorBackground</item>
+
+        <item name="materialButtonStyle">@style/MaterialButtonStyle</item>
+        <item name="chipStyle">@style/ChipStyle</item>
+    </style>
+
+    <style name="Display">
+
+        <item name="android:textSize">@dimen/display_text</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Header">
+
+        <item name="android:textSize">@dimen/header_text</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+
+        <item name="backgroundTint">@color/material_button_background</item>
+        <item name="android:textColor">@color/material_button_text</item>
+        <item name="iconTint">@color/material_button_text</item>
+    </style>
+
+    <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
+
+        <item name="chipStrokeWidth">2dp</item>
+        <item name="chipStrokeColor">@color/light_grey</item>
+        <item name="chipBackgroundColor">@android:color/transparent</item>
+        <item name="chipStartPadding">8dp</item>
+        <item name="chipEndPadding">8dp</item>
+    </style>
+
+    <style name="SecondaryImageButton">
+
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="touchPadding">12dp</item>
+        <item name="android:tint">@color/secondary_button_tint</item>
+    </style>
+
+</resources>

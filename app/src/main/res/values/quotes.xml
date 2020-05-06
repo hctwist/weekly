@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="quotes">
+
+        <item>You must do the things you think you cannot do.</item>
+        <item>It is never too late to be what you might have been.</item>
+        <item>Be the change that you wish to see in the world.</item>
+        <item>No matter what people tell you, words and ideas can change the world.</item>
+        <item>Each person must live their life as a model for others.</item>
+        <item>Impossible is for the unwilling.</item>
+        <item>Imagination is more important than knowledge.</item>
+        <item>It is our choices that show what we truly are, far more than our abilities.</item>
+        <item>The most difficult thing is the decision to act, the rest is merely tenacity.</item>
+    </string-array>
+</resources>

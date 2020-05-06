@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/add_goal_counted_target_title"
+        style="@style/Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:layout_marginTop="@dimen/large_content_margin"
+        android:layout_marginEnd="@dimen/large_content_margin"
+        android:text="@string/add_goal_target_hint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.twisthenry8gmail.dragline.DraglineView
+        android:id="@+id/add_goal_target"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_margin"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="@dimen/large_content_margin"
+        android:paddingEnd="@dimen/large_content_margin"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="56sp"
+        app:centralMargin="@dimen/double_margin"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_counted_target_title"
+        app:thumbColor="@color/color_accent"
+        app:thumbRadius="10dp"
+        app:tickColor="?android:attr/textColorPrimary"
+        app:tickHeight="12dp"
+        app:tickWidth="1dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_goal_target_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_margin"
+        android:layout_marginEnd="@dimen/margin"
+        android:text="@string/cont"
+        app:icon="@drawable/round_arrow_forward_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_target" />
+
+    <ImageButton
+        android:id="@+id/add_goal_target_back"
+        style="@style/SecondaryImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:src="@drawable/round_arrow_back_24"
+        app:layout_constraintBottom_toBottomOf="@id/add_goal_target_continue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/add_goal_target_continue" />
+
+    <!-- TODO -->
+    <TextView
+        android:id="@+id/add_goal_counted_frequency_title"
+        style="@style/Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:layout_marginEnd="@dimen/large_content_margin"
+        android:text="@string/add_goal_reset_hint"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_target" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/add_goal_counted_frequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_counted_frequency_title" />
+
+    <TextView
+        android:id="@+id/add_goal_counted_increase_title"
+        style="@style/Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:layout_marginEnd="@dimen/large_content_margin"
+        android:text="@string/add_goal_increase_hint"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_counted_frequency" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

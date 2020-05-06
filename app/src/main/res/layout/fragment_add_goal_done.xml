@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/add_goal_done_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
+            style="@style/Display"
+            android:layout_marginEnd="@dimen/margin"
+            android:text="@string/add_goal_done_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableEnd="@drawable/round_expand_more_24"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:text="@string/add_goal_done_more"
+            app:layout_constraintBottom_toBottomOf="@id/add_goal_done_confirm"
+            app:layout_constraintStart_toStartOf="@id/add_goal_done_text"
+            app:layout_constraintTop_toTopOf="@id/add_goal_done_confirm" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_done_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/double_margin"
+            android:text="@string/add_goal_done_add_goal"
+            app:layout_constraintEnd_toEndOf="@id/add_goal_done_text"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_done_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

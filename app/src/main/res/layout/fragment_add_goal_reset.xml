@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/add_goal_frequency_title"
+        style="@style/Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:layout_marginTop="@dimen/large_content_margin"
+        android:text="@string/add_goal_reset_hint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.twisthenry8gmail.weeklyphoenix.TypingAnimatedTextView
+        android:id="@+id/add_goal_frequency_display"
+        style="@style/Display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:layout_marginTop="@dimen/double_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_title" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/add_goal_frequency_chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:layout_marginTop="@dimen/double_margin"
+        android:layout_marginEnd="@dimen/margin"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_display"
+        app:singleSelection="true" />
+
+    <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+        android:id="@+id/add_goal_frequency_back"
+        style="@style/SecondaryImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_content_margin"
+        android:src="@drawable/round_arrow_back_24"
+        app:layout_constraintBottom_toBottomOf="@id/add_goal_frequency_continue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/add_goal_frequency_continue" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_goal_frequency_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_margin"
+        android:layout_marginEnd="@dimen/margin"
+        android:text="@string/cont"
+        app:icon="@drawable/round_arrow_forward_24"
+        app:iconGravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_chips" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

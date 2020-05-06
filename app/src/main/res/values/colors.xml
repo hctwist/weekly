@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_primary">#749BFF</color>
+    <color name="color_primary_dark">#5D7CDC</color>
+    <color name="color_primary_light">#E5ECFF</color>
+
+    <color name="color_accent">#7AE7C7</color>
+
+    <color name="secondary_button_tint">#D2D5DF</color>
+    <color name="light_grey">#D0D2D6</color>
+
+    <color name="off_white">#F1F1F1</color>
+
+    <color name="goal_card">#FAFAFA</color>
+    <color name="goal_card_progress_backing">#EDEDED</color>
+
+    <array name="goal_colors">
+
+        <item>#E7E247</item>
+        <item>#F97068</item>
+        <item>#65B891</item>
+        <item>#C1292E</item>
+        <item>#8963BA</item>
+        <item>#D7816A</item>
+        <item>#ACEDFF</item>
+        <item>#FFC1CF</item>
+    </array>
+</resources>

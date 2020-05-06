@@ -1,0 +1,4 @@
+rootProject.name='Weekly Phoenix'
+include ':app', ':dragline', ':buttons'
+project(':dragline').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/dragline')
+project(':buttons').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/buttons')
