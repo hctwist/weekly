@@ -1,4 +1,5 @@
 rootProject.name='Weekly Phoenix'
-include ':app', ':dragline', ':buttons'
+include ':app', ':dragline', ':buttons', ':recyclerextensions'
 project(':dragline').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/dragline')
 project(':buttons').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/buttons')
+project(':recyclerextensions').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/recyclerextensions')

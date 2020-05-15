@@ -1,14 +1,16 @@
 <resources>
-    <string name="app_name">Weekly Phoenix</string>
+    <string name="app_name">Weekly.</string>
 
     <string name="cont">Continue</string>
 
     <string name="time_pattern">%1$s:%2$s</string>
 
-    <!-- Goals -->
-    <string name="goal_single">Single goal</string>
+    <!-- Goal types -->
     <string name="goal_counted">Counted goal</string>
     <string name="goal_timed">Timed goal</string>
+
+    <!-- Goals -->
+    <string name="goal_no_end">-</string>
 
     <!-- Frequencies -->
     <string name="goal_frequency_daily">Daily</string>
@@ -16,10 +18,17 @@
     <string name="goal_frequency_fortnight">Fortnightly</string>
     <string name="goal_frequency_monthly">Monthly</string>
     <string name="goal_frequency_yearly">Yearly</string>
-    <string name="goal_frequency_custom">Custom</string>
+
+    <!-- Goal subtitle patterns -->
+    <string name="goal_subtitle_pattern_left">Only %1$s to go.</string>
+    <string name="goal_subtitle_pattern_over_half">Over half way there.</string>
+    <string name="goal_subtitle_pattern_start">You have a target of %1$s.</string>
+
+    <!-- Goal cards -->
+    <string name="goal_complete">This goal is complete.</string>
 
     <!-- Add goal -->
-    <string name="add_goal_title_text">Create a new %1$s goal called</string>
+    <string name="add_goal_title">Add goal</string>
     <string name="add_goal_title_hint">What is your goal?</string>
     <string name="add_goal_target_hint">What is your target?</string>
     <string name="add_goal_reset_hint">How often should it repeat?</string>
@@ -27,4 +36,8 @@
     <string name="add_goal_done_text">Are you ready to add your goal?</string>
     <string name="add_goal_done_more">More options</string>
     <string name="add_goal_done_add_goal">Add your goal</string>
+
+    <!-- Goal success -->
+    <string name="goal_success">Well done on completing your goal.</string>
+
 </resources>

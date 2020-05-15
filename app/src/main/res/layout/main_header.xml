@@ -6,7 +6,9 @@
 
     <TextView
         android:id="@+id/main_header_heading"
-        style="@style/Display"
+        android:fontFamily="sans-serif"
+        android:textSize="28sp"
+        android:textColor="?android:attr/textColorPrimary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -18,7 +20,7 @@
 
     <TextView
         android:id="@+id/main_header_subheading"
-        style="@style/Header"
+        android:textSize="14sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/large_content_margin"

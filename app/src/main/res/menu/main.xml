@@ -5,6 +5,6 @@
     <item
         android:id="@+id/main_add_goal"
         android:icon="@drawable/round_add_24"
-        android:title="Add goal"
+        android:title="@string/add_goal_title"
         app:showAsAction="always" />
 </menu>

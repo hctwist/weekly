@@ -5,23 +5,111 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_goal_done_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/add_goal_done_text"
+            style="@style/Display"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
             android:layout_marginTop="@dimen/large_content_margin"
-            style="@style/Display"
             android:layout_marginEnd="@dimen/margin"
             android:text="@string/add_goal_done_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_done_start"
+            style="@style/OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_content_margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:minWidth="@dimen/add_goal_more_button_min"
+            android:text="02/05/2020"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_done_text" />
+
         <TextView
+            android:id="@+id/add_goal_done_start_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:text="Start date"
+            app:layout_constraintBottom_toBottomOf="@id/add_goal_done_start"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/add_goal_done_start" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_done_end"
+            style="@style/OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/half_margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:minWidth="@dimen/add_goal_more_button_min"
+            android:text="09/05/2020"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_done_start" />
+
+        <TextView
+            android:id="@+id/add_goal_done_end_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:text="End date"
+            app:layout_constraintBottom_toBottomOf="@id/add_goal_done_end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/add_goal_done_end" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_done_increase"
+            style="@style/OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/half_margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:minWidth="@dimen/add_goal_more_button_min"
+            android:text="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_done_end" />
+
+        <TextView
+            android:id="@+id/add_goal_done_increase_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:text="Periodic increase"
+            app:layout_constraintBottom_toBottomOf="@id/add_goal_done_increase"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/add_goal_done_increase" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_done_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/half_margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:minWidth="@dimen/add_goal_more_button_min"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_done_increase" />
+
+        <TextView
+            android:id="@+id/add_goal_done_color_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:text="Color"
+            app:layout_constraintBottom_toBottomOf="@id/add_goal_done_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/add_goal_done_color" />
+
+        <TextView
+            android:id="@+id/add_goal_done_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
@@ -39,8 +127,25 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/double_margin"
             android:text="@string/add_goal_done_add_goal"
+            app:icon="@drawable/round_add_24"
             app:layout_constraintEnd_toEndOf="@id/add_goal_done_text"
-            app:layout_constraintTop_toBottomOf="@id/add_goal_done_text" />
+            app:layout_constraintTop_toBottomOf="@id/add_goal_done_color" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/add_goal_done_more_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="
+                add_goal_done_start,
+                add_goal_done_start_label,
+                add_goal_done_end,
+                add_goal_done_end_label,
+                add_goal_done_increase,
+                add_goal_done_increase_label,
+                add_goal_done_color,
+                add_goal_done_color_label
+            " />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

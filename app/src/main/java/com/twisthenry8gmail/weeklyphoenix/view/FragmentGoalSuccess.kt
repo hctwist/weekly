@@ -1,0 +1,53 @@
+package com.twisthenry8gmail.weeklyphoenix.view
+
+import android.os.Bundle
+import android.os.Handler
+import android.view.View
+import android.view.animation.OvershootInterpolator
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
+import com.twisthenry8gmail.weeklyphoenix.R
+import kotlinx.android.synthetic.main.fragment_goal_success.*
+
+class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
+
+    private val goalViewModel by activityViewModels<CurrentGoalViewModel>()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val goal = goalViewModel.requireCurrentGoal()
+
+        goal_success_name.text = goal.name
+        goal_success_progress.maxProgress = 1
+        goal_success_progress.setColor(goal.color)
+
+        goal_success_done.setOnClickListener {
+
+            findNavController().popBackStack()
+        }
+
+        Handler().postDelayed(
+            {
+                goal_success_progress.setProgress(1, true) {
+
+                    animateDone()
+                }
+
+            }, 100
+        )
+    }
+
+    private fun animateDone() {
+
+        goal_success_done.apply {
+
+            visibility = View.VISIBLE
+            scaleX = 0F
+            scaleY = 0F
+            animate().scaleX(1F).scaleY(1F)
+                .setInterpolator(OvershootInterpolator(6F)).setDuration(400).start()
+        }
+    }
+}

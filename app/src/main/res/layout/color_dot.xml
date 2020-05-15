@@ -3,3 +3,4 @@
     android:layout_width="@dimen/add_goal_color_dot_size"
     android:layout_height="@dimen/add_goal_color_dot_size"
     android:background="@drawable/color_dot" />
+<!-- TODO Ripple -->

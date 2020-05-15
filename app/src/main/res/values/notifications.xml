@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="channel_goal_timer">Goal timer</string>
+    <string name="channel_goal_timer_desc">Test</string> <!-- TODO -->
+    <string name="notification_goal_timer_title">Goal timer ongoing</string>
+ </resources>

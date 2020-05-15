@@ -6,6 +6,7 @@
 
     <EditText
         android:id="@+id/add_goal_title"
+        style="@style/Display"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/large_content_margin"
@@ -13,8 +14,8 @@
         android:layout_marginEnd="@dimen/margin"
         android:background="@null"
         android:hint="@string/add_goal_title_hint"
-        style="@style/Display"
-        android:inputType="textCapWords|textMultiLine"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences|textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="5000"
+    android:viewportHeight="5000">
+  <group android:translateX="1500"
+      android:translateY="1500">
+      <path
+          android:fillColor="#749bff"
+          android:name="Rounded Rectangle 1"
+          android:pathData="m599.4 61.1c118 43 178.9 173.5 135.9 291.6l-294.1 808.2c-43 118.1 -173.5 178.9 -291.5 136c-118 -43 -178.9 -173.5 -135.9 -291.6l294.1 -808.2c43 -118.1 173.5 -178.9 291.5 -136z" />
+      <path
+          android:fillColor="#749bff"
+          android:name="Rounded Rectangle 1 copy"
+          android:pathData="m1224.3 61.1c118 43 178.9 173.5 135.9 291.6l-294.1 808.2c-43 118.1 -173.5 178.9 -291.5 136c-118 -43 -178.9 -173.5 -135.9 -291.6l294.1 -808.2c43 -118.1 173.5 -178.9 291.5 -136z" />
+      <path
+          android:fillColor="#7ae7c7"
+          android:name="Rounded Rectangle 2"
+          android:pathData="m1850.3 60.8c118 43 178.9 173.5 135.9 291.6l-528.3 1451.9c-43 118.1 -173.5 178.9 -291.5 136c-118 -43 -178.9 -173.5 -135.9 -291.6l528.3 -1451.9c43 -118.1 173.5 -178.9 291.5 -136z" />
+  </group>
+</vector>

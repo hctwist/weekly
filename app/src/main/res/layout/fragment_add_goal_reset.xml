@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.twisthenry8gmail.weeklyphoenix.TypingAnimatedTextView
+    <com.twisthenry8gmail.weeklyphoenix.view.TypingAnimatedTextView
         android:id="@+id/add_goal_frequency_display"
         style="@style/Display"
         android:layout_width="wrap_content"

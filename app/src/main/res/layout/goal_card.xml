@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/goal_card"
-    app:cardElevation="0dp">
+    android:id="@+id/goal_card"
+    style="@style/GoalCard">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +15,7 @@
             android:id="@+id/goal_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:fontFamily="sans-serif-medium"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="@dimen/goal_title"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,12 +25,11 @@
             android:id="@+id/goal_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Subtitle"
             android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.twisthenry8gmail.weeklyphoenix.GoalProgressView
+        <com.twisthenry8gmail.weeklyphoenix.view.GoalProgressView
             android:id="@+id/goal_progress_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

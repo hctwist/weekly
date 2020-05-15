@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="half_margin">8dp</dimen>
     <dimen name="margin">16dp</dimen>
     <dimen name="double_margin">32dp</dimen>
     <dimen name="large_content_margin">48dp</dimen>
 
+    <dimen name="corner_radius">8dp</dimen>
+
+    <dimen name="accessibility_padding">12dp</dimen>
+
+    <dimen name="display_numbers">56sp</dimen>
     <dimen name="display_text">36sp</dimen>
     <dimen name="header_text">18sp</dimen>
 
@@ -13,7 +19,8 @@
     <dimen name="goal_progress_stroke_width">4dp</dimen>
 
     <!-- Add goal -->
-    <dimen name="add_goal_color_dot_size">24dp</dimen>
+    <dimen name="add_goal_color_dot_size">48dp</dimen>
+    <dimen name="add_goal_more_button_min">128dp</dimen>
 
     <!-- Datline drawable -->
     <dimen name="dateline_circle_radius">4dp</dimen>
