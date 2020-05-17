@@ -1,19 +1,21 @@
 package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
+import android.content.res.Resources
 import android.view.MenuItem
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
 import kotlinx.coroutines.launch
 
 class ViewGoalViewModel(
+    private val androidResources: Resources,
     private val goalRepository: GoalRepository,
     private val currentGoalViewModel: CurrentGoalViewModel
 ) : BaseViewModel() {
 
-    val name = currentGoalViewModel.requireCurrentGoal().name
+    val goal = currentGoalViewModel.requireCurrentGoal()
 
     fun onMenuItemClick(menuItem: MenuItem): Boolean {
 
@@ -23,7 +25,7 @@ class ViewGoalViewModel(
 
                 viewModelScope.launch {
 
-                    goalRepository.delete(name)
+                    goalRepository.delete(goal.name)
                 }
                 navigateBack()
                 true
@@ -34,6 +36,7 @@ class ViewGoalViewModel(
     }
 
     class Factory(
+        private val androidResources: Resources,
         private val goalRepository: GoalRepository,
         private val currentGoalViewModel: CurrentGoalViewModel
     ) :
@@ -44,7 +47,7 @@ class ViewGoalViewModel(
             if (modelClass.isAssignableFrom(ViewGoalViewModel::class.java)) {
 
                 @Suppress("UNCHECKED_CAST")
-                return ViewGoalViewModel(goalRepository, currentGoalViewModel) as T
+                return ViewGoalViewModel(androidResources, goalRepository, currentGoalViewModel) as T
             }
 
             throw IllegalArgumentException()

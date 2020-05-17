@@ -3,6 +3,10 @@
 
     <data>
 
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
+
         <variable
             name="viewmodel"
             type="com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoalViewModel" />
@@ -22,15 +26,85 @@
 
         <TextView
             android:id="@+id/view_goal_name"
+            style="@style/Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/double_margin"
+            android:text="@{viewmodel.goal.name}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_toolbar" />
+
+        <TextView
+            android:id="@+id/view_goal_progress_text"
             style="@style/Display"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
-            android:layout_marginTop="@dimen/large_content_margin"
             android:layout_marginEnd="@dimen/margin"
-            android:text="@{viewmodel.name}"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgress(context, viewmodel.goal)}"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_progress"
+            app:layout_constraintEnd_toStartOf="@id/view_goal_progress"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_goal_toolbar" />
+            app:layout_constraintTop_toTopOf="@id/view_goal_progress" />
+
+        <com.twisthenry8gmail.progresscircles.ProgressCircleView
+            android:id="@+id/view_goal_progress"
+            goal="@{viewmodel.goal}"
+            android:layout_width="@dimen/goal_progress"
+            android:layout_height="@dimen/goal_progress"
+            android:layout_marginTop="@dimen/double_margin"
+            android:layout_marginEnd="@dimen/margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressPercentage(context, viewmodel.goal)}"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_progress"
+            app:layout_constraintEnd_toEndOf="@id/view_goal_progress"
+            app:layout_constraintStart_toStartOf="@id/view_goal_progress"
+            app:layout_constraintTop_toTopOf="@id/view_goal_progress" />
+
+        <TextView
+            android:id="@+id/view_goal_reset_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/double_margin"
+            android:text="Reset date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_progress" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin"
+            android:text="@{DateTimeUtil.INSTANCE.displayDate(viewmodel.goal.resetDate)}"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_reset_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view_goal_reset_label" />
+
+        <TextView
+            android:id="@+id/view_goal_end_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/margin"
+            android:text="End date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_reset_label" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context, viewmodel.goal)}"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_end_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view_goal_end_label" />
+
+        <!-- TODO Pause / edit increase -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

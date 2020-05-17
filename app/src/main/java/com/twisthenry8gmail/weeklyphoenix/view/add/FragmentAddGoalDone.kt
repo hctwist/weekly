@@ -3,7 +3,9 @@ package com.twisthenry8gmail.weeklyphoenix.view.add
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintSet
@@ -11,42 +13,46 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionManager
+import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.RoomModel
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalDoneBinding
 import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
+import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalDoneViewModel
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
+import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_add_goal_done.*
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class FragmentAddGoalDone : Fragment(R.layout.fragment_add_goal_done) {
+class FragmentAddGoalDone : Fragment() {
 
-    private val viewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
+    private val currentGoalViewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
+    private val viewModel by viewModels<AddGoalDoneViewModel> {
+        AddGoalDoneViewModel.Factory(
+            currentGoalViewModel,
+            weeklyApplication().goalRepository
+        )
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val binding = FragmentAddGoalDoneBinding.inflate(inflater)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.currentGoal.observe(viewLifecycleOwner, Observer {
+        viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            add_goal_done_start.text =
-                DateTimeUtil.displayDate(
-                    it.startDate
-                )
-
-            if (it.endDate < 0) {
-
-                add_goal_done_end.setText(R.string.goal_no_end)
-            } else {
-
-                add_goal_done_end.text =
-                    DateTimeUtil.displayDate(
-                        it.endDate
-                    )
-            }
-
-            add_goal_done_color.setBackgroundColor(it.color)
+            it.navigate(findNavController())
         })
 
         add_goal_done_start.setOnClickListener {
@@ -59,6 +65,11 @@ class FragmentAddGoalDone : Fragment(R.layout.fragment_add_goal_done) {
 
             EndDatePickerDialog()
                 .show(childFragmentManager, null)
+        }
+
+        add_goal_done_increase.setOnClickListener {
+
+            FragmentAddGoalIncrease().show(childFragmentManager, null)
         }
 
         add_goal_done_color.setOnClickListener {
@@ -88,17 +99,6 @@ class FragmentAddGoalDone : Fragment(R.layout.fragment_add_goal_done) {
 
             constraintSet.applyTo(add_goal_done_root)
         }
-
-        add_goal_done_confirm.setOnClickListener {
-
-            viewModel.viewModelScope.launch {
-                RoomModel.getInstance(
-                    requireContext()
-                ).goalsDao()
-                    .addGoal(viewModel.requireCurrentGoal())
-            }
-            findNavController().navigate(R.id.action_fragmentAddGoalDone_to_fragmentMain)
-        }
     }
 
     class StartDatePickerDialog : DialogFragment(),
@@ -120,14 +120,9 @@ class FragmentAddGoalDone : Fragment(R.layout.fragment_add_goal_done) {
             )
             dialog.datePicker.minDate = System.currentTimeMillis()
 
-            if (goal.endDate >= 0) {
+            if (goal.hasEndDate()) {
                 dialog.datePicker.maxDate = LocalDate.ofEpochDay(goal.endDate)
                     .minus(goal.resetMultiple, goal.resetUnit).toEpochDay() * (24 * 60 * 60 * 1000)
-            }
-
-            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Test") { dialog, which ->
-
-
             }
 
             return dialog
@@ -144,6 +139,7 @@ class FragmentAddGoalDone : Fragment(R.layout.fragment_add_goal_done) {
     class EndDatePickerDialog : DialogFragment(),
         DatePickerDialog.OnDateSetListener {
 
+        // TODO Should be DoneViewModel
         private val viewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -151,7 +147,7 @@ class FragmentAddGoalDone : Fragment(R.layout.fragment_add_goal_done) {
             val goal = viewModel.requireCurrentGoal()
 
             val minDate = LocalDate.now().plus(goal.resetMultiple, goal.resetUnit)
-            val date = if (goal.endDate >= 0) LocalDate.ofEpochDay(goal.endDate) else minDate
+            val date = if (goal.hasEndDate()) LocalDate.ofEpochDay(goal.endDate) else minDate
 
             val dialog = DatePickerDialog(
                 requireContext(),
@@ -162,6 +158,13 @@ class FragmentAddGoalDone : Fragment(R.layout.fragment_add_goal_done) {
             )
 
             dialog.datePicker.minDate = minDate.toEpochDay() * (24 * 60 * 60 * 1000)
+
+            // TODO Hardcoded text
+            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "None") { _, _ ->
+
+                viewModel.requireCurrentGoal().endDate = -1
+                viewModel.postCurrentGoalUpdate()
+            }
 
             return dialog
         }

@@ -26,11 +26,12 @@ abstract class RoomModel : RoomDatabase() {
             }
         }
 
+        // TODO Remove destructive migration
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context, RoomModel::class.java,
                 DATABASE_NAME
-            ).build()
+            ).fallbackToDestructiveMigration().build()
     }
 
     abstract fun goalsDao(): Goal.Dao

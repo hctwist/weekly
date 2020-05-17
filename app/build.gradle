@@ -45,6 +45,7 @@ dependencies {
     implementation project(":dragline")
     implementation project(":buttons")
     implementation project(":recyclerextensions")
+    implementation project(":progresscircles")
 
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

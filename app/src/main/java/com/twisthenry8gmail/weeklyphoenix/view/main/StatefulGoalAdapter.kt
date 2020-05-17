@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.twisthenry8gmail.progresscircles.ProgressCircleView
 import com.twisthenry8gmail.recyclerextensions.StateRecyclerAdapter
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
-import com.twisthenry8gmail.weeklyphoenix.util.GoalSubtitleGenerator
-import com.twisthenry8gmail.weeklyphoenix.view.GoalProgressView
+import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 import kotlinx.android.synthetic.main.goal_card.view.*
 import kotlinx.android.synthetic.main.goal_card_complete.view.*
 import kotlinx.android.synthetic.main.main_header.view.*
@@ -35,8 +35,7 @@ class StatefulGoalAdapter(val context: Context) :
             field = value
             notifyLoadingFinished()
         }
-    private val goalSubtitleGenerator =
-        GoalSubtitleGenerator(context)
+    private val goalSubtitleGenerator = GoalDisplayUtil.SubtitleGenerator(context)
 
     var actionListener: ((Goal, Int, View) -> Unit)? = null
 
@@ -167,7 +166,7 @@ class StatefulGoalAdapter(val context: Context) :
                     goalVH.progressView.apply {
 
                         setColor(goal.color)
-                        maxProgress = goal.target
+                        target = goal.target
                         setProgress(goal.progress)
                     }
 
@@ -207,7 +206,7 @@ class StatefulGoalAdapter(val context: Context) :
 
         val titleView: TextView = itemView.goal_title
         val subtitleView: TextView = itemView.goal_subtitle
-        val progressView: GoalProgressView = itemView.goal_progress_view
+        val progressView: ProgressCircleView = itemView.goal_progress_view
         val actionButton: ImageView = itemView.goal_action_button
     }
 

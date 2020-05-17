@@ -17,26 +17,19 @@ class FragmentAddGoalTarget : Fragment(R.layout.fragment_add_goal_target) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        when (viewModel.requireCurrentGoal().type) {
+        val goal = viewModel.requireCurrentGoal()
 
-            Goal.Type.COUNTED -> {
+        add_goal_target.minValue = goal.type.minIncrement
+        add_goal_target.increment = goal.type.minIncrement
 
-                add_goal_target.minValue = 1
-            }
+        if (goal.type == Goal.Type.TIMED) {
 
-            Goal.Type.TIMED -> {
+            add_goal_target.textFactory = {
 
-                val increment = 15L * 60
-                add_goal_target.minValue = increment
-                add_goal_target.increment = increment
-
-                add_goal_target.textFactory = {
-
-                    DateTimeUtil.showGoalTime(
-                        requireContext(),
-                        it
-                    )
-                }
+                DateTimeUtil.showGoalTime(
+                    requireContext(),
+                    it
+                )
             }
         }
 

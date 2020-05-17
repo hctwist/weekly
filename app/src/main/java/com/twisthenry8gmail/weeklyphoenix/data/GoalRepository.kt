@@ -3,13 +3,7 @@ package com.twisthenry8gmail.weeklyphoenix.data
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 class GoalRepository(
     private val goalsDao: Goal.Dao,
@@ -26,16 +20,26 @@ class GoalRepository(
 
     suspend fun resetAllRequired() {
 
-        val changeMap = ArrayList<Pair<String, Long>>()
+        val resetUpdates = ArrayList<Goal.Dao.ResetUpdate>()
         val now = LocalDate.now()
 
         goalsDao.getAllThatRequireReset(now.toEpochDay()).forEach {
 
+            val resetDate = LocalDate.ofEpochDay(it.resetDate)
+            val periodsPassed = resetDate.until(now)[it.resetUnit] / it.resetMultiple
+
             it.updateResetDate(LocalDate.ofEpochDay(it.resetDate))
-            changeMap.add(it.name to it.resetDate)
+            resetUpdates.add(
+                Goal.Dao.ResetUpdate(
+                    it.name,
+                    it.resetDate,
+                    it.target + periodsPassed * it.increase
+                )
+            )
         }
 
-        goalsDao.resetGoals(changeMap)
+        // TODO Test
+        goalsDao.resetGoals(resetUpdates)
     }
 
     fun getNames(): LiveData<List<String>> {
@@ -57,6 +61,11 @@ class GoalRepository(
 
         // TODO Use goals cache above
         return goalsDao.findGoal(name)
+    }
+
+    suspend fun add(goal: Goal) {
+
+        goalsDao.addGoal(goal)
     }
 
     suspend fun updateGoalProgress(goalName: String, progress: Long) {

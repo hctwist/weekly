@@ -15,7 +15,6 @@ import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.R
 import kotlinx.android.synthetic.main.fragment_color_dot.*
 
-// TODO Remove to AddGoal.kt?
 class FragmentAddGoalColor : BottomSheetDialogFragment() {
 
     private val viewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })

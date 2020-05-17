@@ -20,7 +20,7 @@ class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
         val goal = goalViewModel.requireCurrentGoal()
 
         goal_success_name.text = goal.name
-        goal_success_progress.maxProgress = 1
+        goal_success_progress.target = 1
         goal_success_progress.setColor(goal.color)
 
         goal_success_done.setOnClickListener {

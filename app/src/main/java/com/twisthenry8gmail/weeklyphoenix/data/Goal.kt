@@ -18,7 +18,7 @@ data class Goal(
     var resetMultiple: Long,
     @field:TypeConverters(Goal::class) var resetUnit: ChronoUnit,
     var resetDate: Long,
-    val increase: Long,
+    var increase: Long,
     var startDate: Long,
     var endDate: Long,
     var color: Int
@@ -48,10 +48,12 @@ data class Goal(
         return preset.resetMultiple == resetMultiple && preset.resetUnit == resetUnit
     }
 
-    enum class Type(@StringRes val displayNameRes: Int) {
+    fun hasEndDate() = endDate >= 0
 
-        COUNTED(R.string.goal_counted), TIMED(
-            R.string.goal_timed
+    enum class Type(@StringRes val displayNameRes: Int, val minIncrement: Long) {
+
+        COUNTED(R.string.goal_counted, 1), TIMED(
+            R.string.goal_timed, 60 * 15
         );
 
         fun getDisplayName(context: Context) = context.getString(displayNameRes)
@@ -91,20 +93,19 @@ data class Goal(
         @Query("UPDATE Goal SET progress = :progress WHERE name = :goalName")
         suspend fun updateGoalProgress(goalName: String, progress: Long)
 
-        @Query("UPDATE Goal SET resetDate = :newResetDate, progress = 0 WHERE name = :goalName")
-        suspend fun resetGoal(goalName: String, newResetDate: Long)
+        class ResetUpdate(val goalName: String, val newResetDate: Long, val newTarget: Long)
+
+        @Query("UPDATE Goal SET resetDate = :newResetDate, progress = 0, target = :newTarget WHERE name = :goalName")
+        suspend fun resetGoal(goalName: String, newResetDate: Long, newTarget: Long)
 
         @Transaction
-        suspend fun resetGoals(resetChanges: List<Pair<String, Long>>) {
+        suspend fun resetGoals(resetUpdates: List<ResetUpdate>) {
 
-            resetChanges.forEach {
+            resetUpdates.forEach {
 
-                resetGoal(it.first, it.second)
+                resetGoal(it.goalName, it.newResetDate, it.newTarget)
             }
         }
-
-        @Query("UPDATE Goal SET progress = 0")
-        suspend fun resetGoals()
 
         @Query("DELETE FROM Goal WHERE name = :name")
         suspend fun deleteGoal(name: String)

@@ -16,7 +16,7 @@
 
     <!-- Goal -->
     <dimen name="goal_title">18sp</dimen>
-    <dimen name="goal_progress_stroke_width">4dp</dimen>
+    <dimen name="goal_progress">72dp</dimen>
 
     <!-- Add goal -->
     <dimen name="add_goal_color_dot_size">48dp</dimen>

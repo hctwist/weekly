@@ -4,6 +4,7 @@
     <string name="cont">Continue</string>
 
     <string name="time_pattern">%1$s:%2$s</string>
+    <string name="percentage_pattern">%1$s%%</string>
 
     <!-- Goal types -->
     <string name="goal_counted">Counted goal</string>
@@ -39,5 +40,8 @@
 
     <!-- Goal success -->
     <string name="goal_success">Well done on completing your goal.</string>
+
+    <!-- Goal view -->
+    <string name="goal_view_progress">%1$s/%2$s</string>
 
 </resources>

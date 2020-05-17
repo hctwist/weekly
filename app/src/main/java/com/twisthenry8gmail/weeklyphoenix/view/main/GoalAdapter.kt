@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.twisthenry8gmail.progresscircles.ProgressCircleView
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
-import com.twisthenry8gmail.weeklyphoenix.util.GoalSubtitleGenerator
-import com.twisthenry8gmail.weeklyphoenix.view.GoalProgressView
+import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 import kotlinx.android.synthetic.main.goal_card.view.*
 import kotlinx.android.synthetic.main.goal_card_complete.view.*
 import kotlinx.android.synthetic.main.main_header.view.*
@@ -21,7 +21,7 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
 
     var data = listOf<Data>()
 
-    private val goalSubtitleGenerator = GoalSubtitleGenerator(context)
+    private val goalSubtitleGenerator = GoalDisplayUtil.SubtitleGenerator(context)
 
     var goalClickListener: ((Goal) -> Unit)? = null
     var goalActionListener: ((Goal, Int, View) -> Unit)? = null
@@ -120,7 +120,7 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
                 goalVH.progressView.apply {
 
                     setColor(goal.color)
-                    maxProgress = goal.target
+                    target = goal.target
                     setProgress(goal.progress)
                 }
 
@@ -169,7 +169,7 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
 
         val titleView: TextView = itemView.goal_title
         val subtitleView: TextView = itemView.goal_subtitle
-        val progressView: GoalProgressView = itemView.goal_progress_view
+        val progressView: ProgressCircleView = itemView.goal_progress_view
         val actionButton: ImageView = itemView.goal_action_button
     }
 
@@ -192,9 +192,9 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
             if (adapterPosition == 0) {
 
                 outRect.bottom = parent.resources.getDimensionPixelSize(R.dimen.double_margin)
-            } else if (adapterPosition != state.itemCount - 1) {
+            } else if (adapterPosition != 1) {
 
-                outRect.bottom = parent.resources.getDimensionPixelSize(R.dimen.margin)
+                outRect.top = parent.resources.getDimensionPixelSize(R.dimen.margin)
             }
         }
     }

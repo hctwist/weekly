@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="@id/goal_success_title"
         app:layout_constraintTop_toBottomOf="@id/goal_success_title" />
 
-    <com.twisthenry8gmail.weeklyphoenix.view.GoalProgressView
+    <com.twisthenry8gmail.progresscircles.ProgressCircleView
         android:id="@+id/goal_success_progress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
