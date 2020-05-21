@@ -13,9 +13,9 @@ import androidx.transition.Fade
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import androidx.transition.TransitionManager
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
+import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.GoalTimerViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_timed_goal.*
@@ -30,11 +30,14 @@ class FragmentGoalTimer : Fragment(R.layout.fragment_timed_goal) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        timed_goal_name.text = viewModel.name
+        viewModel.goal.observe(viewLifecycleOwner, Observer {
+
+            timed_goal_name.text = it.name
+        })
 
         viewModel.getDuration().observe(viewLifecycleOwner, Observer {
 
-            timed_goal_time.text = DateTimeUtil.showGoalTime(requireContext(), it / 1000)
+            timed_goal_time.text = GoalDisplayUtil.displayGoalTime(requireContext(), it / 1000)
         })
 
         timed_goal_stop.setOnClickListener {

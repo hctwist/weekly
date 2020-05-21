@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/add_goal_color_dot_size"
-    android:layout_height="@dimen/add_goal_color_dot_size"
-    android:background="@drawable/color_dot" />
-<!-- TODO Ripple -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/color_dot_dot"
+        android:layout_width="@dimen/add_goal_color_dot_size"
+        android:layout_height="@dimen/add_goal_color_dot_size"
+        android:background="@drawable/color_dot"
+        android:contentDescription="@string/cd_color_dot" />
+
+    <ImageView
+        android:id="@+id/color_dot_highlight"
+        android:layout_width="@dimen/add_goal_color_dot_highlight"
+        android:layout_height="@dimen/add_goal_color_dot_highlight"
+        android:layout_gravity="center"
+        android:contentDescription="@string/cd_color_dot_selected"
+        android:src="@drawable/color_dot_highlight"
+        android:visibility="gone" />
+</FrameLayout>

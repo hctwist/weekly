@@ -6,12 +6,14 @@
     <string name="time_pattern">%1$s:%2$s</string>
     <string name="percentage_pattern">%1$s%%</string>
 
-    <!-- Goal types -->
-    <string name="goal_counted">Counted goal</string>
-    <string name="goal_timed">Timed goal</string>
-
-    <!-- Goals -->
-    <string name="goal_no_end">-</string>
+    <!-- Goal properties -->
+    <string name="goal_type_counted">Counted goal</string>
+    <string name="goal_type_timed">Timed goal</string>
+    <string name="goal_start_date">Start date</string>
+    <string name="goal_periodic_increase">Periodic increase</string>
+    <string name="goal_color">Colour</string>
+    <string name="goal_end_date">End date</string>
+    <string name="goal_reset_date">Reset date</string>
 
     <!-- Frequencies -->
     <string name="goal_frequency_daily">Daily</string>
@@ -20,28 +22,35 @@
     <string name="goal_frequency_monthly">Monthly</string>
     <string name="goal_frequency_yearly">Yearly</string>
 
+    <!-- Goals -->
+    <string name="goal_no_end">-</string>
+
     <!-- Goal subtitle patterns -->
     <string name="goal_subtitle_pattern_left">Only %1$s to go.</string>
     <string name="goal_subtitle_pattern_over_half">Over half way there.</string>
     <string name="goal_subtitle_pattern_start">You have a target of %1$s.</string>
 
-    <!-- Goal cards -->
-    <string name="goal_complete">This goal is complete.</string>
+    <!-- Main -->
+    <string name="goal_scheduled">This goal is scheduled for %1$s</string>
+    <string name="goals_empty">You currently do not have any goals.</string>
+    <string name="goals_empty_add">Add a goal</string>
 
     <!-- Add goal -->
     <string name="add_goal_title">Add goal</string>
     <string name="add_goal_title_hint">What is your goal?</string>
     <string name="add_goal_target_hint">What is your target?</string>
     <string name="add_goal_reset_hint">How often should it repeat?</string>
-    <string name="add_goal_increase_hint">Increasing by</string>
     <string name="add_goal_done_text">Are you ready to add your goal?</string>
     <string name="add_goal_done_more">More options</string>
     <string name="add_goal_done_add_goal">Add your goal</string>
+    <string name="add_goal_increase_hint">Your target for this goal will increase by this value every time it resets.</string>
+    <string name="add_goal_end_neutral">None</string>
 
     <!-- Goal success -->
     <string name="goal_success">Well done on completing your goal.</string>
 
     <!-- Goal view -->
     <string name="goal_view_progress">%1$s/%2$s</string>
+    <string name="goal_delete">Delete goal</string>
 
 </resources>

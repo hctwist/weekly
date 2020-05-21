@@ -1,6 +1,7 @@
 package com.twisthenry8gmail.weeklyphoenix.data
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -11,14 +12,16 @@ import kotlin.random.Random
 
 @Entity
 data class Goal(
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @field:TypeConverters(Goal::class) val type: Type,
-    @PrimaryKey var name: String,
+    var name: String,
     var progress: Long,
     var target: Long,
     var resetMultiple: Long,
     @field:TypeConverters(Goal::class) var resetUnit: ChronoUnit,
     var resetDate: Long,
     var increase: Long,
+    var increasePaused: Boolean,
     var startDate: Long,
     var endDate: Long,
     var color: Int
@@ -50,11 +53,14 @@ data class Goal(
 
     fun hasEndDate() = endDate >= 0
 
-    enum class Type(@StringRes val displayNameRes: Int, val minIncrement: Long) {
+    enum class Type(
+        @StringRes val displayNameRes: Int,
+        val minIncrement: Long,
+        @DrawableRes val actionIconRes: Int
+    ) {
 
-        COUNTED(R.string.goal_counted, 1), TIMED(
-            R.string.goal_timed, 60 * 15
-        );
+        COUNTED(R.string.goal_type_counted, 1, R.drawable.round_plus_one_24),
+        TIMED(R.string.goal_type_timed, 60 * 15, R.drawable.round_play_arrow_24);
 
         fun getDisplayName(context: Context) = context.getString(displayNameRes)
     }
@@ -87,11 +93,14 @@ data class Goal(
         @Insert
         suspend fun addGoal(goal: Goal)
 
-        @Query("SELECT * FROM Goal WHERE name = :name LIMIT 1")
-        suspend fun findGoal(name: String): Goal
+        @Query("SELECT * FROM Goal WHERE id = :id LIMIT 1")
+        fun findGoal(id: Int): LiveData<Goal>
 
-        @Query("UPDATE Goal SET progress = :progress WHERE name = :goalName")
-        suspend fun updateGoalProgress(goalName: String, progress: Long)
+        @Query("UPDATE Goal SET progress = progress + :progress WHERE id = :id")
+        suspend fun addGoalProgress(id: Int, progress: Long)
+
+        @Query("UPDATE Goal SET increasePaused = :pause WHERE name = :goalName")
+        suspend fun pauseGoalIncrease(goalName: String, pause: Boolean)
 
         class ResetUpdate(val goalName: String, val newResetDate: Long, val newTarget: Long)
 
@@ -129,7 +138,7 @@ data class Goal(
         @JvmStatic
         fun toResetUnit(ordinal: Int) = ChronoUnit.values()[ordinal]
 
-        fun buildDefaultGoal(context: Context, type: Goal.Type): Goal {
+        fun buildDefaultGoal(context: Context, type: Type): Goal {
 
             val target = when (type) {
 
@@ -143,8 +152,9 @@ data class Goal(
             val color = cTypedArray.getColor(Random.nextInt(cTypedArray.length()), 0)
             cTypedArray.recycle()
 
-            val preset = Goal.ResetPreset.WEEKLY
+            val preset = ResetPreset.WEEKLY
             val goal = Goal(
+                0,
                 type,
                 "",
                 0,
@@ -153,6 +163,7 @@ data class Goal(
                 preset.resetUnit,
                 -1,
                 0,
+                false,
                 startDate.toEpochDay(),
                 -1,
                 color

@@ -4,7 +4,7 @@ class Event<T>(val content: T) {
 
     private var consumed = false
 
-    fun get(): T? {
+    fun getIfNotHandled(): T? {
 
         return if (consumed) null else {
 
@@ -17,7 +17,9 @@ class Event<T>(val content: T) {
 
         override fun onChanged(t: Event<T>?) {
 
-            t?.get()?.let { onChanged(it) }
+            t?.getIfNotHandled()?.let { onChanged(it) }
         }
     }
 }
+
+class AnimatableData<T>(val data: T, val animate: Boolean)

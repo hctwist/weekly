@@ -8,24 +8,19 @@ import kotlin.math.roundToInt
 
 object GoalDisplayUtil {
 
-    fun displayProgress(context: Context, goal: Goal): String {
+    fun displayProgressValue(context: Context, type: Goal.Type, value: Long): String {
 
-        val progress: String
-        val target: String
+        return when (type) {
 
-        when (goal.type) {
-
-            Goal.Type.COUNTED -> {
-
-                progress = goal.progress.toString()
-                target = goal.target.toString()
-            }
-            Goal.Type.TIMED -> {
-
-                progress = DateTimeUtil.showGoalTime(context, goal.progress)
-                target = DateTimeUtil.showGoalTime(context, goal.target)
-            }
+            Goal.Type.COUNTED -> value.toString()
+            Goal.Type.TIMED -> displayGoalTime(context, value)
         }
+    }
+
+    fun displayProgressToTarget(context: Context, goal: Goal): String {
+
+        val progress = displayProgressValue(context, goal.type, goal.progress)
+        val target = displayProgressValue(context, goal.type, goal.target)
 
         return context.getString(R.string.goal_view_progress, progress, target)
     }
@@ -45,34 +40,53 @@ object GoalDisplayUtil {
         )
     }
 
+    private val goalTimeFormatter = DecimalFormat("00")
+
+    fun displayGoalTime(context: Context, seconds: Long): String {
+
+        val totalMinutes = seconds / 60
+        val hours = totalMinutes / 60
+        return context.getString(
+            R.string.time_pattern,
+            goalTimeFormatter.format(hours),
+            goalTimeFormatter.format(totalMinutes - hours * 60)
+        )
+    }
+
+    fun displayScheduled(context: Context, goal: Goal): String {
+
+        return context.getString(R.string.goal_scheduled, DateTimeUtil.displayDate(goal.startDate))
+    }
+
     class SubtitleGenerator(val context: Context) {
 
         private val numbers by lazy { context.resources.getStringArray(R.array.numbers) }
 
         fun generateSubtitle(goal: Goal): String {
 
-            if (goal.progress.toFloat() / goal.target >= 0.75F) {
+            when {
+                goal.progress.toFloat() / goal.target >= 0.75F -> {
 
-                val left = when (goal.type) {
+                    val left = when (goal.type) {
 
-                    Goal.Type.COUNTED -> displayWrittenNumber(goal.target - goal.progress)
-                    Goal.Type.TIMED -> DateTimeUtil.showGoalTime(
-                        context,
-                        goal.target - goal.progress
-                    )
+                        Goal.Type.COUNTED -> displayWrittenNumber(goal.target - goal.progress)
+                        Goal.Type.TIMED -> displayGoalTime(context, goal.target - goal.progress)
+                    }
+                    return context.getString(R.string.goal_subtitle_pattern_left, left)
                 }
-                return context.getString(R.string.goal_subtitle_pattern_left, left)
-            } else if (goal.progress.toFloat() / goal.target >= 0.5F) {
+                goal.progress.toFloat() / goal.target >= 0.5F -> {
 
-                return context.getString(R.string.goal_subtitle_pattern_over_half)
-            } else {
-
-                val target = when (goal.type) {
-
-                    Goal.Type.COUNTED -> displayWrittenNumber(goal.target)
-                    Goal.Type.TIMED -> DateTimeUtil.showGoalTime(context, goal.target)
+                    return context.getString(R.string.goal_subtitle_pattern_over_half)
                 }
-                return context.getString(R.string.goal_subtitle_pattern_start, target)
+                else -> {
+
+                    val target = when (goal.type) {
+
+                        Goal.Type.COUNTED -> displayWrittenNumber(goal.target)
+                        Goal.Type.TIMED -> displayGoalTime(context, goal.target)
+                    }
+                    return context.getString(R.string.goal_subtitle_pattern_start, target)
+                }
             }
         }
 

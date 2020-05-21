@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/goal_complete_card"
-    style="@style/GoalCard"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+<layout>
+
+    <data>
+
+        <variable
+            name="goal"
+            type="com.twisthenry8gmail.weeklyphoenix.data.Goal" />
+
+        <variable
+            name="clickhandler"
+            type="com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapter.ClickHandler" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/goal_complete_card"
+        style="@style/GoalCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin">
+        android:onClick="@{() -> clickhandler.onGoalClick(goal)}">
 
-        <TextView
-            android:id="@+id/goal_complete_title"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="@dimen/goal_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:padding="@dimen/margin">
 
-        <TextView
-            android:id="@+id/goal_complete_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/goal_complete"
-            android:textColor="?android:attr/textColorSecondary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/goal_complete_title"
-            app:layout_constraintStart_toStartOf="@id/goal_complete_title"
-            app:layout_constraintTop_toBottomOf="@id/goal_complete_title" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/goal_complete_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{goal.name}"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="@dimen/goal_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/cd_goal_complete"
+                android:src="@drawable/round_done_24"
+                android:tint="@color/color_primary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

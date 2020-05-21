@@ -46,6 +46,7 @@
         app:layout_constraintTop_toBottomOf="@id/add_goal_target" />
 
     <ImageButton
+        android:contentDescription="@string/cd_back"
         android:id="@+id/add_goal_target_back"
         style="@style/SecondaryImageButton"
         android:layout_width="wrap_content"

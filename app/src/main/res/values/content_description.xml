@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="cd_back">Navigate back</string>
+    <string name="cd_done">Done</string>
+
+    <string name="cd_increase">Increase</string>
+    <string name="cd_decrease">Decrease</string>
+
+    <string name="cd_stop_timing">Stop timing</string>
+    <string name="cd_goal_action">Register goal progress</string>
+    <string name="cd_goal_complete">Goal complete</string>
+    <string name="cd_goal_scheduled">Goal scheduled</string>
+
+    <string name="cd_color_dot">Color</string>
+    <string name="cd_color_dot_selected">Selected color</string>
+</resources>

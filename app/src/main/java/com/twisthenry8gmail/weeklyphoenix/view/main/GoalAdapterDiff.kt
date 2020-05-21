@@ -1,7 +1,6 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
 import androidx.recyclerview.widget.DiffUtil
-import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapter
 
 class GoalAdapterDiff(
     private val oldItems: List<GoalAdapter.Data>,
@@ -28,11 +27,10 @@ class GoalAdapterDiff(
             return false
         }
 
-        // TODO Maybe not use name as this could change?
         return when (oldItem.type) {
 
             GoalAdapter.Data.Type.HEADER -> true
-            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE -> return oldItem.asGoal().name == newItem.asGoal().name
+            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED -> return oldItem.asGoal().id == newItem.asGoal().id
         }
     }
 
@@ -41,14 +39,11 @@ class GoalAdapterDiff(
         val oldItem = oldItems[oldItemPosition]
         val newItem = newItems[newItemPosition]
 
-        // Here the items must both be goals or complete goals
         return when (oldItem.type) {
 
-            // TODO Only check display fields
-            GoalAdapter.Data.Type.HEADER -> true
-            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE -> oldItem.asGoal() == newItem.asGoal()
+            GoalAdapter.Data.Type.HEADER -> oldItem.asHeader() == newItem.asHeader()
+            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED -> oldItem.asGoal() == newItem.asGoal()
         }
-
     }
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
@@ -70,7 +65,7 @@ class GoalAdapterDiff(
                     GoalAdapter.Change.PROGRESS
                 }
             }
-            GoalAdapter.Data.Type.GOAL_COMPLETE -> null
+            GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED -> null
         }
     }
 }

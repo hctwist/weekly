@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.chip.Chip
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import kotlinx.android.synthetic.main.fragment_periodic_increase.*
-import kotlin.math.roundToInt
 
+// TODO Improve with MVVM
 class FragmentAddGoalIncrease : BottomSheetDialogFragment() {
 
     private val viewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
+
+    private var increment: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,30 +30,39 @@ class FragmentAddGoalIncrease : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // TODO Way better system needed here
-        val increment = viewModel.requireCurrentGoal().type.minIncrement
-        val target = viewModel.requireCurrentGoal().target
+        increment = viewModel.requireCurrentGoal().type.minIncrement
 
-        val increases = mutableSetOf<Long>()
+        viewModel.currentGoal.observe(viewLifecycleOwner, Observer {
 
-        for (i in 0..100 step 5) {
+            periodic_increase_value.text =
+                GoalDisplayUtil.displayProgressValue(requireContext(), it.type, it.increase)
+        })
 
-            val multiplier = i.toDouble() / 100
-            val candidateInc = ((target * multiplier) / increment).roundToInt() * increment
-            increases.add(candidateInc)
+        periodic_increase_minus.setOnClickListener {
+
+            onDecrement()
         }
 
-        increases.forEach { inc ->
+        periodic_increase_plus.setOnClickListener {
 
-            val chip = Chip(context)
-            chip.text = inc.toString()
-            chip.setOnClickListener {
-
-                viewModel.requireCurrentGoal().increase = inc
-                viewModel.postCurrentGoalUpdate()
-                dismiss()
-            }
-            periodic_increase_group.addView(chip)
+            onIncrement()
         }
+    }
+
+    private fun onDecrement() {
+
+        val goal = viewModel.requireCurrentGoal()
+
+        if (goal.increase >= increment) {
+
+            goal.increase -= increment
+            viewModel.postCurrentGoalUpdate()
+        }
+    }
+
+    private fun onIncrement() {
+
+        viewModel.requireCurrentGoal().increase += increment
+        viewModel.postCurrentGoalUpdate()
     }
 }

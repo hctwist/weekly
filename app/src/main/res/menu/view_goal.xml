@@ -4,7 +4,7 @@
 
     <item
         android:icon="@drawable/round_delete_forever_24"
-        android:title="Delete goal"
+        android:title="@string/goal_delete"
         android:id="@+id/view_goal_delete"
         app:showAsAction="always" />
 </menu>

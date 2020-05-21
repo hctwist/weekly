@@ -1,10 +1,8 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+
         <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
 
         <item name="android:windowLightStatusBar">true</item>
@@ -51,11 +49,12 @@
     <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
 
         <item name="chipStrokeWidth">2dp</item>
-        <item name="chipStrokeColor">@color/light_grey</item>
+        <item name="chipStrokeColor">@color/chip_stroke</item>
         <item name="chipBackgroundColor">@android:color/transparent</item>
         <item name="chipStartPadding">8dp</item>
         <item name="chipEndPadding">8dp</item>
-        <item name="android:textAlignment">center</item>
+        <item name="chipCornerRadius">12dp</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
     <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -72,5 +71,4 @@
         <item name="touchPadding">12dp</item>
         <item name="android:tint">@color/secondary_button_tint</item>
     </style>
-
 </resources>

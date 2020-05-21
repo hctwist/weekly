@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
             android:layout_marginEnd="@dimen/margin"
-            android:text="@{GoalDisplayUtil.INSTANCE.displayProgress(context, viewmodel.goal)}"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressToTarget(context, viewmodel.goal)}"
             app:layout_constraintBottom_toBottomOf="@id/view_goal_progress"
             app:layout_constraintEnd_toStartOf="@id/view_goal_progress"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
             android:layout_marginTop="@dimen/double_margin"
-            android:text="Reset date"
+            android:text="@string/goal_reset_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_goal_progress" />
 
@@ -82,29 +82,88 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin"
             android:text="@{DateTimeUtil.INSTANCE.displayDate(viewmodel.goal.resetDate)}"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintBottom_toBottomOf="@id/view_goal_reset_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/view_goal_reset_label" />
 
         <TextView
             android:id="@+id/view_goal_end_label"
+            goneUnless="@{viewmodel.goal.hasEndDate()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
             android:layout_marginTop="@dimen/margin"
-            android:text="End date"
+            android:text="@string/goal_end_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_goal_reset_label" />
 
         <TextView
+            goneUnless="@{viewmodel.goal.hasEndDate()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin"
             android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context, viewmodel.goal)}"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintBottom_toBottomOf="@id/view_goal_end_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/view_goal_end_label" />
 
-        <!-- TODO Pause / edit increase -->
+        <View
+            android:id="@+id/view_goal_divider_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/double_margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:background="@color/off_white"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_end_label" />
+
+        <TextView
+            android:id="@+id/view_goal_periodic_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/double_margin"
+            android:text="@string/goal_periodic_increase"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_divider_1" />
+
+        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+            android:id="@+id/view_goal_periodic_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> viewmodel.onPauseIncrease()}"
+            android:src="@{viewmodel.goal.increasePaused ? @drawable/round_play_arrow_24 : @drawable/round_pause_24}"
+            android:tint="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_periodic_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view_goal_periodic_label"
+            app:touchPadding="@dimen/accessibility_padding" />
+
+        <TextView
+            android:id="@+id/view_goal_periodic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context, viewmodel.goal.type, viewmodel.goal.increase)}"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_periodic_label"
+            app:layout_constraintEnd_toStartOf="@id/view_goal_periodic_pause"
+            app:layout_constraintTop_toTopOf="@id/view_goal_periodic_label"
+            app:layout_goneMarginEnd="@dimen/margin" />
+
+        <androidx.constraintlayout.widget.Group
+            goneUnless="@{viewmodel.goal.increase > 0}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="
+                view_goal_divider_1,
+                view_goal_periodic_label,
+                view_goal_periodic,
+                view_goal_periodic_pause" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -18,8 +18,6 @@ import androidx.transition.TransitionManager
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalDoneBinding
-import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
-import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalDoneViewModel
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
@@ -80,25 +78,34 @@ class FragmentAddGoalDone : Fragment() {
 
         add_goal_done_more.setOnClickListener {
 
-            val constraintSet = ConstraintSet().apply {
-
-                clone(add_goal_done_root)
-                setVisibility(
-                    R.id.add_goal_done_more,
-                    View.GONE
-                )
-                setVisibility(
-                    R.id.add_goal_done_more_group,
-                    View.VISIBLE
-                )
-            }
-
-            TransitionManager.beginDelayedTransition(
-                add_goal_done_root
-            )
-
-            constraintSet.applyTo(add_goal_done_root)
+            viewModel.onClickShowMoreOptions()
         }
+
+        viewModel.showMoreOptions.observe(viewLifecycleOwner, Observer {
+
+            if (it.data) {
+
+                if (it.animate) {
+
+                    val constraintSet = ConstraintSet().apply {
+
+                        clone(add_goal_done_root)
+                        setVisibility(R.id.add_goal_done_more, View.GONE)
+                        setVisibility(R.id.add_goal_done_more_group, View.VISIBLE)
+                    }
+
+                    TransitionManager.beginDelayedTransition(
+                        add_goal_done_root
+                    )
+
+                    constraintSet.applyTo(add_goal_done_root)
+                } else {
+
+                    add_goal_done_more.visibility = View.GONE
+                    add_goal_done_more_group.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     class StartDatePickerDialog : DialogFragment(),
@@ -159,8 +166,10 @@ class FragmentAddGoalDone : Fragment() {
 
             dialog.datePicker.minDate = minDate.toEpochDay() * (24 * 60 * 60 * 1000)
 
-            // TODO Hardcoded text
-            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "None") { _, _ ->
+            dialog.setButton(
+                AlertDialog.BUTTON_NEUTRAL,
+                getString(R.string.add_goal_end_neutral)
+            ) { _, _ ->
 
                 viewModel.requireCurrentGoal().endDate = -1
                 viewModel.postCurrentGoalUpdate()

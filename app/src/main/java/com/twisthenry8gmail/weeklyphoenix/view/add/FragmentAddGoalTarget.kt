@@ -6,8 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
-import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
+import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import kotlinx.android.synthetic.main.fragment_add_goal_target.*
 
@@ -21,16 +20,9 @@ class FragmentAddGoalTarget : Fragment(R.layout.fragment_add_goal_target) {
 
         add_goal_target.minValue = goal.type.minIncrement
         add_goal_target.increment = goal.type.minIncrement
+        add_goal_target.textFactory = {
 
-        if (goal.type == Goal.Type.TIMED) {
-
-            add_goal_target.textFactory = {
-
-                DateTimeUtil.showGoalTime(
-                    requireContext(),
-                    it
-                )
-            }
+            GoalDisplayUtil.displayProgressValue(requireContext(), goal.type, it)
         }
 
         add_goal_target.valueChangedListener = {

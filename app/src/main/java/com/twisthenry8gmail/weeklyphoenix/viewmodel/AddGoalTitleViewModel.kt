@@ -1,13 +1,14 @@
 package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.text.Editable
-import androidx.lifecycle.*
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
-import kotlinx.android.synthetic.main.fragment_add_goal_title.*
 
-class AddGoalTitleViewModel(goalRepository: GoalRepository, val currentGoalViewModel: CurrentGoalViewModel) : BaseViewModel() {
+class AddGoalTitleViewModel(goalRepository: GoalRepository, private val currentGoalViewModel: CurrentGoalViewModel) : BaseViewModel() {
 
     private var goalNames: List<String>? = null
     private val _canContinue = MediatorLiveData<Boolean>().apply {

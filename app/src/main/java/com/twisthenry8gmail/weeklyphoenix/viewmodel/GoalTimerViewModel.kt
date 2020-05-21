@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel() {
 
-    val name = goalRepository.getTimingGoalName()!!
+    val goal = goalRepository.getTimingGoal()
     val progressUpdate = MutableLiveData<ProgressUpdate>()
 
     private val startTime = goalRepository.getTimingGoalStartTime()
@@ -46,18 +46,19 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel
 
         updateHandler.removeCallbacks(updateRunnable)
         goalRepository.stopTimer()
-        NotificationHelper.cancelGoalTimerNotificationAlarm(context)
         NotificationHelper.cancelGoalTimerNotification(context)
 
         viewModelScope.launch {
 
-            val goal = goalRepository.find(name)
-            val oldProgress = goal.progress
+            goal.value?.let {
 
-            goal.progress += progressIncrement
-            goalRepository.updateGoalProgress(name, goal.progress)
+                val oldProgress = it.progress
 
-            progressUpdate.value = ProgressUpdate(oldProgress, goal)
+                it.progress += progressIncrement
+                goalRepository.addProgress(it.id, progressIncrement)
+
+                progressUpdate.value = ProgressUpdate(oldProgress, it   )
+            }
         }
     }
 

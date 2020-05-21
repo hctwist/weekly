@@ -15,9 +15,8 @@ import com.twisthenry8gmail.weeklyphoenix.view.ActivityMain
 
 object NotificationHelper {
 
-    const val GOAL_TIMER_CHANNEL_ID = "timer_channel"
-
-    const val TIMED_GOAL_NOTIFICATION_ID = 0
+    private const val GOAL_TIMER_CHANNEL_ID = "timer_channel"
+    private const val TIMED_GOAL_NOTIFICATION_ID = 0
 
     fun createChannels(context: Context) {
 
@@ -26,8 +25,6 @@ object NotificationHelper {
             context.getString(R.string.channel_goal_timer),
             NotificationManager.IMPORTANCE_DEFAULT
         )
-
-        // TODO Set light color etc
         timerChannel.description = context.getString(R.string.channel_goal_timer_desc)
 
         context.getSystemService<NotificationManager>()?.createNotificationChannel(timerChannel)
@@ -36,17 +33,20 @@ object NotificationHelper {
     fun showGoalTimerNotification(context: Context, startTime: Long) {
 
         val timeText =
-            DateTimeUtil.showGoalTime(context, (System.currentTimeMillis() - startTime) / 1000)
+            GoalDisplayUtil.displayGoalTime(
+                context,
+                (System.currentTimeMillis() - startTime) / 1000
+            )
 
-        val intent = Intent(context, ActivityMain::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+        val contentIntent = Intent(context, ActivityMain::class.java)
+        contentIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        val contentPendingIntent = PendingIntent.getActivity(context, 1, contentIntent, 0)
 
         val builder = NotificationCompat.Builder(context, GOAL_TIMER_CHANNEL_ID)
             .setSmallIcon(R.drawable.round_hourglass_empty_24)
             .setContentTitle(context.getString(R.string.notification_goal_timer_title))
             .setContentText(timeText)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(contentPendingIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
 
@@ -55,27 +55,22 @@ object NotificationHelper {
 
     fun cancelGoalTimerNotification(context: Context) {
 
+        val alarmManager = context.getSystemService<AlarmManager>()
+        alarmManager?.cancel(
+            GoalTimerReceiver.buildPendingIntent(context)
+        )
+
         NotificationManagerCompat.from(context)
             .cancel(TIMED_GOAL_NOTIFICATION_ID)
     }
 
-    fun scheduleGoalTimerNotification(context: Context, startAt: Long) {
+    fun scheduleNextGoalTimerNotification(context: Context, startTime: Long) {
 
-        // TODO Start alarm when phone is restarted
         val alarmManager = context.getSystemService<AlarmManager>()
 
-        alarmManager?.setInexactRepeating(
+        alarmManager?.set(
             AlarmManager.RTC_WAKEUP,
-            startAt,
-            60 * 1000,
-            GoalTimerReceiver.buildPendingIntent(context)
-        )
-    }
-
-    fun cancelGoalTimerNotificationAlarm(context: Context) {
-
-        val alarmManager = context.getSystemService<AlarmManager>()
-        alarmManager?.cancel(
+            System.currentTimeMillis() + GoalTimerUtil.calculateScheduleOffset(startTime),
             GoalTimerReceiver.buildPendingIntent(context)
         )
     }

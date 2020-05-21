@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 class TypingAnimatedTextView(context: Context, attrs: AttributeSet) :
     AppCompatTextView(context, attrs) {
 
-    private val characterAnimationDuration = 40L
+    private val characterAnimationDuration = 30L
 
     private var eventualText: CharSequence = ""
     private var remainingToAnimate = 0

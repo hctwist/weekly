@@ -5,17 +5,15 @@ import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.OnRebindCallback
 import androidx.recyclerview.widget.RecyclerView
-import com.twisthenry8gmail.progresscircles.ProgressCircleView
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
+import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardCompleteBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardScheduledBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.MainHeaderBinding
 import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
-import kotlinx.android.synthetic.main.goal_card.view.*
-import kotlinx.android.synthetic.main.goal_card_complete.view.*
-import kotlinx.android.synthetic.main.main_header.view.*
-import java.lang.Exception
 
 class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -23,8 +21,7 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
 
     private val goalSubtitleGenerator = GoalDisplayUtil.SubtitleGenerator(context)
 
-    var goalClickListener: ((Goal) -> Unit)? = null
-    var goalActionListener: ((Goal, Int, View) -> Unit)? = null
+    var clickHandler: ClickHandler? = null
 
     override fun getItemCount() = data.size
 
@@ -35,29 +32,24 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
+        val inflater = LayoutInflater.from(parent.context)
         return when (Data.Type.values()[viewType]) {
 
-            Data.Type.HEADER -> HeaderVH(
-                LayoutInflater.from(context).inflate(
-                    R.layout.main_header,
-                    parent,
-                    false
-                )
-            )
-            Data.Type.GOAL -> GoalVH(
-                LayoutInflater.from(context).inflate(
-                    R.layout.goal_card,
-                    parent,
-                    false
-                )
-            )
+            Data.Type.HEADER -> HeaderVH(MainHeaderBinding.inflate(inflater, parent, false))
+            Data.Type.GOAL -> GoalVH(GoalCardBinding.inflate(inflater, parent, false))
             Data.Type.GOAL_COMPLETE -> GoalCompleteVH(
-                LayoutInflater.from(context)
-                    .inflate(
-                        R.layout.goal_card_complete,
-                        parent,
-                        false
-                    )
+                GoalCardCompleteBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+            Data.Type.GOAL_SCHEDULED -> GoalScheduledVH(
+                GoalCardScheduledBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
             )
         }
     }
@@ -82,8 +74,21 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
                         val h = holder as GoalVH
                         val goal = data[position].asGoal()
 
-                        h.progressView.setProgress(goal.progress, true)
-                        h.subtitleView.text = goalSubtitleGenerator.generateSubtitle(goal)
+                        // TODO Better method to stop the rebind?
+                        val callback = object : OnRebindCallback<GoalCardBinding>() {
+
+                            override fun onPreBind(binding: GoalCardBinding?): Boolean {
+
+                                binding?.goalProgressView?.setProgress(goal.progress, true)
+                                binding?.goalSubtitle?.text =
+                                    goalSubtitleGenerator.generateSubtitle(goal)
+                                binding?.removeOnRebindCallback(this)
+
+                                return false
+                            }
+                        }
+                        h.binding.addOnRebindCallback(callback)
+                        h.binding.goal = goal
                     }
                 }
             }
@@ -92,90 +97,71 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
+        val item = data[position]
+
         when (Data.Type.values()[getItemViewType(position)]) {
 
-            Data.Type.HEADER -> {
-
-                val headerVH = holder as HeaderVH
-                val header = data[position].asHeader()
-
-                headerVH.headingView.text = header.heading
-                headerVH.subheadingView.text = header.subHeading
-            }
-
-            Data.Type.GOAL -> {
-
-                val goalVH = holder as GoalVH
-                val goal = data[position].asGoal()
-
-                goalVH.itemView.setOnClickListener {
-
-                    val adapterPosition = goalVH.adapterPosition
-                    goalClickListener?.invoke(data[adapterPosition].asGoal())
-                }
-
-                goalVH.titleView.text = goal.name
-                goalVH.subtitleView.text = goalSubtitleGenerator.generateSubtitle(goal)
-
-                goalVH.progressView.apply {
-
-                    setColor(goal.color)
-                    target = goal.target
-                    setProgress(goal.progress)
-                }
-
-                goalVH.actionButton.setImageResource(
-
-                    when (goal.type) {
-
-                        Goal.Type.COUNTED -> R.drawable.round_plus_one_24
-                        Goal.Type.TIMED -> R.drawable.round_play_arrow_24
-                    }
-                )
-                goalVH.actionButton.setOnClickListener {
-
-                    val adapterPosition = goalVH.adapterPosition
-                    goalActionListener?.invoke(
-                        data[adapterPosition].asGoal(),
-                        adapterPosition,
-                        goalVH.itemView
-                    )
-                }
-            }
-
-            Data.Type.GOAL_COMPLETE -> {
-
-                val goalCVH = holder as GoalCompleteVH
-                val goal = data[position].asGoal()
-
-                goalCVH.itemView.setOnClickListener {
-
-                    val adapterPosition = goalCVH.adapterPosition
-                    goalClickListener?.invoke(data[adapterPosition].asGoal())
-                }
-
-                goalCVH.titleView.text = goal.name
-            }
+            Data.Type.HEADER -> (holder as HeaderVH).bind(item.asHeader())
+            Data.Type.GOAL -> (holder as GoalVH).bind(
+                item.asGoal(),
+                goalSubtitleGenerator,
+                clickHandler!!
+            )
+            Data.Type.GOAL_COMPLETE -> (holder as GoalCompleteVH).bind(
+                item.asGoal(),
+                clickHandler!!
+            )
+            Data.Type.GOAL_SCHEDULED -> (holder as GoalScheduledVH).bind(
+                item.asGoal(),
+                clickHandler!!
+            )
         }
     }
 
-    class HeaderVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class HeaderVH(private val binding: MainHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val headingView: TextView = itemView.main_header_heading
-        val subheadingView: TextView = itemView.main_header_subheading
+        fun bind(header: Header) {
+
+            binding.header = header
+            binding.executePendingBindings()
+        }
     }
 
-    class GoalVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class GoalVH(val binding: GoalCardBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val titleView: TextView = itemView.goal_title
-        val subtitleView: TextView = itemView.goal_subtitle
-        val progressView: ProgressCircleView = itemView.goal_progress_view
-        val actionButton: ImageView = itemView.goal_action_button
+        fun bind(
+            goal: Goal,
+            subtitleGenerator: GoalDisplayUtil.SubtitleGenerator,
+            clickHandler: ClickHandler
+        ) {
+
+            binding.goal = goal
+            binding.subtitlegenrator = subtitleGenerator
+            binding.clickhandler = clickHandler
+            binding.executePendingBindings()
+        }
     }
 
-    class GoalCompleteVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class GoalCompleteVH(private val binding: GoalCardCompleteBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        val titleView: TextView = itemView.goal_complete_title
+        fun bind(goal: Goal, clickHandler: ClickHandler) {
+
+            binding.goal = goal
+            binding.clickhandler = clickHandler
+            binding.executePendingBindings()
+        }
+    }
+
+    class GoalScheduledVH(private val binding: GoalCardScheduledBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(goal: Goal, clickHandler: ClickHandler) {
+
+            binding.goal = goal
+            binding.clickhandler = clickHandler
+            binding.executePendingBindings()
+        }
     }
 
     class ItemDecoration : RecyclerView.ItemDecoration() {
@@ -216,11 +202,9 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
                 }
             }
 
-            fun ofGoal(g: Goal): Data {
+            fun ofGoal(type: Type, g: Goal): Data {
 
-                return Data(
-                    if (g.isComplete()) Type.GOAL_COMPLETE else Type.GOAL
-                ).apply {
+                return Data(type).apply {
 
                     goal = g
                 }
@@ -239,14 +223,21 @@ class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
 
         enum class Type {
 
-            HEADER, GOAL, GOAL_COMPLETE
+            HEADER, GOAL, GOAL_COMPLETE, GOAL_SCHEDULED
         }
     }
 
-    class Header(val heading: String, val subHeading: String)
+    data class Header(val heading: String, val subHeading: String)
 
     enum class Change {
 
         PROGRESS
+    }
+
+    interface ClickHandler {
+
+        fun onGoalAction(goal: Goal)
+
+        fun onGoalClick(goal: Goal)
     }
 }

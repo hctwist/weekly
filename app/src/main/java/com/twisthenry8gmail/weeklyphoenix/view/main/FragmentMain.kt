@@ -3,19 +3,19 @@ package com.twisthenry8gmail.weeklyphoenix.view.main
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.twisthenry8gmail.weeklyphoenix.*
+import com.twisthenry8gmail.weeklyphoenix.Event
+import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.MainViewModel
+import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.launch
 
 class FragmentMain : Fragment(R.layout.fragment_main) {
 
@@ -67,14 +67,22 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
 
         goalAdapter = GoalAdapter(requireContext())
 
-        goalAdapter.goalClickListener = {
+        goalAdapter.clickHandler = object : GoalAdapter.ClickHandler {
 
-            mainViewModel.onGoalClick(it)
+            override fun onGoalAction(goal: Goal) {
+
+                mainViewModel.onGoalAction(requireContext(), goal)
+            }
+
+            override fun onGoalClick(goal: Goal) {
+
+                mainViewModel.onGoalClick(goal)
+            }
         }
 
-        goalAdapter.goalActionListener = { goal, _, _ ->
+        main_empty_add_goal.setOnClickListener {
 
-            mainViewModel.onGoalAction(requireContext(), goal)
+            main_toolbar.menu.performIdentifierAction(R.id.main_add_goal, 0)
         }
 
         main_cards.apply {

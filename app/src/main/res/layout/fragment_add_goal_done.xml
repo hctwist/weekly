@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/large_content_margin"
-                android:text="Start date"
+                android:text="@string/goal_start_date"
                 app:layout_constraintBottom_toBottomOf="@id/add_goal_done_start"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_goal_done_start" />
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/large_content_margin"
-                android:text="End date"
+                android:text="@string/goal_end_date"
                 app:layout_constraintBottom_toBottomOf="@id/add_goal_done_end"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_goal_done_end" />
@@ -88,7 +88,7 @@
                 android:layout_marginTop="@dimen/half_margin"
                 android:layout_marginEnd="@dimen/margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
-                android:text="@{String.valueOf(viewmodel.goal.increase)}"
+                android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context, viewmodel.goal.type, viewmodel.goal.increase)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_end" />
 
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/large_content_margin"
-                android:text="Periodic increase"
+                android:text="@string/goal_periodic_increase"
                 app:layout_constraintBottom_toBottomOf="@id/add_goal_done_increase"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_goal_done_increase" />
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/large_content_margin"
-                android:text="Color"
+                android:text="@string/goal_color"
                 app:layout_constraintBottom_toBottomOf="@id/add_goal_done_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_goal_done_color" />

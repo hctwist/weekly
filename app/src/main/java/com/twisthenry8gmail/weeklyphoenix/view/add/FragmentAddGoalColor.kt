@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.R
+import kotlinx.android.synthetic.main.color_dot.view.*
 import kotlinx.android.synthetic.main.fragment_color_dot.*
 
 class FragmentAddGoalColor : BottomSheetDialogFragment() {
@@ -30,37 +32,52 @@ class FragmentAddGoalColor : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val cTypedArray = requireContext().resources.obtainTypedArray(R.array.goal_colors)
+        val cTypedArray = resources.obtainTypedArray(R.array.goal_colors)
         val colors = Array(cTypedArray.length()) {
 
             cTypedArray.getColor(it, 0)
         }
         cTypedArray.recycle()
+        val colorNames = resources.getStringArray(R.array.goal_color_names)
 
-        val dotAdapter =
-            Adapter(
-                colors
-            )
+        val dotAdapter = Adapter(colors)
+
+        viewModel.currentGoal.observe(viewLifecycleOwner, Observer { goal ->
+
+            val colorIndex = colors.indexOfFirst { it == goal.color }
+            dotAdapter.selected = colorIndex
+            color_dot_color_name.text = colorNames[colorIndex]
+        })
+
         dotAdapter.onClickListener = {
 
             viewModel.requireCurrentGoal().color = it
             viewModel.postCurrentGoalUpdate()
-            dismiss()
         }
 
         color_dot_colors.apply {
 
             setHasFixedSize(true)
             addItemDecoration(Decoration())
+            itemAnimator = null
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = dotAdapter
         }
     }
 
-    // TODO Current selected
-    class Adapter(private val colors: Array<Int>) : RecyclerView.Adapter<Adapter.VH>() {
+    class Adapter(private val colors: Array<Int>) :
+        RecyclerView.Adapter<Adapter.VH>() {
 
-        var onClickListener: (Int) -> Unit = {}
+        var selected = 0
+            set(value) {
+
+                notifyItemChanged(field)
+                notifyItemChanged(value)
+
+                field = value
+            }
+
+        var onClickListener: ((Int) -> Unit)? = null
 
         override fun getItemCount(): Int {
 
@@ -83,15 +100,18 @@ class FragmentAddGoalColor : BottomSheetDialogFragment() {
             val color = colors[position]
             holder.dot.backgroundTintList = ColorStateList.valueOf(color)
 
+            holder.highlight.visibility = if (position == selected) View.VISIBLE else View.GONE
+
             holder.dot.setOnClickListener {
 
-                onClickListener(color)
+                onClickListener?.invoke(color)
             }
         }
 
         class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            val dot = itemView as ImageButton
+            val dot: ImageButton = itemView.color_dot_dot
+            val highlight: View = itemView.color_dot_highlight
         }
     }
 

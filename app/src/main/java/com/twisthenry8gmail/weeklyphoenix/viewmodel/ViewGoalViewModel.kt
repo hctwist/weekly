@@ -2,11 +2,11 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.content.res.Resources
 import android.view.MenuItem
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
-import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
 import kotlinx.coroutines.launch
 
 class ViewGoalViewModel(
@@ -15,7 +15,7 @@ class ViewGoalViewModel(
     private val currentGoalViewModel: CurrentGoalViewModel
 ) : BaseViewModel() {
 
-    val goal = currentGoalViewModel.requireCurrentGoal()
+    val goal = currentGoalViewModel.currentGoal
 
     fun onMenuItemClick(menuItem: MenuItem): Boolean {
 
@@ -25,13 +25,23 @@ class ViewGoalViewModel(
 
                 viewModelScope.launch {
 
-                    goalRepository.delete(goal.name)
+                    goalRepository.delete(goal.value!!.name)
                 }
                 navigateBack()
                 true
             }
 
             else -> false
+        }
+    }
+
+    fun onPauseIncrease() {
+
+        goal.value!!.increasePaused = !goal.value!!.increasePaused
+        goal.value = goal.value
+        viewModelScope.launch {
+
+            goalRepository.pauseIncrease(goal.value!!.name, goal.value!!.increasePaused)
         }
     }
 

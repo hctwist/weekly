@@ -89,7 +89,7 @@ class MainViewModel(
 
                 viewModelScope.launch {
 
-                    goalRepository.updateGoalProgress(goal.name, goal.progress + 1)
+                    goalRepository.addProgress(goal.id, 1)
                 }
 
                 if (goal.progress + 1 == goal.target) {
@@ -101,17 +101,17 @@ class MainViewModel(
 
             Goal.Type.TIMED -> {
 
-                startGoalTimer(context, goal.name)
+                startGoalTimer(context, goal.id)
                 navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
             }
         }
     }
 
-    private fun startGoalTimer(context: Context, goalName: String) {
+    private fun startGoalTimer(context: Context, goalId: Int) {
 
-        val time = goalRepository.startTimer(goalName)
+        val time = goalRepository.startTimer(goalId)
         NotificationHelper.showGoalTimerNotification(context, time)
-        NotificationHelper.scheduleGoalTimerNotification(context, time)
+        NotificationHelper.scheduleNextGoalTimerNotification(context, time)
     }
 
     class Factory(

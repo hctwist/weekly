@@ -33,6 +33,7 @@
         android:layout_marginTop="@dimen/double_margin"
         android:layout_marginEnd="@dimen/margin"
         app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_display"
+        app:selectionRequired="true"
         app:singleSelection="true" />
 
     <com.twisthenry8gmail.buttons.AccessibleTouchImageButton

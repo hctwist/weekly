@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.twisthenry8gmail.weeklyphoenix">
+    
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +13,14 @@
         android:theme="@style/AppTheme">
 
         <receiver android:name=".services.GoalTimerReceiver" />
+
+        <receiver android:name=".services.RebootReceiver">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".view.ActivityMain">
 

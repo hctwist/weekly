@@ -22,9 +22,10 @@ open class GoalTimerReceiver : BroadcastReceiver() {
 
         context?.let {
 
-            // TODO Does this follow good architecture?
-            val goalRepository = (it.applicationContext as WeeklyApplication).goalRepository
-            NotificationHelper.showGoalTimerNotification(it, goalRepository.getTimingGoalStartTime())
+            val startTime =
+                (it.applicationContext as WeeklyApplication).goalRepository.getTimingGoalStartTime()
+            NotificationHelper.showGoalTimerNotification(it, startTime)
+            NotificationHelper.scheduleNextGoalTimerNotification(it, startTime)
         }
     }
 }

@@ -41,6 +41,7 @@
     <ImageView
         android:layout_width="56dp"
         android:layout_height="56dp"
+        android:contentDescription="@string/cd_done"
         android:id="@+id/goal_success_done"
         android:visibility="invisible"
         android:src="@drawable/round_done_24"

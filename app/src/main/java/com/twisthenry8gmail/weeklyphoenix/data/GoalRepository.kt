@@ -2,6 +2,7 @@ package com.twisthenry8gmail.weeklyphoenix.data
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import java.time.LocalDate
 
@@ -12,7 +13,7 @@ class GoalRepository(
 
     companion object {
 
-        private const val PREF_TIMED_GOAL_NAME = "timed_goal_name"
+        private const val PREF_TIMED_GOAL_ID = "timed_goal_name"
         private const val PREF_TIMED_GOAL_START = "timed_goal_start"
     }
 
@@ -26,16 +27,15 @@ class GoalRepository(
         goalsDao.getAllThatRequireReset(now.toEpochDay()).forEach {
 
             val resetDate = LocalDate.ofEpochDay(it.resetDate)
-            val periodsPassed = resetDate.until(now)[it.resetUnit] / it.resetMultiple
-
             it.updateResetDate(LocalDate.ofEpochDay(it.resetDate))
-            resetUpdates.add(
-                Goal.Dao.ResetUpdate(
-                    it.name,
-                    it.resetDate,
-                    it.target + periodsPassed * it.increase
-                )
-            )
+
+            if (!it.increasePaused) {
+
+                val periodsPassed = resetDate.until(now)[it.resetUnit] / it.resetMultiple
+                it.target += periodsPassed * it.increase
+            }
+
+            resetUpdates.add(Goal.Dao.ResetUpdate(it.name, it.resetDate, it.target))
         }
 
         // TODO Test
@@ -57,20 +57,19 @@ class GoalRepository(
         return goals!!
     }
 
-    suspend fun find(name: String): Goal {
-
-        // TODO Use goals cache above
-        return goalsDao.findGoal(name)
-    }
-
     suspend fun add(goal: Goal) {
 
         goalsDao.addGoal(goal)
     }
 
-    suspend fun updateGoalProgress(goalName: String, progress: Long) {
+    suspend fun addProgress(id: Int, progress: Long) {
 
-        goalsDao.updateGoalProgress(goalName, progress)
+        goalsDao.addGoalProgress(id, progress)
+    }
+
+    suspend fun pauseIncrease(goalName: String, pause: Boolean) {
+
+        goalsDao.pauseGoalIncrease(goalName, pause)
     }
 
     suspend fun delete(goalName: String) {
@@ -78,12 +77,12 @@ class GoalRepository(
         goalsDao.deleteGoal(goalName)
     }
 
-    fun startTimer(goalName: String): Long {
+    fun startTimer(id: Int): Long {
 
         val time = System.currentTimeMillis()
         goalPreferences.edit().run {
 
-            putString(PREF_TIMED_GOAL_NAME, goalName)
+            putInt(PREF_TIMED_GOAL_ID, id)
             putLong(PREF_TIMED_GOAL_START, time)
             apply()
         }
@@ -95,7 +94,7 @@ class GoalRepository(
 
         goalPreferences.edit().run {
 
-            remove(PREF_TIMED_GOAL_NAME)
+            remove(PREF_TIMED_GOAL_ID)
             remove(PREF_TIMED_GOAL_START)
             apply()
         }
@@ -103,12 +102,28 @@ class GoalRepository(
 
     fun isTiming(): Boolean {
 
-        return goalPreferences.contains(PREF_TIMED_GOAL_NAME)
+        return goalPreferences.contains(PREF_TIMED_GOAL_ID)
     }
 
-    fun getTimingGoalName(): String? {
+    fun getTimingGoal(): LiveData<Goal> {
 
-        return goalPreferences.getString(PREF_TIMED_GOAL_NAME, null)
+        val data: LiveData<Goal>
+
+        val id = goalPreferences.getInt(PREF_TIMED_GOAL_ID, -1)
+        val cachedGoal = goals?.value?.find { it.id == id }
+
+        if (cachedGoal == null) {
+
+            data = goalsDao.findGoal(id)
+        } else {
+
+            data = MutableLiveData<Goal>().apply {
+
+                value = cachedGoal
+            }
+        }
+
+        return data
     }
 
     fun getTimingGoalStartTime(): Long {

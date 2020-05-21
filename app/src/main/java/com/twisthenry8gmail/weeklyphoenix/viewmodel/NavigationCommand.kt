@@ -15,7 +15,7 @@ interface NavigationCommand {
         }
     }
 
-    class Back(): NavigationCommand {
+    class Back: NavigationCommand {
 
         override fun navigate(navController: NavController) {
 
