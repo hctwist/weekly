@@ -4,12 +4,12 @@ import androidx.navigation.NavController
 
 interface NavigationCommand {
 
-    fun navigate(navController: NavController)
+    fun navigateWith(navController: NavController)
 
     class To(private val resId: Int):
         NavigationCommand {
 
-        override fun navigate(navController: NavController) {
+        override fun navigateWith(navController: NavController) {
 
             navController.navigate(resId)
         }
@@ -17,7 +17,7 @@ interface NavigationCommand {
 
     class Back: NavigationCommand {
 
-        override fun navigate(navController: NavController) {
+        override fun navigateWith(navController: NavController) {
 
             navController.popBackStack()
         }

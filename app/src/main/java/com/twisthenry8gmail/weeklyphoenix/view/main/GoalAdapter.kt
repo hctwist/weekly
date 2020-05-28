@@ -1,10 +1,13 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.ColorUtils
 import androidx.databinding.OnRebindCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.twisthenry8gmail.weeklyphoenix.R
@@ -15,11 +18,11 @@ import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardScheduledBinding
 import com.twisthenry8gmail.weeklyphoenix.databinding.MainHeaderBinding
 import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 
-class GoalAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GoalAdapter(val resources: Resources) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data = listOf<Data>()
 
-    private val goalSubtitleGenerator = GoalDisplayUtil.SubtitleGenerator(context)
+    private val goalSubtitleGenerator = GoalDisplayUtil.SubtitleGenerator(resources)
 
     var clickHandler: ClickHandler? = null
 

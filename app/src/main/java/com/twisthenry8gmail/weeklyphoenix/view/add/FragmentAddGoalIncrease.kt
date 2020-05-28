@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
 import kotlinx.android.synthetic.main.fragment_periodic_increase.*
 
 // TODO Improve with MVVM
 class FragmentAddGoalIncrease : BottomSheetDialogFragment() {
 
-    private val viewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
+    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
 
     private var increment: Long = 0
 
@@ -30,12 +30,12 @@ class FragmentAddGoalIncrease : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        increment = viewModel.requireCurrentGoal().type.minIncrement
+        increment = viewModel.type.minIncrement
 
-        viewModel.currentGoal.observe(viewLifecycleOwner, Observer {
+        viewModel.increase.observe(viewLifecycleOwner, Observer {
 
             periodic_increase_value.text =
-                GoalDisplayUtil.displayProgressValue(requireContext(), it.type, it.increase)
+                GoalDisplayUtil.displayProgressValue(resources, viewModel.type, it)
         })
 
         periodic_increase_minus.setOnClickListener {
@@ -51,18 +51,16 @@ class FragmentAddGoalIncrease : BottomSheetDialogFragment() {
 
     private fun onDecrement() {
 
-        val goal = viewModel.requireCurrentGoal()
+        val currentIncrease = viewModel.increase.value
+        if (currentIncrease >= increment) {
 
-        if (goal.increase >= increment) {
-
-            goal.increase -= increment
-            viewModel.postCurrentGoalUpdate()
+            viewModel.increase.value = currentIncrease + increment
         }
     }
 
     private fun onIncrement() {
 
-        viewModel.requireCurrentGoal().increase += increment
-        viewModel.postCurrentGoalUpdate()
+        val currentIncrease = viewModel.increase.value
+        viewModel.increase.value = currentIncrease + increment
     }
 }

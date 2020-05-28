@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="@{goal.name}"
+                android:text="@{goal.title}"
                 android:textAlignment="viewStart"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="@dimen/goal_title"

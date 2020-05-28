@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.ColorUtil" />
+
         <variable
             name="goal"
             type="com.twisthenry8gmail.weeklyphoenix.data.Goal" />
@@ -35,7 +37,9 @@
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginTop="@dimen/margin"
                 android:fontFamily="sans-serif-medium"
-                android:text="@{goal.name}"
+                android:text="@{goal.title}"
+                app:layout_constraintBottom_toTopOf="@id/goal_subtitle"
+                app:layout_constraintVertical_chainStyle="packed"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="@dimen/goal_title"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +51,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin"
+                android:layout_marginTop="@dimen/half_margin"
+                app:layout_constraintTop_toBottomOf="@id/goal_title"
                 android:text="@{subtitlegenrator.generateSubtitle(goal)}"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"

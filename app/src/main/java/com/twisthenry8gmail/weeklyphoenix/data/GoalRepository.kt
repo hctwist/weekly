@@ -19,35 +19,39 @@ class GoalRepository(
 
     private var goals: LiveData<List<Goal>>? = null
 
-    suspend fun resetAllRequired() {
+    suspend fun getAllThatRequireReset(): List<Goal> {
+
+        return goalsDao.getAllThatRequireReset(LocalDate.now().toEpochDay())
+    }
+
+    suspend fun reset(goals: List<Goal>) {
 
         val resetUpdates = ArrayList<Goal.Dao.ResetUpdate>()
         val now = LocalDate.now()
-
-        goalsDao.getAllThatRequireReset(now.toEpochDay()).forEach {
+        goals.forEach {
 
             val resetDate = LocalDate.ofEpochDay(it.resetDate)
-            it.updateResetDate(LocalDate.ofEpochDay(it.resetDate))
+            val nextResetDate = it.getResetDateFrom(LocalDate.ofEpochDay(it.resetDate))
+            var newTarget = it.target
 
             if (!it.increasePaused) {
 
-                val periodsPassed = resetDate.until(now)[it.resetUnit] / it.resetMultiple
-                it.target += periodsPassed * it.increase
+                val periodsPassed = resetDate.until(now)[it.reset.unit] / it.reset.multiple
+                newTarget += periodsPassed * it.increase
             }
 
-            resetUpdates.add(Goal.Dao.ResetUpdate(it.name, it.resetDate, it.target))
+            resetUpdates.add(Goal.Dao.ResetUpdate(it.id, nextResetDate, newTarget))
         }
 
-        // TODO Test
-        goalsDao.resetGoals(resetUpdates)
+        goalsDao.reset(resetUpdates)
     }
 
-    fun getNames(): LiveData<List<String>> {
+    fun getTitles(): LiveData<List<String>> {
 
-        if (goals == null) return goalsDao.getNames()
+        if (goals == null) return goalsDao.getTitles()
         return Transformations.map(goals!!) { g ->
 
-            g.map { it.name }
+            g.map { it.title }
         }
     }
 
@@ -59,22 +63,22 @@ class GoalRepository(
 
     suspend fun add(goal: Goal) {
 
-        goalsDao.addGoal(goal)
+        goalsDao.insert(goal)
     }
 
     suspend fun addProgress(id: Int, progress: Long) {
 
-        goalsDao.addGoalProgress(id, progress)
+        goalsDao.incrementProgress(id, progress)
     }
 
-    suspend fun pauseIncrease(goalName: String, pause: Boolean) {
+    suspend fun pauseIncrease(id: Int, pause: Boolean) {
 
-        goalsDao.pauseGoalIncrease(goalName, pause)
+        goalsDao.pauseIncrease(id, pause)
     }
 
-    suspend fun delete(goalName: String) {
+    suspend fun delete(id: Int) {
 
-        goalsDao.deleteGoal(goalName)
+        goalsDao.delete(id)
     }
 
     fun startTimer(id: Int): Long {
@@ -114,7 +118,7 @@ class GoalRepository(
 
         if (cachedGoal == null) {
 
-            data = goalsDao.findGoal(id)
+            data = goalsDao.find(id)
         } else {
 
             data = MutableLiveData<Goal>().apply {

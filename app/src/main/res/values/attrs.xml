@@ -5,4 +5,11 @@
 
         <attr name="emptyView" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="GoalTypeView">
+
+        <attr name="goalTypeTitle" format="string" />
+        <attr name="goalTypeIcon" format="reference" />
+        <attr name="goalTypeDescription" format="string" />
+    </declare-styleable>
 </resources>

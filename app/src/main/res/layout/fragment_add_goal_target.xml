@@ -1,60 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:bind="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/add_goal_counted_target_title"
-        style="@style/Header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_content_margin"
-        android:layout_marginTop="@dimen/large_content_margin"
-        android:layout_marginEnd="@dimen/large_content_margin"
-        android:text="@string/add_goal_target_hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <com.twisthenry8gmail.dragline.DraglineView
-        android:id="@+id/add_goal_target"
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/double_margin"
-        android:fontFamily="sans-serif-medium"
-        android:paddingStart="@dimen/large_content_margin"
-        android:paddingEnd="@dimen/large_content_margin"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="@dimen/display_numbers"
-        app:centralMargin="@dimen/double_margin"
-        app:layout_constraintTop_toBottomOf="@id/add_goal_counted_target_title"
-        app:thumbColor="@color/color_accent"
-        app:thumbRadius="10dp"
-        app:tickColor="?android:attr/textColorPrimary"
-        app:tickHeight="12dp"
-        app:tickWidth="1dp" />
+        android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/add_goal_target_continue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/double_margin"
-        android:layout_marginEnd="@dimen/margin"
-        android:text="@string/cont"
-        app:icon="@drawable/round_arrow_forward_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_goal_target" />
+        <TextView
+            android:id="@+id/add_goal_counted_target_title"
+            style="@style/Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
+            android:layout_marginEnd="@dimen/large_content_margin"
+            android:text="@string/add_goal_target_hint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:contentDescription="@string/cd_back"
-        android:id="@+id/add_goal_target_back"
-        style="@style/SecondaryImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_content_margin"
-        android:src="@drawable/round_arrow_back_24"
-        app:layout_constraintBottom_toBottomOf="@id/add_goal_target_continue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/add_goal_target_continue" />
+        <com.twisthenry8gmail.dragline.DraglineView
+            android:id="@+id/add_goal_target"
+            draglineTextFactory="@{(value) -> GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.type, value)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/double_margin"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="@dimen/large_content_margin"
+            android:paddingEnd="@dimen/large_content_margin"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="@dimen/display_numbers"
+            app:centralMargin="@dimen/double_margin"
+            app:increment="@{viewmodel.type.minIncrement}"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_counted_target_title"
+            app:minValue="@{viewmodel.type.minIncrement}"
+            app:thumbColor="@color/color_accent"
+            app:thumbRadius="10dp"
+            app:tickColor="?android:attr/textColorPrimary"
+            app:tickHeight="12dp"
+            app:tickWidth="1dp"
+            app:value="@={viewmodel.target}" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_target_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/double_margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:onClick="@{() -> viewmodel.onConfirmTarget()}"
+            android:text="@string/cont"
+            app:icon="@drawable/round_arrow_forward_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_target" />
+
+        <ImageButton
+            android:id="@+id/add_goal_target_back"
+            style="@style/SecondaryImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:contentDescription="@string/cd_back"
+            android:onClick="@{() -> viewmodel.onBack()}"
+            android:src="@drawable/round_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="@id/add_goal_target_continue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/add_goal_target_continue" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

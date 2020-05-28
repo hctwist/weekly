@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.twisthenry8gmail.weeklyphoenix.services.GoalTimerReceiver
 import com.twisthenry8gmail.weeklyphoenix.R
@@ -34,7 +35,7 @@ object NotificationHelper {
 
         val timeText =
             GoalDisplayUtil.displayGoalTime(
-                context,
+                context.resources,
                 (System.currentTimeMillis() - startTime) / 1000
             )
 
@@ -43,7 +44,8 @@ object NotificationHelper {
         val contentPendingIntent = PendingIntent.getActivity(context, 1, contentIntent, 0)
 
         val builder = NotificationCompat.Builder(context, GOAL_TIMER_CHANNEL_ID)
-            .setSmallIcon(R.drawable.round_hourglass_empty_24)
+            .setSmallIcon(R.drawable.timer_notification)
+            .setColor(context.getColor(R.color.color_primary))
             .setContentTitle(context.getString(R.string.notification_goal_timer_title))
             .setContentText(timeText)
             .setContentIntent(contentPendingIntent)

@@ -24,6 +24,8 @@ class StatefulRecyclerView(context: Context, attrs: AttributeSet) : RecyclerView
     private val emptyViewId: Int
     private var emptyView: View? = null
 
+    private var loading = true
+
     init {
 
         visibility = View.GONE
@@ -44,9 +46,19 @@ class StatefulRecyclerView(context: Context, attrs: AttributeSet) : RecyclerView
         newAdapter?.registerAdapterDataObserver(observer)
 
         super.setAdapter(newAdapter)
+
+        setEmpty(isEmpty())
+    }
+
+    fun finishedLoading() {
+
+        loading = false
+        setEmpty(isEmpty())
     }
 
     fun setEmpty(empty: Boolean) {
+
+        if(loading) return
 
         if (emptyView == null) {
 

@@ -2,14 +2,18 @@ package com.twisthenry8gmail.weeklyphoenix.view
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import kotlinx.android.synthetic.main.fragment_goal_success.*
+import kotlinx.coroutines.launch
 
 class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
 
@@ -19,14 +23,16 @@ class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
 
         val goal = goalViewModel.requireCurrentGoal()
 
-        goal_success_name.text = goal.name
+        goal_success_name.text = goal.title
         goal_success_progress.target = 1
+        goal_success_progress.setBackingArcColor(ColorUtil.lightenGoalColor(goal.color))
         goal_success_progress.setColor(goal.color)
 
         goal_success_done.setOnClickListener {
 
             findNavController().popBackStack()
         }
+
 
         Handler().postDelayed(
             {
@@ -37,6 +43,12 @@ class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
 
             }, 100
         )
+    }
+
+    override fun onDestroyView() {
+
+        // TODO Cancel handler?
+        super.onDestroyView()
     }
 
     private fun animateDone() {

@@ -1,43 +1,37 @@
 package com.twisthenry8gmail.weeklyphoenix.view.add
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
+import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
-import kotlinx.android.synthetic.main.fragment_add_goal_target.*
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalTargetBinding
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
 
-class FragmentAddGoalTarget : Fragment(R.layout.fragment_add_goal_target) {
+class FragmentAddGoalTarget : Fragment() {
 
-    private val viewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
+    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val binding = FragmentAddGoalTargetBinding.inflate(inflater, container, false)
+        binding.viewmodel = viewModel
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val goal = viewModel.requireCurrentGoal()
+        viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-        add_goal_target.minValue = goal.type.minIncrement
-        add_goal_target.increment = goal.type.minIncrement
-        add_goal_target.textFactory = {
-
-            GoalDisplayUtil.displayProgressValue(requireContext(), goal.type, it)
-        }
-
-        add_goal_target.valueChangedListener = {
-
-            viewModel.requireCurrentGoal().target = it
-        }
-
-        add_goal_target_continue.setOnClickListener {
-
-            findNavController().navigate(R.id.action_fragmentAddGoalTarget_to_fragmentAddGoalReset)
-        }
-
-        add_goal_target_back.setOnClickListener {
-
-            findNavController().popBackStack()
-        }
+            it.navigateWith(findNavController())
+        })
     }
 }

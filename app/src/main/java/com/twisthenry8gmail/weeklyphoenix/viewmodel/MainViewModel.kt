@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.DiffUtil
+import com.twisthenry8gmail.weeklyphoenix.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
@@ -19,20 +20,19 @@ import java.util.*
 
 class MainViewModel(
     private val androidResources: Resources,
+    private val mainRepository: MainRepository,
     private val goalRepository: GoalRepository,
     private val currentGoalViewModel: CurrentGoalViewModel
-) : BaseViewModel() {
+) : NavigatorViewModel() {
 
     init {
-
-        viewModelScope.launch(Dispatchers.IO) {
-
-            goalRepository.resetAllRequired()
-        }
 
         if (goalRepository.isTiming()) {
 
             navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
+        } else if (mainRepository.isFirstTime()) {
+
+            navigateTo(R.id.action_fragmentMain_to_fragmentOnboarding)
         }
     }
 
@@ -69,9 +69,8 @@ class MainViewModel(
     val goalAdapterDiffData
         get() = _goalAdapterDiffData
 
-    fun onAddGoal(context: Context, type: Goal.Type) {
+    fun onAddGoal() {
 
-        currentGoalViewModel.currentGoal.value = Goal.buildDefaultGoal(context, type)
         navigateTo(R.id.action_fragmentMain_to_fragmentAddGoalTitle)
     }
 
@@ -116,6 +115,7 @@ class MainViewModel(
 
     class Factory(
         private val androidResources: Resources,
+        private val mainRepository: MainRepository,
         private val goalRepository: GoalRepository,
         private val currentGoalViewModel: CurrentGoalViewModel
     ) : ViewModelProvider.Factory {
@@ -124,7 +124,12 @@ class MainViewModel(
 
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return MainViewModel(androidResources, goalRepository, currentGoalViewModel) as T
+                return MainViewModel(
+                    androidResources,
+                    mainRepository,
+                    goalRepository,
+                    currentGoalViewModel
+                ) as T
             }
 
             throw IllegalArgumentException()

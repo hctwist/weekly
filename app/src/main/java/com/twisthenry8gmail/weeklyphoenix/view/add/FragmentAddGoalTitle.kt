@@ -1,30 +1,34 @@
 package com.twisthenry8gmail.weeklyphoenix.view.add
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.core.widget.addTextChangedListener
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalTitleBinding
 import com.twisthenry8gmail.weeklyphoenix.util.hideSoftKeyboard
 import com.twisthenry8gmail.weeklyphoenix.util.showSoftKeyboard
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalTitleViewModel
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
-import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
 import kotlinx.android.synthetic.main.fragment_add_goal_title.*
 
-class FragmentAddGoalTitle : Fragment(R.layout.fragment_add_goal_title) {
+class FragmentAddGoalTitle : Fragment() {
 
-    private val currentGoalViewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
+    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
 
-    private val viewModel by viewModels<AddGoalTitleViewModel> {
-        AddGoalTitleViewModel.Factory(
-            weeklyApplication().goalRepository,
-            currentGoalViewModel
-        )
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val binding = FragmentAddGoalTitleBinding.inflate(inflater, container, false)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,30 +37,13 @@ class FragmentAddGoalTitle : Fragment(R.layout.fragment_add_goal_title) {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigate(findNavController())
+            it.navigateWith(findNavController())
         })
+    }
 
-        add_goal_title.addTextChangedListener {
+    override fun onDetach() {
 
-            viewModel.onTextChanged(it)
-        }
-
-        add_goal_title.setText(currentGoalViewModel.requireCurrentGoal().name)
-
-        viewModel.canContinue.observe(viewLifecycleOwner, Observer {
-
-            add_goal_title_continue.isEnabled = it
-        })
-
-        add_goal_title_continue.setOnClickListener {
-
-            viewModel.onContinue()
-        }
-
-        add_goal_title_back.setOnClickListener {
-
-            hideSoftKeyboard()
-            viewModel.onBack()
-        }
+        hideSoftKeyboard()
+        super.onDetach()
     }
 }

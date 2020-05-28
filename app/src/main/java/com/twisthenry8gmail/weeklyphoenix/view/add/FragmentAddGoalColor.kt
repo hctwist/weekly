@@ -7,19 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
 import kotlinx.android.synthetic.main.color_dot.view.*
 import kotlinx.android.synthetic.main.fragment_color_dot.*
 
+// TODO Make this generic or move to AddGoalDoneFragment
 class FragmentAddGoalColor : BottomSheetDialogFragment() {
 
-    private val viewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
+    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,17 +43,16 @@ class FragmentAddGoalColor : BottomSheetDialogFragment() {
 
         val dotAdapter = Adapter(colors)
 
-        viewModel.currentGoal.observe(viewLifecycleOwner, Observer { goal ->
+        viewModel.color.observe(viewLifecycleOwner, Observer { color ->
 
-            val colorIndex = colors.indexOfFirst { it == goal.color }
+            val colorIndex = colors.indexOfFirst { it == color }
             dotAdapter.selected = colorIndex
             color_dot_color_name.text = colorNames[colorIndex]
         })
 
         dotAdapter.onClickListener = {
 
-            viewModel.requireCurrentGoal().color = it
-            viewModel.postCurrentGoalUpdate()
+            viewModel.color.value = it
         }
 
         color_dot_colors.apply {

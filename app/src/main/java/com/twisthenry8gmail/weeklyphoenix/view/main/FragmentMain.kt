@@ -1,15 +1,21 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
-import androidx.core.view.get
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.twisthenry8gmail.weeklyphoenix.Event
+import com.twisthenry8gmail.weeklyphoenix.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
@@ -23,6 +29,7 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
     private val mainViewModel by viewModels<MainViewModel> {
         MainViewModel.Factory(
             resources,
+            MainRepository(requireActivity().getPreferences(Context.MODE_PRIVATE)),
             weeklyApplication().goalRepository,
             currentGoalViewModel
         )
@@ -33,7 +40,7 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
 
         mainViewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigate(findNavController())
+            it.navigateWith(findNavController())
         })
 
         main_toolbar.setOnMenuItemClickListener { menuItem ->
@@ -42,22 +49,7 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
 
                 R.id.main_add_goal -> {
 
-                    val popupMenu = PopupMenu(context, view.findViewById(menuItem.itemId))
-                    Goal.Type.values().forEach {
-
-                        popupMenu.menu.add(it.displayNameRes)
-                    }
-
-                    popupMenu.setOnMenuItemClickListener { popupMenuItem ->
-
-                        mainViewModel.onAddGoal(
-                            requireContext(), Goal.Type.values()
-                                .find { it.getDisplayName(requireContext()) == popupMenuItem.title.toString() }!!
-                        )
-                        true
-                    }
-                    popupMenu.show()
-
+                    mainViewModel.onAddGoal()
                     true
                 }
 
@@ -65,7 +57,7 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
             }
         }
 
-        goalAdapter = GoalAdapter(requireContext())
+        goalAdapter = GoalAdapter(resources)
 
         goalAdapter.clickHandler = object : GoalAdapter.ClickHandler {
 
@@ -95,6 +87,7 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
         mainViewModel.goalAdapterData.observe(viewLifecycleOwner, Observer {
 
             goalAdapter.data = it
+            main_cards.finishedLoading()
         })
 
         mainViewModel.goalAdapterDiffData.observe(viewLifecycleOwner, Observer {

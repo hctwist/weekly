@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
             android:layout_marginTop="@dimen/double_margin"
-            android:text="@{viewmodel.goal.name}"
+            android:text="@{viewmodel.goal.title}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_goal_toolbar" />
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
             android:layout_marginEnd="@dimen/margin"
-            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressToTarget(context, viewmodel.goal)}"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressToTarget(context.resources, viewmodel.goal)}"
             app:layout_constraintBottom_toBottomOf="@id/view_goal_progress"
             app:layout_constraintEnd_toStartOf="@id/view_goal_progress"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,19 +61,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressPercentage(context, viewmodel.goal)}"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressPercentage(context.resources, viewmodel.goal)}"
             app:layout_constraintBottom_toBottomOf="@id/view_goal_progress"
             app:layout_constraintEnd_toEndOf="@id/view_goal_progress"
             app:layout_constraintStart_toStartOf="@id/view_goal_progress"
             app:layout_constraintTop_toTopOf="@id/view_goal_progress" />
 
         <TextView
-            android:id="@+id/view_goal_reset_label"
+            android:id="@+id/view_goal_resets_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/large_content_margin"
             android:layout_marginTop="@dimen/double_margin"
-            android:text="@string/goal_reset_date"
+            android:text="@string/goal_resets"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_goal_progress" />
 
@@ -81,11 +81,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayReset(context.resources, viewmodel.goal)}"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_resets_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view_goal_resets_label" />
+
+        <TextView
+            android:id="@+id/view_goal_reset_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/margin"
+            android:text="@string/goal_next_reset"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_resets_label" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin"
             android:text="@{DateTimeUtil.INSTANCE.displayDate(viewmodel.goal.resetDate)}"
             android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/view_goal_reset_label"
+            app:layout_constraintBottom_toBottomOf="@id/view_goal_reset_date_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/view_goal_reset_label" />
+            app:layout_constraintTop_toTopOf="@id/view_goal_reset_date_label" />
 
         <TextView
             android:id="@+id/view_goal_end_label"
@@ -96,14 +116,14 @@
             android:layout_marginTop="@dimen/margin"
             android:text="@string/goal_end_date"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_goal_reset_label" />
+            app:layout_constraintTop_toBottomOf="@id/view_goal_reset_date_label" />
 
         <TextView
             goneUnless="@{viewmodel.goal.hasEndDate()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin"
-            android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context, viewmodel.goal)}"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context.resources, viewmodel.goal.endDate)}"
             android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintBottom_toBottomOf="@id/view_goal_end_label"
             app:layout_constraintEnd_toEndOf="parent"
@@ -148,7 +168,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin"
-            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context, viewmodel.goal.type, viewmodel.goal.increase)}"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.goal.type, viewmodel.goal.increase)}"
             android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintBottom_toBottomOf="@id/view_goal_periodic_label"
             app:layout_constraintEnd_toStartOf="@id/view_goal_periodic_pause"
@@ -164,6 +184,15 @@
                 view_goal_periodic_label,
                 view_goal_periodic,
                 view_goal_periodic_pause" />
+
+        <com.twisthenry8gmail.graphview.GraphView
+            android:id="@+id/view_goal_graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/double_margin"
+            android:layout_marginEnd="@dimen/margin"
+            app:layout_constraintTop_toBottomOf="@id/view_goal_periodic_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

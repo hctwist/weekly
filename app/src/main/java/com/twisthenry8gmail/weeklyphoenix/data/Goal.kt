@@ -6,19 +6,19 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.util.GoalPropertyUtil
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import kotlin.random.Random
 
+// TODO Immutability
 @Entity
 data class Goal(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @field:TypeConverters(Goal::class) val type: Type,
-    var name: String,
+    @field:TypeConverters(Goal::class) var type: Type,
+    var title: String,
     var progress: Long,
     var target: Long,
-    var resetMultiple: Long,
-    @field:TypeConverters(Goal::class) var resetUnit: ChronoUnit,
+    @Embedded var reset: Reset,
     var resetDate: Long,
     var increase: Long,
     var increasePaused: Boolean,
@@ -29,29 +29,24 @@ data class Goal(
 
     fun isComplete() = progress >= target
 
-    fun setResetPreset(resetPreset: ResetPreset) {
+    fun getResetDateFrom(from: LocalDate): Long {
 
-        resetMultiple = resetPreset.resetMultiple
-        resetUnit = resetPreset.resetUnit
-    }
+        return when (reset.unit) {
 
-    fun updateResetDate(from: LocalDate) {
-
-        resetDate = when (resetUnit) {
-
-            ChronoUnit.DAYS -> from.plusDays(resetMultiple)
-            ChronoUnit.MONTHS -> from.plusMonths(resetMultiple)
-            ChronoUnit.YEARS -> from.plusYears(resetMultiple)
+            ChronoUnit.DAYS -> from.plusDays(reset.multiple)
+            ChronoUnit.MONTHS -> from.plusMonths(reset.multiple)
+            ChronoUnit.YEARS -> from.plusYears(reset.multiple)
             else -> throw Exception("Invalid ChronoUnit used for goal")
         }.toEpochDay()
     }
 
-    fun hasResetPreset(preset: ResetPreset): Boolean {
+    @Deprecated("Immutability", replaceWith = ReplaceWith("getResetDateFrom"))
+    fun updateResetDate(from: LocalDate) {
 
-        return preset.resetMultiple == resetMultiple && preset.resetUnit == resetUnit
+        resetDate = getResetDateFrom(from)
     }
 
-    fun hasEndDate() = endDate >= 0
+    fun hasEndDate() = GoalPropertyUtil.hasEndDate(endDate)
 
     enum class Type(
         @StringRes val displayNameRes: Int,
@@ -65,17 +60,30 @@ data class Goal(
         fun getDisplayName(context: Context) = context.getString(displayNameRes)
     }
 
-    enum class ResetPreset(
-        val displayNameRes: Int,
-        val resetMultiple: Long,
-        val resetUnit: ChronoUnit
+    class Reset(
+        val multiple: Long,
+        @field:TypeConverters(Goal::class) val unit: ChronoUnit
     ) {
 
-        DAILY(R.string.goal_frequency_daily, 1, ChronoUnit.DAYS),
-        WEEKLY(R.string.goal_frequency_weekly, 7, ChronoUnit.DAYS),
-        FORTNIGHTLY(R.string.goal_frequency_fortnight, 14, ChronoUnit.DAYS),
-        MONTHLY(R.string.goal_frequency_monthly, 1, ChronoUnit.MONTHS),
-        YEARLY(R.string.goal_frequency_yearly, 1, ChronoUnit.YEARS)
+        fun isPreset(resetPreset: ResetPreset): Boolean {
+
+            return multiple == resetPreset.multiple && unit == resetPreset.unit
+        }
+    }
+
+    enum class ResetPreset(
+        val multiple: Long,
+        val unit: ChronoUnit,
+        val displayNameRes: Int
+    ) {
+
+        DAILY(1, ChronoUnit.DAYS, R.string.goal_frequency_daily),
+        WEEKLY(7, ChronoUnit.DAYS, R.string.goal_frequency_weekly),
+        FORTNIGHTLY(14, ChronoUnit.DAYS, R.string.goal_frequency_fortnight),
+        MONTHLY(1, ChronoUnit.MONTHS, R.string.goal_frequency_monthly),
+        YEARLY(1, ChronoUnit.YEARS, R.string.goal_frequency_yearly);
+
+        fun toReset() = Reset(multiple, unit)
     }
 
     @androidx.room.Dao
@@ -84,40 +92,40 @@ data class Goal(
         @Query("SELECT * FROM Goal")
         fun getAll(): LiveData<List<Goal>>
 
-        @Query("SELECT name FROM Goal")
-        fun getNames(): LiveData<List<String>>
+        @Query("SELECT title FROM Goal")
+        fun getTitles(): LiveData<List<String>>
 
         @Query("SELECT * FROM GOAL WHERE resetDate <= :threshold")
-        fun getAllThatRequireReset(threshold: Long): List<Goal>
+        suspend fun getAllThatRequireReset(threshold: Long): List<Goal>
 
         @Insert
-        suspend fun addGoal(goal: Goal)
+        suspend fun insert(goal: Goal)
 
         @Query("SELECT * FROM Goal WHERE id = :id LIMIT 1")
-        fun findGoal(id: Int): LiveData<Goal>
+        fun find(id: Int): LiveData<Goal>
 
         @Query("UPDATE Goal SET progress = progress + :progress WHERE id = :id")
-        suspend fun addGoalProgress(id: Int, progress: Long)
+        suspend fun incrementProgress(id: Int, progress: Long)
 
-        @Query("UPDATE Goal SET increasePaused = :pause WHERE name = :goalName")
-        suspend fun pauseGoalIncrease(goalName: String, pause: Boolean)
+        @Query("UPDATE Goal SET increasePaused = :pause WHERE id = :id")
+        suspend fun pauseIncrease(id: Int, pause: Boolean)
 
-        class ResetUpdate(val goalName: String, val newResetDate: Long, val newTarget: Long)
+        class ResetUpdate(val id: Int, val newResetDate: Long, val newTarget: Long)
 
-        @Query("UPDATE Goal SET resetDate = :newResetDate, progress = 0, target = :newTarget WHERE name = :goalName")
-        suspend fun resetGoal(goalName: String, newResetDate: Long, newTarget: Long)
+        @Query("UPDATE Goal SET resetDate = :newResetDate, progress = 0, target = :newTarget WHERE id = :id")
+        suspend fun reset(id: Int, newResetDate: Long, newTarget: Long)
 
         @Transaction
-        suspend fun resetGoals(resetUpdates: List<ResetUpdate>) {
+        suspend fun reset(resetUpdates: List<ResetUpdate>) {
 
             resetUpdates.forEach {
 
-                resetGoal(it.goalName, it.newResetDate, it.newTarget)
+                reset(it.id, it.newResetDate, it.newTarget)
             }
         }
 
-        @Query("DELETE FROM Goal WHERE name = :name")
-        suspend fun deleteGoal(name: String)
+        @Query("DELETE FROM Goal WHERE id = :id")
+        suspend fun delete(id: Int)
     }
 
     companion object {
@@ -137,40 +145,5 @@ data class Goal(
         @TypeConverter
         @JvmStatic
         fun toResetUnit(ordinal: Int) = ChronoUnit.values()[ordinal]
-
-        fun buildDefaultGoal(context: Context, type: Type): Goal {
-
-            val target = when (type) {
-
-                Type.COUNTED -> 1L
-                Type.TIMED -> 15 * 60
-            }
-
-            val startDate = LocalDate.now()
-
-            val cTypedArray = context.resources.obtainTypedArray(R.array.goal_colors)
-            val color = cTypedArray.getColor(Random.nextInt(cTypedArray.length()), 0)
-            cTypedArray.recycle()
-
-            val preset = ResetPreset.WEEKLY
-            val goal = Goal(
-                0,
-                type,
-                "",
-                0,
-                target,
-                preset.resetMultiple,
-                preset.resetUnit,
-                -1,
-                0,
-                false,
-                startDate.toEpochDay(),
-                -1,
-                color
-            )
-            goal.updateResetDate(startDate)
-
-            return goal
-        }
     }
 }

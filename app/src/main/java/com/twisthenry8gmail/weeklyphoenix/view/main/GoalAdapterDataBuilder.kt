@@ -53,7 +53,7 @@ object GoalAdapterDataBuilder : Comparator<GoalAdapter.Data> {
 
     private fun compareGoal(g1: Goal, g2: Goal): Int {
 
-        return g1.name.compareTo(g2.name)
+        return g1.title.compareTo(g2.title)
     }
 
     private fun getOrder(type: GoalAdapter.Data.Type) = when (type) {

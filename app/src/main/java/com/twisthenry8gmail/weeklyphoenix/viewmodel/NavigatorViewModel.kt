@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twisthenry8gmail.weeklyphoenix.Event
 
-open class BaseViewModel : ViewModel() {
+open class NavigatorViewModel : ViewModel() {
 
     private val _navigationCommander = MutableLiveData<Event<NavigationCommand>>()
     val navigationCommander: LiveData<Event<NavigationCommand>>

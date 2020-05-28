@@ -1,6 +1,6 @@
 package com.twisthenry8gmail.weeklyphoenix.util
 
-import android.content.Context
+import android.content.res.Resources
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import java.text.DecimalFormat
@@ -8,33 +8,41 @@ import kotlin.math.roundToInt
 
 object GoalDisplayUtil {
 
-    fun displayProgressValue(context: Context, type: Goal.Type, value: Long): String {
+    fun displayProgressValue(resources: Resources, type: Goal.Type, value: Long): String {
 
         return when (type) {
 
             Goal.Type.COUNTED -> value.toString()
-            Goal.Type.TIMED -> displayGoalTime(context, value)
+            Goal.Type.TIMED -> displayGoalTime(resources, value)
         }
     }
 
-    fun displayProgressToTarget(context: Context, goal: Goal): String {
+    fun displayProgressToTarget(resources: Resources, goal: Goal): String {
 
-        val progress = displayProgressValue(context, goal.type, goal.progress)
-        val target = displayProgressValue(context, goal.type, goal.target)
+        val progress = displayProgressValue(resources, goal.type, goal.progress)
+        val target = displayProgressValue(resources, goal.type, goal.target)
 
-        return context.getString(R.string.goal_view_progress, progress, target)
+        return resources.getString(R.string.goal_view_progress, progress, target)
     }
 
-    fun displayEndDate(context: Context, goal: Goal): String {
+    fun displayReset(resources: Resources, goal: Goal): String {
 
-        return if (goal.hasEndDate()) DateTimeUtil.displayDate(goal.endDate) else context.resources.getString(
+        val preset = Goal.ResetPreset.values()
+            .find { goal.reset.isPreset(it) }
+
+        return resources.getString(preset!!.displayNameRes)
+    }
+
+    fun displayEndDate(resources: Resources, endDate: Long): String {
+
+        return if (GoalPropertyUtil.hasEndDate(endDate)) DateTimeUtil.displayDate(endDate) else resources.getString(
             R.string.goal_no_end
         )
     }
 
-    fun displayProgressPercentage(context: Context, goal: Goal): String {
+    fun displayProgressPercentage(resources: Resources, goal: Goal): String {
 
-        return context.getString(
+        return resources.getString(
             R.string.percentage_pattern,
             ((goal.progress.toDouble() / goal.target) * 100).roundToInt().toString()
         )
@@ -42,25 +50,20 @@ object GoalDisplayUtil {
 
     private val goalTimeFormatter = DecimalFormat("00")
 
-    fun displayGoalTime(context: Context, seconds: Long): String {
+    fun displayGoalTime(resources: Resources, seconds: Long): String {
 
         val totalMinutes = seconds / 60
         val hours = totalMinutes / 60
-        return context.getString(
+        return resources.getString(
             R.string.time_pattern,
             goalTimeFormatter.format(hours),
             goalTimeFormatter.format(totalMinutes - hours * 60)
         )
     }
 
-    fun displayScheduled(context: Context, goal: Goal): String {
+    class SubtitleGenerator(private val resources: Resources) {
 
-        return context.getString(R.string.goal_scheduled, DateTimeUtil.displayDate(goal.startDate))
-    }
-
-    class SubtitleGenerator(val context: Context) {
-
-        private val numbers by lazy { context.resources.getStringArray(R.array.numbers) }
+        private val numbers by lazy { resources.getStringArray(R.array.numbers) }
 
         fun generateSubtitle(goal: Goal): String {
 
@@ -70,22 +73,25 @@ object GoalDisplayUtil {
                     val left = when (goal.type) {
 
                         Goal.Type.COUNTED -> displayWrittenNumber(goal.target - goal.progress)
-                        Goal.Type.TIMED -> displayGoalTime(context, goal.target - goal.progress)
+                        Goal.Type.TIMED -> displayGoalTime(
+                            resources,
+                            goal.target - goal.progress
+                        )
                     }
-                    return context.getString(R.string.goal_subtitle_pattern_left, left)
+                    return resources.getString(R.string.goal_subtitle_pattern_left, left)
                 }
                 goal.progress.toFloat() / goal.target >= 0.5F -> {
 
-                    return context.getString(R.string.goal_subtitle_pattern_over_half)
+                    return resources.getString(R.string.goal_subtitle_pattern_over_half)
                 }
                 else -> {
 
                     val target = when (goal.type) {
 
                         Goal.Type.COUNTED -> displayWrittenNumber(goal.target)
-                        Goal.Type.TIMED -> displayGoalTime(context, goal.target)
+                        Goal.Type.TIMED -> displayGoalTime(resources, goal.target)
                     }
-                    return context.getString(R.string.goal_subtitle_pattern_start, target)
+                    return resources.getString(R.string.goal_subtitle_pattern_start, target)
                 }
             }
         }

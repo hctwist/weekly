@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewGoalBinding
@@ -21,6 +22,7 @@ class FragmentViewGoal : Fragment() {
         ViewGoalViewModel.Factory(
             resources,
             weeklyApplication().goalRepository,
+            weeklyApplication().goalHistoryRepository,
             currentGoalViewModel
         )
     }
@@ -42,12 +44,17 @@ class FragmentViewGoal : Fragment() {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigate(findNavController())
+            it.navigateWith(findNavController())
         })
 
         view_goal_toolbar.setOnMenuItemClickListener {
 
             viewModel.onMenuItemClick(it)
         }
+
+        viewModel.goalHistoryGraphData.observe(viewLifecycleOwner, Observer {
+
+            view_goal_graph.addElements(it)
+        })
     }
 }

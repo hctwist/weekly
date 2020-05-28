@@ -4,13 +4,11 @@
 
     <data>
 
-        <import type="com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil" />
-
         <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
 
         <variable
             name="viewmodel"
-            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalDoneViewModel" />
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel" />
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,7 +42,7 @@
                 android:layout_marginTop="@dimen/large_content_margin"
                 android:layout_marginEnd="@dimen/margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
-                android:text="@{DateTimeUtil.INSTANCE.displayDate(viewmodel.goal.startDate)}"
+                android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context.resources, viewmodel.startDate)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_text" />
 
@@ -66,7 +64,7 @@
                 android:layout_marginTop="@dimen/half_margin"
                 android:layout_marginEnd="@dimen/margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
-                android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context, viewmodel.goal)}"
+                android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context.resources, viewmodel.endDate)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_start" />
 
@@ -88,7 +86,7 @@
                 android:layout_marginTop="@dimen/half_margin"
                 android:layout_marginEnd="@dimen/margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
-                android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context, viewmodel.goal.type, viewmodel.goal.increase)}"
+                android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.type, viewmodel.increase)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_end" />
 
@@ -111,7 +109,7 @@
                 android:minWidth="@dimen/add_goal_more_button_min"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_increase"
-                bind:backgroundColor="@{viewmodel.goal.color}" />
+                bind:backgroundColor="@{viewmodel.color}" />
 
             <TextView
                 android:id="@+id/add_goal_done_color_label"
@@ -123,17 +121,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_goal_done_color" />
 
-            <TextView
-                android:id="@+id/add_goal_done_more"
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                style="@style/SecondaryImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:drawableEnd="@drawable/round_expand_more_24"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                android:text="@string/add_goal_done_more"
+                android:layout_marginStart="@dimen/large_content_margin"
+                android:onClick="@{() -> viewmodel.onBack()}"
+                android:src="@drawable/round_arrow_back_24"
                 app:layout_constraintBottom_toBottomOf="@id/add_goal_done_confirm"
-                app:layout_constraintStart_toStartOf="@id/add_goal_done_text"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_goal_done_confirm" />
 
             <com.google.android.material.button.MaterialButton
@@ -141,26 +137,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/double_margin"
-                android:onClick="@{() -> viewmodel.onConfirm()}"
+                android:onClick="@{() -> viewmodel.onDone()}"
                 android:text="@string/add_goal_done_add_goal"
                 app:icon="@drawable/round_add_24"
+                android:layout_marginBottom="@dimen/margin"
                 app:layout_constraintEnd_toEndOf="@id/add_goal_done_text"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_color" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/add_goal_done_more_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="
-                    add_goal_done_start,
-                    add_goal_done_start_label,
-                    add_goal_done_end,
-                    add_goal_done_end_label,
-                    add_goal_done_increase,
-                    add_goal_done_increase_label,
-                    add_goal_done_color,
-                    add_goal_done_color_label" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
