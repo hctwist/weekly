@@ -2,15 +2,19 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.content.res.Resources
 import android.graphics.Color
+import android.util.Range
 import android.view.MenuItem
 import androidx.lifecycle.*
 import com.twisthenry8gmail.graphview.DataElement
-import com.twisthenry8gmail.graphview.DataElements
-import com.twisthenry8gmail.graphview.LineDataElement
+import com.twisthenry8gmail.graphview.GraphElement
+import com.twisthenry8gmail.graphview.LineElement
+import com.twisthenry8gmail.graphview.TickAxis
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistoryRepository
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class ViewGoalViewModel(
     private val androidResources: Resources,
@@ -22,26 +26,44 @@ class ViewGoalViewModel(
     // TODO Better system
     val goal = currentGoalViewModel.currentGoal
 
-    val goalHistoryGraphData = Transformations.switchMap(goal) { goal ->
+    val goalHistoryGraphData: LiveData<List<GraphElement>> =
+        Transformations.switchMap(goal) { goal ->
 
-        MediatorLiveData<DataElements>().apply {
+            MediatorLiveData<List<GraphElement>>().apply {
 
-            addSource(goalHistoryRepository.getAllFor(goal.id)) { histories ->
+                addSource(goalHistoryRepository.getAllFor(goal.id)) { histories ->
 
-                val mainLine = LineDataElement(histories.map {
+                    val resetDate = LocalDate.ofEpochDay(goal.resetDate)
 
-                    DataElement.DataPoint(it.startDate.toDouble(), it.progress.toDouble())
-                }, 10F, Color.BLUE)
+                    val nPeriodsToShow = 5
 
-                val targetLine = LineDataElement(histories.map {
+                    val ticks = List(nPeriodsToShow) {
 
-                    DataElement.DataPoint(it.startDate.toDouble(), it.target.toDouble())
-                }, 10F, Color.LTGRAY)
+                        val tickDate = resetDate.minus(
+                            (nPeriodsToShow - it) * goal.reset.multiple,
+                            goal.reset.unit
+                        )
+                        TickAxis.Tick(
+                            tickDate.toEpochDay().toDouble(),
+                            DateTimeUtil.displayDate(tickDate)
+                        )
+                    }
+                    val xAxis = TickAxis.X(Range(ticks.first().point, ticks.last().point), ticks)
 
-                value = DataElement.combine(mainLine, targetLine)
+                    val mainLine = LineElement(histories.map {
+
+                        DataElement.DataPoint(it.startDate.toDouble(), it.progress.toDouble())
+                    }, 10F, Color.BLUE)
+
+                    val targetLine = LineElement(histories.map {
+
+                        DataElement.DataPoint(it.startDate.toDouble(), it.target.toDouble())
+                    }, 10F, Color.LTGRAY)
+
+                    value = listOf(xAxis, mainLine, targetLine)
+                }
             }
         }
-    }
 
     fun onMenuItemClick(menuItem: MenuItem): Boolean {
 

@@ -9,12 +9,12 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/../ProjectSource/buttons" />
+            <option value="$PROJECT_DIR$/../ProjectSource/dragline" />
+            <option value="$PROJECT_DIR$/../ProjectSource/graphview" />
+            <option value="$PROJECT_DIR$/../ProjectSource/progresscircles" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/../../ProjectSource/buttons" />
-            <option value="$PROJECT_DIR$/../../ProjectSource/dragline" />
-            <option value="$PROJECT_DIR$/../../ProjectSource/graphview" />
-            <option value="$PROJECT_DIR$/../../ProjectSource/progresscircles" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

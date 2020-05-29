@@ -8,9 +8,13 @@ import java.time.format.FormatStyle
 
 object DateTimeUtil {
 
+    fun displayDate(localDate: LocalDate): String {
+
+        return DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).format(localDate)
+    }
+
     fun displayDate(epochDay: Long): String {
 
-        return DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-            .format(LocalDate.ofEpochDay(epochDay))
+        return displayDate(LocalDate.ofEpochDay(epochDay))
     }
 }

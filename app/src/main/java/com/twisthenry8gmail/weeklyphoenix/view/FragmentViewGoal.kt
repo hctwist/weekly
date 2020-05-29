@@ -54,7 +54,7 @@ class FragmentViewGoal : Fragment() {
 
         viewModel.goalHistoryGraphData.observe(viewLifecycleOwner, Observer {
 
-            view_goal_graph.addElements(it)
+            view_goal_graph.setElements(it)
         })
     }
 }
