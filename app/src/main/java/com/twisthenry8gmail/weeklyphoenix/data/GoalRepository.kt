@@ -31,7 +31,7 @@ class GoalRepository(
         goals.forEach {
 
             val resetDate = LocalDate.ofEpochDay(it.resetDate)
-            val nextResetDate = it.getResetDateFrom(LocalDate.ofEpochDay(it.resetDate))
+            val nextResetDate = Goal.getResetDateFrom(LocalDate.ofEpochDay(it.resetDate), it.reset)
             var newTarget = it.target
 
             if (!it.increasePaused) {

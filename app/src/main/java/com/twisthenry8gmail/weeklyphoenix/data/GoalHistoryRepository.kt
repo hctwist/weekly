@@ -12,10 +12,8 @@ class GoalHistoryRepository(
 
         goalHistoryDao.insert(goals.map {
 
-            val endDate = LocalDate.ofEpochDay(it.resetDate)
-            val startDate = endDate.minus(it.reset.multiple, it.reset.unit)
-
-            GoalHistory(startDate.toEpochDay(), endDate.toEpochDay(), it.id, it.progress, it.target)
+            val date = LocalDate.ofEpochDay(it.resetDate).minus(it.reset.multiple, it.reset.unit)
+            GoalHistory(it.id, date.toEpochDay(), it.progress, it.target)
         })
     }
 
@@ -24,8 +22,14 @@ class GoalHistoryRepository(
         goalHistoryDao.insert(goalHistory)
     }
 
-    fun getAllFor(goalId: Int): LiveData<List<GoalHistory>> {
+    fun getAllFor(goal: Goal, nPeriodsBack: Int): LiveData<List<GoalHistory>> {
 
-        return goalHistoryDao.getAllFor(goalId)
+        val queryFrom = LocalDate.ofEpochDay(goal.resetDate).minus(goal.reset * (nPeriodsBack + 1))
+        return getAllFor(goal.id, queryFrom.toEpochDay())
+    }
+
+    fun getAllFor(goalId: Int, fromDate: Long): LiveData<List<GoalHistory>> {
+
+        return goalHistoryDao.getAllFor(goalId, fromDate)
     }
 }

@@ -13,6 +13,14 @@
         <item name="chipStyle">@style/ChipStyle</item>
         <item name="progressCircleStyle">@style/ProgressCircleStyle</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceLarge</item>
+        <item name="graphViewStyle">@style/GraphViewStyle</item>
+    </style>
+
+    <style name="GraphViewStyle">
+
+        <item name="graphAxisTextSize">12sp</item>
+        <item name="graphPlotLineWidth">2dp</item>
+        <item name="graphDefaultMargin">@dimen/half_margin</item>
     </style>
 
     <style name="ShapeAppearanceLarge" parent="ShapeAppearance.MaterialComponents.LargeComponent">
@@ -28,7 +36,7 @@
 
     <style name="GoalCard" parent="Widget.MaterialComponents.CardView">
 
-        <item name="cardBackgroundColor">@color/light_blue_test</item>
+        <item name="cardBackgroundColor">@color/goal_card</item>
         <item name="cardCornerRadius">@dimen/corner_radius</item>
         <item name="cardElevation">0dp</item>
     </style>

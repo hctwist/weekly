@@ -65,7 +65,7 @@ class FragmentGoalTimer : Fragment(R.layout.fragment_timed_goal) {
                 timed_goal_progress.setBackingArcColor(ColorUtil.lightenGoalColor(it.updatedGoal.color))
                 timed_goal_progress.setColor(it.updatedGoal.color)
                 timed_goal_progress.target = it.updatedGoal.target
-                timed_goal_progress.setProgress(it.oldProgress, false)
+                timed_goal_progress.setProgress(it.updatedGoal.progress, false)
 
                 val fadeTransition = Fade().apply {
 

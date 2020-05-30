@@ -6,6 +6,7 @@ import com.twisthenry8gmail.weeklyphoenix.NonNullLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.random.Random
@@ -36,7 +37,6 @@ class AddGoalViewModel(
     val validTitle: LiveData<Boolean>
         get() = _validTitle
 
-    // TODO Better backing field solution?
     private var _target: Long? = null
         get() = field ?: type.minIncrement
     var target: Long
@@ -108,15 +108,13 @@ class AddGoalViewModel(
             0,
             target,
             reset,
-            -1,
+            Goal.getResetDateFrom(LocalDate.ofEpochDay(startDate.value), reset),
             increase.value,
             false,
             startDate.value,
             endDate.value,
             color.value
         )
-
-        goal.updateResetDate(LocalDate.ofEpochDay(startDate.value))
 
         return goal
     }

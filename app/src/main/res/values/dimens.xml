@@ -24,6 +24,9 @@
     <dimen name="add_goal_color_dot_highlight">12dp</dimen>
     <dimen name="add_goal_more_button_min">128dp</dimen>
 
+    <!-- View goal -->
+    <dimen name="view_goal_history_height">192dp</dimen>
+
     <!-- Datline drawable -->
     <dimen name="dateline_circle_radius">4dp</dimen>
     <dimen name="dateline_min_spacing">32dp</dimen>

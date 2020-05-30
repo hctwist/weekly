@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin"
-                android:text="@{DateTimeUtil.INSTANCE.displayDate(goal.startDate)}"
+                android:text="@{DateTimeUtil.INSTANCE.displayMediumDate(goal.startDate)}"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

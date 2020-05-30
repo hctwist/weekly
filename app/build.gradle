@@ -11,14 +11,14 @@ android {
         applicationId "com.twisthenry8gmail.weeklyphoenix"
         minSdkVersion 26
         targetSdkVersion 29
-        versionCode 5
-        versionName "0.1.1"
+        versionCode 6
+        versionName "0.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
     buildTypes {
@@ -40,14 +40,14 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.0'
 
     implementation project(":dragline")
     implementation project(":buttons")
     implementation project(":progresscircles")
     implementation project(":graphview")
 
-    implementation 'com.google.android.material:material:1.2.0-alpha06'
+    implementation 'com.google.android.material:material:1.2.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation "androidx.room:room-runtime:2.2.5"

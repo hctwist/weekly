@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.twisthenry8gmail.weeklyphoenix.MainRepository
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 
 class OnboardingViewModel(val mainRepository: MainRepository) : NavigatorViewModel() {
 

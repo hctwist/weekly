@@ -52,12 +52,9 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel
 
             goal.value?.let {
 
-                val oldProgress = it.progress
-
-                it.progress += progressIncrement
                 goalRepository.addProgress(it.id, progressIncrement)
-
-                progressUpdate.value = ProgressUpdate(oldProgress, it   )
+                progressUpdate.value =
+                    ProgressUpdate(it, it.withProgressIncrement(progressIncrement))
             }
         }
     }
@@ -67,7 +64,7 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel
         updateHandler.removeCallbacks(updateRunnable)
     }
 
-    class ProgressUpdate(val oldProgress: Long, val updatedGoal: Goal)
+    class ProgressUpdate(val originalGoal: Goal, val updatedGoal: Goal)
 
     class Factory(private val goalRepository: GoalRepository) : ViewModelProvider.Factory {
 

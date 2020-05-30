@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--    <color name="color_primary">#749BFF</color>-->
-    <!--    <color name="color_primary_dark">#5D7CDC</color>-->
-    <!--    <color name="color_primary_light">#E5ECFF</color>-->
+
     <color name="color_primary">#7A90DF</color>
     <color name="color_primary_light">#EAEEFA</color>
-
-    <!--    <color name="color_accent">#7AE7C7</color>-->
-    <!--    <color name="color_accent">#FF6E72</color>-->
-    <!--    <color name="color_accent">#64A6BD</color>-->
     <color name="color_accent">#A0CFD3</color>
 
     <color name="red">#D5573B</color>
@@ -18,5 +12,5 @@
 
     <color name="off_white">#F1F1F1</color>
 
-    <color name="light_blue_test">#FBFBFE</color>
+    <color name="goal_card">#FBFBFE</color>
 </resources>

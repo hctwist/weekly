@@ -12,6 +12,7 @@ import com.twisthenry8gmail.weeklyphoenix.util.NotificationHelper
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapter
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapterDataBuilder
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapterDiff
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate

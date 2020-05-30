@@ -1,4 +1,4 @@
-package com.twisthenry8gmail.weeklyphoenix.viewmodel
+package com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator
 
 import androidx.navigation.NavController
 
@@ -15,7 +15,8 @@ interface NavigationCommand {
         }
     }
 
-    class Back: NavigationCommand {
+    class Back:
+        NavigationCommand {
 
         override fun navigateWith(navController: NavController) {
 

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 // TODO Reset to 1
-@Database(entities = [Goal::class, GoalHistory::class], version = 4)
+@Database(entities = [Goal::class, GoalHistory::class], version = 5)
 abstract class RoomModel : RoomDatabase() {
 
     companion object {

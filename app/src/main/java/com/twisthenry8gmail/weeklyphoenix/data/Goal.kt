@@ -7,46 +7,32 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.util.GoalPropertyUtil
+import java.lang.IllegalArgumentException
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-// TODO Immutability
 @Entity
 data class Goal(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @field:TypeConverters(Goal::class) var type: Type,
-    var title: String,
-    var progress: Long,
-    var target: Long,
-    @Embedded var reset: Reset,
-    var resetDate: Long,
-    var increase: Long,
-    var increasePaused: Boolean,
-    var startDate: Long,
-    var endDate: Long,
-    var color: Int
+    val title: String,
+    val progress: Long,
+    val target: Long,
+    @Embedded val reset: Reset,
+    val resetDate: Long,
+    val increase: Long,
+    val increasePaused: Boolean,
+    val startDate: Long,
+    val endDate: Long,
+    val color: Int
 ) {
 
     fun isComplete() = progress >= target
 
-    fun getResetDateFrom(from: LocalDate): Long {
-
-        return when (reset.unit) {
-
-            ChronoUnit.DAYS -> from.plusDays(reset.multiple)
-            ChronoUnit.MONTHS -> from.plusMonths(reset.multiple)
-            ChronoUnit.YEARS -> from.plusYears(reset.multiple)
-            else -> throw Exception("Invalid ChronoUnit used for goal")
-        }.toEpochDay()
-    }
-
-    @Deprecated("Immutability", replaceWith = ReplaceWith("getResetDateFrom"))
-    fun updateResetDate(from: LocalDate) {
-
-        resetDate = getResetDateFrom(from)
-    }
-
     fun hasEndDate() = GoalPropertyUtil.hasEndDate(endDate)
+
+    fun withProgressIncrement(progressIncrement: Long) =
+        copy(progress = progress + progressIncrement)
 
     enum class Type(
         @StringRes val displayNameRes: Int,
@@ -65,10 +51,17 @@ data class Goal(
         @field:TypeConverters(Goal::class) val unit: ChronoUnit
     ) {
 
+        operator fun times(n: Int): Reset {
+
+            return Reset(multiple * n, unit)
+        }
+
         fun isPreset(resetPreset: ResetPreset): Boolean {
 
             return multiple == resetPreset.multiple && unit == resetPreset.unit
         }
+
+        class UnitException : IllegalArgumentException("Invalid ChronoUnit used for goal")
     }
 
     enum class ResetPreset(
@@ -130,6 +123,17 @@ data class Goal(
 
     companion object {
 
+        fun getResetDateFrom(from: LocalDate, reset: Reset): Long {
+
+            return when (reset.unit) {
+
+                ChronoUnit.DAYS -> from.plusDays(reset.multiple)
+                ChronoUnit.MONTHS -> from.plusMonths(reset.multiple)
+                ChronoUnit.YEARS -> from.plusYears(reset.multiple)
+                else -> throw Reset.UnitException()
+            }.toEpochDay()
+        }
+
         @TypeConverter
         @JvmStatic
         fun fromType(type: Type) = type.name
@@ -147,3 +151,7 @@ data class Goal(
         fun toResetUnit(ordinal: Int) = ChronoUnit.values()[ordinal]
     }
 }
+
+fun LocalDate.plus(reset: Goal.Reset): LocalDate = plus(reset.multiple, reset.unit)
+
+fun LocalDate.minus(reset: Goal.Reset): LocalDate = minus(reset.multiple, reset.unit)

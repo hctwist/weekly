@@ -1,5 +1,6 @@
-package com.twisthenry8gmail.weeklyphoenix.viewmodel
+package com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator
 
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,11 @@ open class NavigatorViewModel : ViewModel() {
 
     protected fun navigateTo(resId: Int) {
 
-        _navigationCommander.value = Event(NavigationCommand.To(resId))
+        _navigationCommander.value = Event(
+            NavigationCommand.To(
+                resId
+            )
+        )
     }
 
     protected fun navigateBack() {

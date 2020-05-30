@@ -35,7 +35,7 @@ object GoalDisplayUtil {
 
     fun displayEndDate(resources: Resources, endDate: Long): String {
 
-        return if (GoalPropertyUtil.hasEndDate(endDate)) DateTimeUtil.displayDate(endDate) else resources.getString(
+        return if (GoalPropertyUtil.hasEndDate(endDate)) DateTimeUtil.displayMediumDate(endDate) else resources.getString(
             R.string.goal_no_end
         )
     }
