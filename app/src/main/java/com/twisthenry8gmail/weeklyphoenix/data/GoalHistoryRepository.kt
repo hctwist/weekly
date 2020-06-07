@@ -1,20 +1,38 @@
 package com.twisthenry8gmail.weeklyphoenix.data
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
-// TODO Are these suspend functions being run on the main thread by accident? Do I need to use Dispatchers.IO?
 class GoalHistoryRepository(
     private val goalHistoryDao: GoalHistory.Dao
 ) {
 
-    suspend fun addAll(goals: List<Goal>) {
+    suspend fun addAllFor(goals: List<Goal>) {
 
-        goalHistoryDao.insert(goals.map {
+        withContext(Dispatchers.Default) {
 
-            val date = LocalDate.ofEpochDay(it.resetDate).minus(it.reset.multiple, it.reset.unit)
-            GoalHistory(it.id, date.toEpochDay(), it.progress, it.target)
-        })
+            goalHistoryDao.insert(goals.flatMap { goal ->
+
+                val now = LocalDate.now()
+                val resetDate = LocalDate.ofEpochDay(goal.resetDate)
+                val periodsPassed = resetDate.until(now)[goal.reset.unit] / goal.reset.multiple
+                val historyStart = resetDate.minus(goal.reset)
+
+                List((periodsPassed + 1).toInt()) {
+
+                    val progress = if (it == 0) goal.progress else 0
+                    val target = goal.target + it * goal.increase
+                    GoalHistory(
+                        goal.id,
+                        historyStart.plus(goal.reset * it.toLong()).toEpochDay(),
+                        progress,
+                        target
+                    )
+                }
+            })
+        }
     }
 
     suspend fun add(goalHistory: GoalHistory) {
@@ -22,9 +40,10 @@ class GoalHistoryRepository(
         goalHistoryDao.insert(goalHistory)
     }
 
-    fun getAllFor(goal: Goal, nPeriodsBack: Int): LiveData<List<GoalHistory>> {
+    fun getAllFor(goal: Goal, nPeriodsBack: Long): LiveData<List<GoalHistory>> {
 
-        val queryFrom = LocalDate.ofEpochDay(goal.resetDate).minus(goal.reset * (nPeriodsBack + 1))
+        val queryFrom =
+            LocalDate.ofEpochDay(goal.resetDate).minus(goal.reset * (nPeriodsBack + 1))
         return getAllFor(goal.id, queryFrom.toEpochDay())
     }
 

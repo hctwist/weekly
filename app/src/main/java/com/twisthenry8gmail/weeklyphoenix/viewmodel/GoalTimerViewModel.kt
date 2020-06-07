@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel() {
 
+    // TODO Data binding here
     val goal = goalRepository.getTimingGoal()
     val progressUpdate = MutableLiveData<ProgressUpdate>()
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
+
+        <variable
+            name="goal"
+            type="com.twisthenry8gmail.weeklyphoenix.data.Goal" />
+
+        <variable
+            name="goalhistory"
+            type="com.twisthenry8gmail.weeklyphoenix.data.GoalHistory" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/goal_history_row_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayHistoryDate(goal, goalhistory.date)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <com.twisthenry8gmail.progresscircles.ProgressLineView
+            goal="@{goal}"
+            goalHistory="@{goalhistory}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/goal_history_row_date"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

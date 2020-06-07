@@ -17,7 +17,6 @@ import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
 import kotlinx.android.synthetic.main.color_dot.view.*
 import kotlinx.android.synthetic.main.fragment_color_dot.*
 
-// TODO Make this generic or move to AddGoalDoneFragment
 class FragmentAddGoalColor : BottomSheetDialogFragment() {
 
     private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)

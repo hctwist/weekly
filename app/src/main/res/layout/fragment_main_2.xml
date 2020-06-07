@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.Main2ViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/main_header_title"
+            style="@style/Display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
+            android:text="@{viewmodel.title}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/main_header_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/large_content_margin"
+            android:text="@{viewmodel.subtitle}"
+            android:textAlignment="viewStart"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/main_header_title"
+            app:layout_constraintTop_toBottomOf="@id/main_header_title" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/main_goals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_content_margin"
+            android:layout_marginBottom="@dimen/margin"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toTopOf="@id/main_add_goal"
+            app:layout_constraintTop_toBottomOf="@id/main_header_subtitle" />
+
+        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+            android:id="@+id/main_add_goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginEnd="@dimen/large_content_margin"
+            android:layout_marginBottom="@dimen/double_margin"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> viewmodel.onAddGoal()}"
+            android:src="@drawable/round_add_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+            android:id="@+id/main_shuffle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> viewmodel.onShuffle()}"
+            android:src="@drawable/round_casino_24"
+            app:layout_constraintBottom_toBottomOf="@id/main_add_goal"
+            app:layout_constraintStart_toEndOf="@id/main_add_goal"
+            app:layout_constraintTop_toTopOf="@id/main_add_goal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

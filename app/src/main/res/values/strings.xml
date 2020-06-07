@@ -9,6 +9,8 @@
     <!-- Goal properties -->
     <string name="goal_type_counted">Counted</string>
     <string name="goal_type_timed">Timed</string>
+    <string name="goal_type_counted_description">A basic goal in which you keep track of how many times you want to complete your task.</string>
+    <string name="goal_type_timed_description">A goal which is able to keep track of the amount of time you spend doing something, ensuring you hit your target.</string>
     <string name="goal_start_date">Start date</string>
     <string name="goal_periodic_increase">Periodic increase</string>
     <string name="goal_color">Colour</string>
@@ -38,10 +40,6 @@
 
     <!-- Add goal -->
     <string name="add_goal_title">Add goal</string>
-    <string name="add_goal_type_counted">Counted.</string>
-    <string name="add_goal_type_timed">Timed.</string>
-    <string name="add_goal_type_counted_description">A basic goal in which you keep track of how many times you want to complete your task.</string>
-    <string name="add_goal_type_timed_description">A goal which is able to keep track of the amount of time you spend doing something, ensuring you hit your target.</string>
     <string name="add_goal_title_hint">What is your goal?</string>
     <string name="add_goal_target_hint">What is your target?</string>
     <string name="add_goal_reset_hint">How often should it repeat?</string>
@@ -50,6 +48,7 @@
     <string name="add_goal_done_add_goal">Add your goal</string>
     <string name="add_goal_increase_hint">Your target for this goal will increase by this value every time it resets.</string>
     <string name="add_goal_end_neutral">None</string>
+    <string name="add_goal_target_chip">Target - %1$s</string>
 
     <!-- Goal success -->
     <string name="goal_success">Well done on completing your goal.</string>

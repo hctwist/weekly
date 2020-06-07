@@ -2,14 +2,12 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.content.res.Resources
 import android.util.Range
-import com.twisthenry8gmail.graphview.DataElement
-import com.twisthenry8gmail.graphview.GraphElement
-import com.twisthenry8gmail.graphview.LabelAxis
-import com.twisthenry8gmail.graphview.LineElement
+import com.twisthenry8gmail.graphview.*
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistory
 import com.twisthenry8gmail.weeklyphoenix.data.minus
+import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil
 import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 import java.lang.Long.max
@@ -32,12 +30,6 @@ class GoalHistoryGraphMediator(
                 goal.target
             )
         )
-    }
-
-    init {
-
-        // TODO Fill in history points somehow
-
     }
 
     private fun makeDateLabel(date: Long): String {
@@ -82,19 +74,29 @@ class GoalHistoryGraphMediator(
         val style = LabelAxis.Style()
         style.textColorRes = R.color.light_grey
 
-        return LabelAxis.Y(Range(0.0, max), labels, style)
+//        return LabelAxis.Y(Range(0.0, max), labels, style)
+
+        val firstTarget = historyPoints.first().target
+        return LabelAxis.Y(
+            Range(0.0, max), listOf(
+                LabelAxis.Label(
+                    firstTarget.toDouble(),
+                    GoalDisplayUtil.displayProgressValue(resources, goal.type, firstTarget)
+                )
+            )
+        )
     }
 
     private fun makeMainLine(): GraphElement {
 
         val mainLineStyle = LineElement.Style()
-        mainLineStyle.lineColorRes = R.color.color_primary
-        mainLineStyle.fillLine = true
-        mainLineStyle.lineFillColorRes = R.color.color_primary_light
+        mainLineStyle.lineColor.colorInt = goal.color
+//        mainLineStyle.fillLine = true
+//        mainLineStyle.lineFillColor.colorInt = goal.color
 
         val points = historyPoints.map {
 
-            DataElement.DataPoint(it.date.toDouble(), it.progress.toDouble())
+            DataPoint(it.date.toDouble(), it.progress.toDouble())
         }
 
         return LineElement(points, mainLineStyle)
@@ -103,24 +105,53 @@ class GoalHistoryGraphMediator(
     private fun makeTargetLine(): GraphElement {
 
         val targetLineStyle = LineElement.Style()
-        targetLineStyle.lineColorRes = R.color.light_grey
-        targetLineStyle.dashWidthRes = R.dimen.half_margin to R.dimen.margin
+//        targetLineStyle.lineColor.colorResource = R.color.light_grey
+        targetLineStyle.lineColor.colorInt = ColorUtil.lightenGoalColor(goal.color)
+//        targetLineStyle.dashWidthRes =
+//            R.dimen.view_goal_target_line_dash to R.dimen.view_goal_target_line_gap
 
         val points = historyPoints.map {
 
-            DataElement.DataPoint(it.date.toDouble(), it.target.toDouble())
+            DataPoint(it.date.toDouble(), it.target.toDouble())
         }
 
         return LineElement(points, targetLineStyle)
     }
 
+    private fun makePoints(): Array<GraphElement> {
+
+        val style = LabelledPointElement.Style()
+        style.color.colorInt = ColorUtil.lightenGoalColor(goal.color)
+
+        val firstPoint = historyPoints.first()
+        val lastPoint = historyPoints.last()
+
+        return listOf(
+            LabelledPointElement(
+                DataPoint(
+                    firstPoint.date.toDouble(),
+                    firstPoint.target.toDouble()
+                ),
+                null,
+                style
+            ), LabelledPointElement(
+                DataPoint(
+                    lastPoint.date.toDouble(),
+                    lastPoint.target.toDouble()
+                ),
+                GoalDisplayUtil.displayProgressValue(resources, goal.type, lastPoint.target),
+                style
+            )
+        ).toTypedArray()
+    }
+
     fun build(): List<GraphElement> {
 
-        return listOf(makeXAxis(), makeYAxis(), makeMainLine(), makeTargetLine())
+        return listOf(makeXAxis(), makeYAxis(), makeMainLine(), makeTargetLine(), *makePoints())
     }
 
     companion object {
 
-        const val MAX_HISTORY_POINTS = 4
+        const val MAX_HISTORY_POINTS = 4L
     }
 }

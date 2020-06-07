@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.twisthenry8gmail.weeklyphoenix.MainRepository
-import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentOnbaordingIntroBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalDoneBinding.inflate
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentOnboardingIntroBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentOnboardingWelcomeBinding
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.OnboardingViewModel
 
 class FragmentOnboardingIntro : Fragment() {
@@ -27,7 +29,7 @@ class FragmentOnboardingIntro : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentOnbaordingIntroBinding.inflate(inflater)
+        val binding = FragmentOnboardingIntroBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
 
         return binding.root

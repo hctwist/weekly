@@ -5,5 +5,5 @@ import androidx.core.graphics.ColorUtils
 
 object ColorUtil {
 
-    fun lightenGoalColor(color: Int) = ColorUtils.blendARGB(color, Color.WHITE, 0.85F)
+    fun lightenGoalColor(color: Int) = ColorUtils.blendARGB(color, Color.WHITE, 0.7F)
 }

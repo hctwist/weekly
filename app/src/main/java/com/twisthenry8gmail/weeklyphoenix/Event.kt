@@ -1,8 +1,10 @@
 package com.twisthenry8gmail.weeklyphoenix
 
-class Event<T>(val content: T) {
+open class Event<T>(private val content: T) {
 
-    private var consumed = false
+    protected var consumed = false
+
+    fun get() = content
 
     fun getIfNotHandled(): T? {
 
@@ -22,4 +24,10 @@ class Event<T>(val content: T) {
     }
 }
 
-class AnimatableData<T>(val data: T, val animate: Boolean)
+class HandledEvent<T>(content: T) : Event<T>(content) {
+
+    init {
+
+        consumed = true
+    }
+}

@@ -4,9 +4,13 @@ import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import com.google.android.material.card.MaterialCardView
 import com.twisthenry8gmail.dragline.DraglineView
-import com.twisthenry8gmail.progresscircles.ProgressCircleView
+import com.twisthenry8gmail.progresscircles.ProgressView
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.GoalHistory
+import com.twisthenry8gmail.weeklyphoenix.view.GoalProgressView
+import com.twisthenry8gmail.weeklyphoenix.view.views.GoalProgressView2
 
 object BindingAdapters {
 
@@ -17,16 +21,40 @@ object BindingAdapters {
         view.visibility = if (bool) View.VISIBLE else View.GONE
     }
 
-    @BindingAdapter("goal")
+    @BindingAdapter("goal", "bindProgress", requireAll = false)
     @JvmStatic
-    fun bindGoalToProgressView(progressView: ProgressCircleView, goal: Goal) {
+    fun bindGoalToProgressView(
+        progressView: ProgressView,
+        goal: Goal?,
+        bindProgress: Boolean?
+    ) {
+
+        goal?.let {
+
+            progressView.run {
+
+                target = it.target
+                setColor(it.color)
+                setBackingArcColor(ColorUtil.lightenGoalColor(it.color))
+                if (bindProgress != false) setProgress(it.progress)
+            }
+        }
+    }
+
+    @BindingAdapter("goal", "goalHistory")
+    @JvmStatic
+    fun bindGoalToProgressView(
+        progressView: ProgressView,
+        goal: Goal,
+        goalHistory: GoalHistory
+    ) {
 
         progressView.run {
 
-            target = goal.target
+            target = goalHistory.target
             setColor(goal.color)
             setBackingArcColor(ColorUtil.lightenGoalColor(goal.color))
-            setProgress(goal.progress)
+            setProgress(goalHistory.progress)
         }
     }
 
@@ -37,7 +65,7 @@ object BindingAdapters {
 
     @BindingAdapter("draglineTextFactory")
     @JvmStatic
-    fun onDraglineValueChanged(draglineView: DraglineView, textFactory: DraglineTextFactory) {
+    fun setDraglineTextFactory(draglineView: DraglineView, textFactory: DraglineTextFactory) {
 
         draglineView.textFactory = {
 
@@ -45,7 +73,7 @@ object BindingAdapters {
         }
     }
 
-    // TODO Sort out, why do I need some of these?!
+    // TODO Sort out, why do I need some of these?! - STACK
     @BindingAdapter("valueAttrChanged")
     @JvmStatic
     fun setDraglineListener(draglineView: DraglineView, listener: InverseBindingListener) {
@@ -63,10 +91,30 @@ object BindingAdapters {
         return draglineView.value
     }
 
+    @BindingAdapter("goal")
+    @JvmStatic
+    fun bindGoalToProgressView(goalProgressView: GoalProgressView, goal: Goal) {
+
+        goalProgressView.initialise(goal)
+    }
+
+    @BindingAdapter("goal")
+    @JvmStatic
+    fun bindGoalToProgressView(goalProgressView: GoalProgressView2, goal: Goal) {
+
+        goalProgressView.initialise(goal)
+    }
 //    @BindingAdapter("value")
 //    @JvmStatic
 //    fun setValueTest(draglineView: DraglineView, value: Long) {
 //
 //        draglineView.value = value
 //    }
+
+    @BindingAdapter("android:checked")
+    @JvmStatic
+    fun setChecked(materialCardView: MaterialCardView, checked: Boolean) {
+
+        materialCardView.isChecked = checked
+    }
 }

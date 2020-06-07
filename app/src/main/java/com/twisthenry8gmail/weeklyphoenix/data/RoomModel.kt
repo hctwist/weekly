@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-// TODO Reset to 1
+// RELEASE Reset to 1
 @Database(entities = [Goal::class, GoalHistory::class], version = 5)
 abstract class RoomModel : RoomDatabase() {
 
@@ -27,7 +27,7 @@ abstract class RoomModel : RoomDatabase() {
             }
         }
 
-        // TODO Remove destructive migration
+        // RELEASE Remove destructive migration
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context, RoomModel::class.java,

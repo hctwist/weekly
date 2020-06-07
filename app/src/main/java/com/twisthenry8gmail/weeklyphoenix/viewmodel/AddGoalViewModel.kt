@@ -3,6 +3,7 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 import android.content.res.Resources
 import androidx.lifecycle.*
 import com.twisthenry8gmail.weeklyphoenix.NonNullLiveData
+import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
@@ -16,9 +17,14 @@ class AddGoalViewModel(
     private val goalRepository: GoalRepository
 ) : NavigatorViewModel() {
 
-    lateinit var type: Goal.Type
-        private set
+    private val _type = NonNullMutableLiveData(Goal.Type.COUNTED)
+    val type: NonNullLiveData<Goal.Type>
+        get() = _type
 
+    val suggestedTitles: Array<String> = androidResources.getStringArray(R.array.goal_suggested_titles)
+    private val _titleHint = NonNullMutableLiveData(suggestedTitles.random())
+    val titleHint: NonNullLiveData<String>
+        get() = _titleHint
     var title = ""
         set(value) {
 
@@ -38,7 +44,7 @@ class AddGoalViewModel(
         get() = _validTitle
 
     private var _target: Long? = null
-        get() = field ?: type.minIncrement
+        get() = field ?: type.value.minIncrement
     var target: Long
         get() = _target!!
         set(value) {
@@ -47,13 +53,13 @@ class AddGoalViewModel(
 
     var reset: Goal.Reset = Goal.ResetPreset.WEEKLY.toReset()
 
-    val startDate = NonNullLiveData(LocalDate.now().toEpochDay())
+    val startDate = NonNullMutableLiveData(LocalDate.now().toEpochDay())
 
-    val endDate = NonNullLiveData(-1L)
+    val endDate = NonNullMutableLiveData(-1L)
 
-    val increase = NonNullLiveData(0L)
+    val increase = NonNullMutableLiveData(0L)
 
-    val color = NonNullLiveData {
+    val color = NonNullMutableLiveData {
 
         val cTypedArray = androidResources.obtainTypedArray(R.array.goal_colors)
         val value = cTypedArray.getColor(Random.nextInt(cTypedArray.length()), 0)
@@ -66,16 +72,33 @@ class AddGoalViewModel(
         navigateBack()
     }
 
-    fun onConfirmType(type: Goal.Type) {
+    fun onSelectType(type: Goal.Type) {
 
-        this.type = type
+        _type.value = type
+    }
+
+    fun onConfirmType() {
+
         navigateTo(R.id.action_fragmentAddGoalType_to_fragmentAddGoalTitle)
     }
 
-    private fun isTitleValid() = title.isNotEmpty() && existingGoalTitles?.contains(title) != true
+    private fun isTitleValid(): Boolean {
+
+        return if (title.isEmpty()) {
+
+            existingGoalTitles?.contains(_titleHint.value) != true
+        } else {
+
+            existingGoalTitles?.contains(title) != true
+        }
+    }
 
     fun onConfirmTitle() {
 
+        if (title.isEmpty()) {
+
+            title = titleHint.value
+        }
         navigateTo(R.id.action_fragmentAddGoalTitle_to_fragmentAddGoalTarget)
     }
 
@@ -89,21 +112,34 @@ class AddGoalViewModel(
         navigateTo(R.id.action_fragmentAddGoalReset_to_fragmentAddGoalDone)
     }
 
+    fun onIncreaseDecrement() {
+
+        if (increase.value >= type.value.minIncrement) {
+
+            increase.value -= type.value.minIncrement
+        }
+    }
+
+    fun onIncreaseIncrement() {
+
+        increase.value += type.value.minIncrement
+    }
+
     fun onDone() {
 
         viewModelScope.launch {
 
             goalRepository.add(build())
-        }
 
-        navigateTo(R.id.action_global_fragmentMain)
+            navigateTo(R.id.action_global_fragmentMain)
+        }
     }
 
     private fun build(): Goal {
 
-        val goal = Goal(
+        return Goal(
             0,
-            type,
+            type.value,
             title,
             0,
             target,
@@ -115,8 +151,6 @@ class AddGoalViewModel(
             endDate.value,
             color.value
         )
-
-        return goal
     }
 
     class Factory(

@@ -33,6 +33,7 @@ class FragmentAddGoalTitle : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // TODO Showing and hiding of the keyboard
         add_goal_title.showSoftKeyboard()
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
@@ -42,8 +43,7 @@ class FragmentAddGoalTitle : Fragment() {
     }
 
     override fun onDetach() {
-
-        hideSoftKeyboard()
         super.onDetach()
+        hideSoftKeyboard()
     }
 }

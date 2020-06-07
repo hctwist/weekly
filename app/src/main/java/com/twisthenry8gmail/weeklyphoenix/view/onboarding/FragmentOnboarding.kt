@@ -42,14 +42,17 @@ class FragmentOnboarding : Fragment(R.layout.fragment_onboarding) {
 
         override fun getItemCount(): Int {
 
-            return 1
+            return 4
         }
 
         override fun createFragment(position: Int): Fragment {
 
             return when (position) {
 
-                0 -> FragmentOnboardingIntro()
+                0 -> FragmentOnboardingWelcome()
+                1 -> FragmentOnboardingIntro()
+                2 -> FragmentOnboardingCustomise()
+                3 -> FragmentOnboardingFinish()
 
                 else -> throw IllegalArgumentException()
             }

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="exit_transition_duration">100</integer>
+    <integer name="enter_transition_duration">150</integer>
+
+    <!-- RELEASE Deprecated -->
     <integer name="transition_duration">150</integer>
 </resources>

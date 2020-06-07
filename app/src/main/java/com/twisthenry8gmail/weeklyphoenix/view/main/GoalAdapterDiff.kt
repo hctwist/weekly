@@ -30,7 +30,7 @@ class GoalAdapterDiff(
         return when (oldItem.type) {
 
             GoalAdapter.Data.Type.HEADER -> true
-            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED -> return oldItem.asGoal().id == newItem.asGoal().id
+            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_ENDED -> return oldItem.asGoal().id == newItem.asGoal().id
         }
     }
 
@@ -42,7 +42,7 @@ class GoalAdapterDiff(
         return when (oldItem.type) {
 
             GoalAdapter.Data.Type.HEADER -> oldItem.asHeader() == newItem.asHeader()
-            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED -> oldItem.asGoal() == newItem.asGoal()
+            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_ENDED -> oldItem.asGoal() == newItem.asGoal()
         }
     }
 
@@ -65,7 +65,7 @@ class GoalAdapterDiff(
                     GoalAdapter.Change.PROGRESS
                 }
             }
-            GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED -> null
+            GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_ENDED -> null
         }
     }
 }

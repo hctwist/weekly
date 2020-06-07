@@ -5,9 +5,13 @@
     <dimen name="margin">16dp</dimen>
     <dimen name="double_margin">32dp</dimen>
     <dimen name="large_content_margin">48dp</dimen>
+    <dimen name="extra_large_content_margin">96dp</dimen>
 
-    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="corner_radius">6dp</dimen>
     <dimen name="stroke_width">2dp</dimen>
+
+    <dimen name="goal_corner_radius">12dp</dimen>
+    <dimen name="goal_progress_stroke">6dp</dimen>
 
     <dimen name="accessibility_padding">12dp</dimen>
 
@@ -22,12 +26,18 @@
     <!-- Add goal -->
     <dimen name="add_goal_color_dot_size">48dp</dimen>
     <dimen name="add_goal_color_dot_highlight">12dp</dimen>
-    <dimen name="add_goal_more_button_min">128dp</dimen>
+    <dimen name="add_goal_more_button_min">148sp</dimen>
 
     <!-- View goal -->
+    <dimen name="view_goal_progress_width">72dp</dimen>
     <dimen name="view_goal_history_height">192dp</dimen>
+    <dimen name="view_goal_target_line_dash">4dp</dimen>
+    <dimen name="view_goal_target_line_gap">12dp</dimen>
 
     <!-- Datline drawable -->
     <dimen name="dateline_circle_radius">4dp</dimen>
     <dimen name="dateline_min_spacing">32dp</dimen>
+
+    <!-- Goal progress view -->
+    <dimen name="goal_progress_thumb_radius">12dp</dimen>
 </resources>

@@ -1,19 +1,13 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.PopupMenu
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.R
@@ -30,8 +24,7 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
         MainViewModel.Factory(
             resources,
             MainRepository(requireActivity().getPreferences(Context.MODE_PRIVATE)),
-            weeklyApplication().goalRepository,
-            currentGoalViewModel
+            weeklyApplication().goalRepository
         )
     }
     private lateinit var goalAdapter: GoalAdapter

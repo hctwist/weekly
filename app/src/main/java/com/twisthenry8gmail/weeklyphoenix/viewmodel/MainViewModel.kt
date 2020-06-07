@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.DiffUtil
+import com.twisthenry8gmail.weeklyphoenix.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
@@ -22,8 +23,7 @@ import java.util.*
 class MainViewModel(
     private val androidResources: Resources,
     private val mainRepository: MainRepository,
-    private val goalRepository: GoalRepository,
-    private val currentGoalViewModel: CurrentGoalViewModel
+    private val goalRepository: GoalRepository
 ) : NavigatorViewModel() {
 
     init {
@@ -77,8 +77,7 @@ class MainViewModel(
 
     fun onGoalClick(goal: Goal) {
 
-        currentGoalViewModel.currentGoal.value = goal
-        navigateTo(R.id.action_fragmentMain_to_fragmentViewGoal)
+        navigateTo(R.id.action_fragmentMain_to_fragmentViewGoal, GoalIdBundle(goal.id))
     }
 
     fun onGoalAction(context: Context, goal: Goal) {
@@ -94,8 +93,11 @@ class MainViewModel(
 
                 if (goal.progress + 1 == goal.target) {
 
-                    currentGoalViewModel.currentGoal.value = goal
-                    navigateTo(R.id.action_fragmentMain_to_fragmentGoalSuccess)
+                    navigateTo(
+                        R.id.action_fragmentMain_to_fragmentGoalSuccess, GoalIdBundle(
+                            goal.id
+                        )
+                    )
                 }
             }
 
@@ -117,8 +119,7 @@ class MainViewModel(
     class Factory(
         private val androidResources: Resources,
         private val mainRepository: MainRepository,
-        private val goalRepository: GoalRepository,
-        private val currentGoalViewModel: CurrentGoalViewModel
+        private val goalRepository: GoalRepository
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -128,8 +129,7 @@ class MainViewModel(
                 return MainViewModel(
                     androidResources,
                     mainRepository,
-                    goalRepository,
-                    currentGoalViewModel
+                    goalRepository
                 ) as T
             }
 

@@ -19,6 +19,12 @@ class GoalRepository(
 
     private var goals: LiveData<List<Goal>>? = null
 
+    // RELEASE Remove
+    suspend fun forceZeroProgress() {
+
+        goalsDao.forceZeroProgress()
+    }
+
     suspend fun getAllThatRequireReset(): List<Goal> {
 
         return goalsDao.getAllThatRequireReset(LocalDate.now().toEpochDay())
@@ -31,13 +37,14 @@ class GoalRepository(
         goals.forEach {
 
             val resetDate = LocalDate.ofEpochDay(it.resetDate)
-            val nextResetDate = Goal.getResetDateFrom(LocalDate.ofEpochDay(it.resetDate), it.reset)
+            val periodsPassed = resetDate.until(now)[it.reset.unit] / it.reset.multiple
+
+            val nextResetDate = Goal.getResetDateFrom(resetDate, it.reset * (periodsPassed + 1))
             var newTarget = it.target
 
             if (!it.increasePaused) {
 
-                val periodsPassed = resetDate.until(now)[it.reset.unit] / it.reset.multiple
-                newTarget += periodsPassed * it.increase
+                newTarget += (periodsPassed + 1) * it.increase
             }
 
             resetUpdates.add(Goal.Dao.ResetUpdate(it.id, nextResetDate, newTarget))
@@ -61,6 +68,19 @@ class GoalRepository(
         return goals!!
     }
 
+    fun get(id: Int): LiveData<Goal> {
+
+        goals?.let { goals ->
+
+            return Transformations.map(goals) { goalsList ->
+
+                goalsList.find { it.id == id }
+            }
+        }
+
+        return goalsDao.get(id)
+    }
+
     suspend fun add(goal: Goal) {
 
         goalsDao.insert(goal)
@@ -71,9 +91,9 @@ class GoalRepository(
         goalsDao.incrementProgress(id, progress)
     }
 
-    suspend fun pauseIncrease(id: Int, pause: Boolean) {
+    suspend fun pauseIncrease(id: Int) {
 
-        goalsDao.pauseIncrease(id, pause)
+        goalsDao.pauseIncrease(id)
     }
 
     suspend fun delete(id: Int) {
@@ -118,7 +138,7 @@ class GoalRepository(
 
         if (cachedGoal == null) {
 
-            data = goalsDao.find(id)
+            data = goalsDao.get(id)
         } else {
 
             data = MutableLiveData<Goal>().apply {

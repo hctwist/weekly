@@ -1,4 +1,4 @@
-package com.twisthenry8gmail.weeklyphoenix.view
+package com.twisthenry8gmail.weeklyphoenix.view.viewgoal
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,24 +8,27 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.twisthenry8gmail.weeklyphoenix.Event
+import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewGoalBinding
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoalViewModel
+import com.twisthenry8gmail.weeklyphoenix.view.MarginItemDecoration
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoal2ViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_view_goal.*
 
 class FragmentViewGoal : Fragment() {
 
-    private val currentGoalViewModel by viewModels<CurrentGoalViewModel>({ requireActivity() })
-    private val viewModel by viewModels<ViewGoalViewModel> {
-        ViewGoalViewModel.Factory(
+    private val viewModel by viewModels<ViewGoal2ViewModel> {
+        ViewGoal2ViewModel.Factory(
+            arguments,
             resources,
             weeklyApplication().goalRepository,
-            weeklyApplication().goalHistoryRepository,
-            currentGoalViewModel
+            weeklyApplication().goalHistoryRepository
         )
     }
+
+    private val historyAdapter = GoalHistoryAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,14 +50,27 @@ class FragmentViewGoal : Fragment() {
             it.navigateWith(findNavController())
         })
 
-        view_goal_toolbar.setOnMenuItemClickListener {
+        viewModel.goal.observe(viewLifecycleOwner, Observer {
 
-            viewModel.onMenuItemClick(it)
-        }
-
-        viewModel.goalHistoryGraphData.observe(viewLifecycleOwner, Observer {
-
-            it?.let { view_goal_history.setElements(it) }
+            historyAdapter.goal = it
         })
+
+        viewModel.histories.observe(viewLifecycleOwner, Observer {
+
+            historyAdapter.histories = it
+            historyAdapter.notifyDataSetChanged()
+        })
+
+        setupHistoryList()
+    }
+
+    private fun setupHistoryList() {
+
+        with(view_goal_history) {
+
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin)))
+            adapter = historyAdapter
+        }
     }
 }

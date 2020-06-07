@@ -1,9 +1,11 @@
 package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.content.res.Resources
+import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.*
 import com.twisthenry8gmail.graphview.GraphElement
+import com.twisthenry8gmail.weeklyphoenix.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistoryRepository
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
@@ -11,15 +13,13 @@ import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.launch
 
 class ViewGoalViewModel(
+    private val args: Bundle?,
     private val androidResources: Resources,
     private val goalRepository: GoalRepository,
-    private val goalHistoryRepository: GoalHistoryRepository,
-    private val currentGoalViewModel: CurrentGoalViewModel
+    private val goalHistoryRepository: GoalHistoryRepository
 ) : NavigatorViewModel() {
 
-    // TODO Better system for these two, increasePaused is a slight workaround
-    val goal = currentGoalViewModel.currentGoal
-    val increasePaused = MutableLiveData(goal.value!!.increasePaused)
+    val goal = goalRepository.get(GoalIdBundle.fetchId(args))
 
     val goalHistoryGraphData: LiveData<List<GraphElement>> =
         Transformations.switchMap(goal) { goal ->
@@ -59,18 +59,17 @@ class ViewGoalViewModel(
 
     fun onPauseIncrease() {
 
-        increasePaused.value = !increasePaused.value!!
         viewModelScope.launch {
 
-            goalRepository.pauseIncrease(goal.value!!.id, goal.value!!.increasePaused)
+            goalRepository.pauseIncrease(goal.value!!.id)
         }
     }
 
     class Factory(
+        private val args: Bundle?,
         private val androidResources: Resources,
         private val goalRepository: GoalRepository,
-        private val goalHistoryRepository: GoalHistoryRepository,
-        private val currentGoalViewModel: CurrentGoalViewModel
+        private val goalHistoryRepository: GoalHistoryRepository
     ) :
         ViewModelProvider.Factory {
 
@@ -80,10 +79,10 @@ class ViewGoalViewModel(
 
                 @Suppress("UNCHECKED_CAST")
                 return ViewGoalViewModel(
+                    args,
                     androidResources,
                     goalRepository,
-                    goalHistoryRepository,
-                    currentGoalViewModel
+                    goalHistoryRepository
                 ) as T
             }
 

@@ -5,22 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.twisthenry8gmail.weeklyphoenix.MainRepository
+import com.twisthenry8gmail.weeklyphoenix.NonNullLiveData
+import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 
-class OnboardingViewModel(val mainRepository: MainRepository) : NavigatorViewModel() {
+class OnboardingViewModel(private val mainRepository: MainRepository) : NavigatorViewModel() {
 
-    private val _page = MutableLiveData(0)
+    private val _page = NonNullMutableLiveData(0)
     val page: LiveData<Int>
         get() = _page
 
     fun next() {
 
-        _page.value = _page.value!! + 1
+        _page.value++
     }
 
     fun previous() {
 
-        _page.value = _page.value!! - 1
+        _page.value--
     }
 
     fun finish() {

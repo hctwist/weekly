@@ -12,10 +12,7 @@ import androidx.databinding.OnRebindCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
-import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardBinding
-import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardCompleteBinding
-import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardScheduledBinding
-import com.twisthenry8gmail.weeklyphoenix.databinding.MainHeaderBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.*
 import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
 
 class GoalAdapter(val resources: Resources) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -54,6 +51,13 @@ class GoalAdapter(val resources: Resources) : RecyclerView.Adapter<RecyclerView.
                     false
                 )
             )
+            Data.Type.GOAL_ENDED -> GoalEndedVH(
+                GoalCardEndedBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
         }
     }
 
@@ -77,7 +81,7 @@ class GoalAdapter(val resources: Resources) : RecyclerView.Adapter<RecyclerView.
                         val h = holder as GoalVH
                         val goal = data[position].asGoal()
 
-                        // TODO Better method to stop the rebind?
+                        // TODO Better method to stop the rebind? - STACK
                         val callback = object : OnRebindCallback<GoalCardBinding>() {
 
                             override fun onPreBind(binding: GoalCardBinding?): Boolean {
@@ -115,6 +119,10 @@ class GoalAdapter(val resources: Resources) : RecyclerView.Adapter<RecyclerView.
                 clickHandler!!
             )
             Data.Type.GOAL_SCHEDULED -> (holder as GoalScheduledVH).bind(
+                item.asGoal(),
+                clickHandler!!
+            )
+            Data.Type.GOAL_ENDED -> (holder as GoalEndedVH).bind(
                 item.asGoal(),
                 clickHandler!!
             )
@@ -157,6 +165,17 @@ class GoalAdapter(val resources: Resources) : RecyclerView.Adapter<RecyclerView.
     }
 
     class GoalScheduledVH(private val binding: GoalCardScheduledBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(goal: Goal, clickHandler: ClickHandler) {
+
+            binding.goal = goal
+            binding.clickhandler = clickHandler
+            binding.executePendingBindings()
+        }
+    }
+
+    class GoalEndedVH(private val binding: GoalCardEndedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(goal: Goal, clickHandler: ClickHandler) {
@@ -226,7 +245,7 @@ class GoalAdapter(val resources: Resources) : RecyclerView.Adapter<RecyclerView.
 
         enum class Type {
 
-            HEADER, GOAL, GOAL_COMPLETE, GOAL_SCHEDULED
+            HEADER, GOAL, GOAL_COMPLETE, GOAL_SCHEDULED, GOAL_ENDED
         }
     }
 

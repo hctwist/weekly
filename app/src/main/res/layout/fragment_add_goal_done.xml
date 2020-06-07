@@ -21,6 +21,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/add_goal_done_back"
+                style="@style/SecondaryImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_content_margin"
+                android:layout_marginTop="@dimen/double_margin"
+                android:onClick="@{() -> viewmodel.onBack()}"
+                android:src="@drawable/round_arrow_back_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/add_goal_done_text"
                 style="@style/Display"
@@ -28,23 +40,59 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/large_content_margin"
                 android:layout_marginTop="@dimen/large_content_margin"
-                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginEnd="@dimen/large_content_margin"
                 android:text="@string/add_goal_done_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/add_goal_done_back" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/add_goal_done_chips"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_content_margin"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginEnd="@dimen/large_content_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_goal_done_text">
+
+                <com.google.android.material.chip.Chip
+                    style="@style/AddGoalChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewmodel.type.getDisplayName(context)}" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/AddGoalChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewmodel.title}" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/AddGoalChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/add_goal_target_chip(GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.type, viewmodel.target))}" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/AddGoalChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{GoalDisplayUtil.INSTANCE.displayReset(context.resources, viewmodel.reset)}" />
+            </com.google.android.material.chip.ChipGroup>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_goal_done_start"
                 style="@style/OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/large_content_margin"
-                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginEnd="@dimen/large_content_margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
                 android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context.resources, viewmodel.startDate)}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_goal_done_text" />
+                app:layout_constraintTop_toBottomOf="@id/add_goal_done_chips" />
 
             <TextView
                 android:id="@+id/add_goal_done_start_label"
@@ -62,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/half_margin"
-                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginEnd="@dimen/large_content_margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
                 android:text="@{GoalDisplayUtil.INSTANCE.displayEndDate(context.resources, viewmodel.endDate)}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/half_margin"
-                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginEnd="@dimen/large_content_margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
                 android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.type, viewmodel.increase)}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/half_margin"
-                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginEnd="@dimen/large_content_margin"
                 android:minWidth="@dimen/add_goal_more_button_min"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_increase"
@@ -121,27 +169,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_goal_done_color" />
 
-            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
-                style="@style/SecondaryImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/large_content_margin"
-                android:onClick="@{() -> viewmodel.onBack()}"
-                android:src="@drawable/round_arrow_back_24"
-                app:layout_constraintBottom_toBottomOf="@id/add_goal_done_confirm"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/add_goal_done_confirm" />
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_goal_done_confirm"
+                style="@style/ContinueButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/double_margin"
+                android:layout_marginTop="@dimen/large_content_margin"
+                android:layout_marginEnd="@dimen/large_content_margin"
+                android:layout_marginBottom="@dimen/margin"
                 android:onClick="@{() -> viewmodel.onDone()}"
                 android:text="@string/add_goal_done_add_goal"
                 app:icon="@drawable/round_add_24"
-                android:layout_marginBottom="@dimen/margin"
-                app:layout_constraintEnd_toEndOf="@id/add_goal_done_text"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_color" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

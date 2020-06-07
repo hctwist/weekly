@@ -15,11 +15,10 @@ fun View.showSoftKeyboard() {
 
 fun Fragment.hideSoftKeyboard() {
 
-    activity?.currentFocus?.let {
-        context?.getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(
-            it.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY
-        )
-    }
+    val windowToken = activity?.currentFocus?.windowToken
+    context?.getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(
+        windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+    )
 }
 
 fun EditText.replaceText(text: CharSequence) {

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.GoalSuccessViewModel" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.twisthenry8gmail.progresscircles.ProgressCircleView
+            android:id="@+id/goal_success_progress"
+            bindProgress="@{!viewmodel.shouldAnimateViews}"
+            goal="@{viewmodel.goal}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/goal_success_done"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/cd_done"
+            android:onClick="@{() -> viewmodel.onDone()}"
+            android:src="@drawable/round_done_24"
+            android:visibility="@{viewmodel.shouldAnimateViews ? View.INVISIBLE : View.VISIBLE}" />
+    </FrameLayout>
+</layout>

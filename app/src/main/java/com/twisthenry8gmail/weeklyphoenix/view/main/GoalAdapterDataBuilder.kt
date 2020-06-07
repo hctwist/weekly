@@ -21,6 +21,7 @@ object GoalAdapterDataBuilder : Comparator<GoalAdapter.Data> {
                 it.isComplete() -> GoalAdapter.Data.Type.GOAL_COMPLETE
                 LocalDate.ofEpochDay(it.startDate)
                     .isAfter(date) -> GoalAdapter.Data.Type.GOAL_SCHEDULED
+                date.isBefore(LocalDate.ofEpochDay(it.endDate)) -> GoalAdapter.Data.Type.GOAL_ENDED
                 else -> GoalAdapter.Data.Type.GOAL
             }
 
@@ -43,7 +44,7 @@ object GoalAdapterDataBuilder : Comparator<GoalAdapter.Data> {
             when (d1.type) {
 
                 GoalAdapter.Data.Type.HEADER -> 0
-                GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_COMPLETE -> compareGoal(
+                GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_ENDED -> compareGoal(
                     d1.asGoal(),
                     d2.asGoal()
                 )
@@ -61,6 +62,7 @@ object GoalAdapterDataBuilder : Comparator<GoalAdapter.Data> {
         GoalAdapter.Data.Type.HEADER -> 0
         GoalAdapter.Data.Type.GOAL -> 1
         GoalAdapter.Data.Type.GOAL_COMPLETE -> 2
-        GoalAdapter.Data.Type.GOAL_SCHEDULED -> 3
+        GoalAdapter.Data.Type.GOAL_ENDED -> 3
+        GoalAdapter.Data.Type.GOAL_SCHEDULED -> 4
     }
 }

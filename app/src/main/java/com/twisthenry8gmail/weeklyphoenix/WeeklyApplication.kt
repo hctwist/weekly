@@ -5,14 +5,10 @@ import android.content.Context
 import android.graphics.Color
 import androidx.fragment.app.Fragment
 import com.twisthenry8gmail.weeklyphoenix.data.*
-import com.twisthenry8gmail.weeklyphoenix.util.GoalPropertyUtil
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
-import java.util.concurrent.Executors
+import java.time.Month
 
 class WeeklyApplication : Application() {
 
@@ -37,49 +33,38 @@ class WeeklyApplication : Application() {
 
     private suspend fun resetGoals() {
 
-        val add = false
+        val test = false
 
-        if (add) {
-
-            val testId = 88
-            val now = LocalDate.now()
-            val startDate = now.minusDays(35)
-            val testGoal =
-                Goal(
-                    testId,
-                    Goal.Type.COUNTED,
-                    "Graph test goal",
-                    2,
-                    10,
-                    Goal.Reset(7, ChronoUnit.DAYS),
-                    now.plusDays(7).toEpochDay(),
-                    0,
-                    false,
-                    startDate.toEpochDay(),
-                    -1,
-                    Color.RED
-                )
+        if (test) {
+            val startDate = LocalDate.of(2020, Month.MAY, 4)
+            val reset = Goal.ResetPreset.WEEKLY.toReset()
+            val testGoal = Goal(
+                888,
+                Goal.Type.COUNTED,
+                "New test goal",
+                5,
+                6,
+                reset,
+                Goal.getResetDateFrom(startDate, reset),
+                2,
+                false,
+                startDate.toEpochDay(),
+                -1,
+                getColor(R.color.color_primary)
+            )
             goalRepository.add(testGoal)
+        }
 
-            val d1 = now.minusDays(7)
-            val d2 = d1.minusDays(7)
-            val d3 = d2.minusDays(7)
+        val test2 = true
 
-            val h1 =
-                GoalHistory(testGoal.id, d1.toEpochDay(),1, 10)
-            val h2 =
-                GoalHistory(testGoal.id, d2.toEpochDay(),2, 10)
-            val h3 =
-                GoalHistory(testGoal.id, d3.toEpochDay(), 1, 10)
+        if(test2) {
 
-            goalHistoryRepository.add(h1)
-            goalHistoryRepository.add(h2)
-            goalHistoryRepository.add(h3)
+            goalRepository.forceZeroProgress()
         }
 
         val toReset = goalRepository.getAllThatRequireReset()
 
-        goalHistoryRepository.addAll(toReset)
+        goalHistoryRepository.addAllFor(toReset)
         goalRepository.reset(toReset)
     }
 }

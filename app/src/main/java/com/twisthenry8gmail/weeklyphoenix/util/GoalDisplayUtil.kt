@@ -4,6 +4,7 @@ import android.content.res.Resources
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import java.text.DecimalFormat
+import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
 
 object GoalDisplayUtil {
@@ -25,12 +26,30 @@ object GoalDisplayUtil {
         return resources.getString(R.string.goal_view_progress, progress, target)
     }
 
-    fun displayReset(resources: Resources, goal: Goal): String {
+    fun displayReset(resources: Resources, reset: Goal.Reset): String {
 
         val preset = Goal.ResetPreset.values()
-            .find { goal.reset.isPreset(it) }
+            .find { reset.isPreset(it) }
 
         return resources.getString(preset!!.displayNameRes)
+    }
+
+    fun displayHistoryDate(goal: Goal, date: Long): String {
+
+        return when {
+
+            goal.reset.unit == ChronoUnit.DAYS && goal.reset.multiple == 1L -> {
+
+                DateTimeUtil.displayDay(date)
+            }
+
+            goal.reset.unit == ChronoUnit.YEARS -> {
+
+                DateTimeUtil.displayMonthAndYear(date)
+            }
+
+            else -> DateTimeUtil.displayShortDate(date)
+        }
     }
 
     fun displayEndDate(resources: Resources, endDate: Long): String {

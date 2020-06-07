@@ -29,6 +29,11 @@ data class Goal(
 
     fun isComplete() = progress >= target
 
+    fun hasStarted(now: LocalDate) = !LocalDate.ofEpochDay(startDate).isAfter(now)
+
+    fun hasEnded(now: LocalDate) =
+        if (!hasEndDate()) false else !LocalDate.ofEpochDay(endDate).isAfter(now)
+
     fun hasEndDate() = GoalPropertyUtil.hasEndDate(endDate)
 
     fun withProgressIncrement(progressIncrement: Long) =
@@ -37,13 +42,26 @@ data class Goal(
     enum class Type(
         @StringRes val displayNameRes: Int,
         val minIncrement: Long,
-        @DrawableRes val actionIconRes: Int
+        @DrawableRes val actionIconRes: Int,
+        @StringRes val descriptionRes: Int
     ) {
 
-        COUNTED(R.string.goal_type_counted, 1, R.drawable.round_plus_one_24),
-        TIMED(R.string.goal_type_timed, 60 * 15, R.drawable.round_play_arrow_24);
+        COUNTED(
+            R.string.goal_type_counted,
+            1,
+            R.drawable.round_plus_one_24,
+            R.string.goal_type_counted_description
+        ),
+        TIMED(
+            R.string.goal_type_timed,
+            60 * 15,
+            R.drawable.round_play_arrow_24,
+            R.string.goal_type_timed_description
+        );
 
         fun getDisplayName(context: Context) = context.getString(displayNameRes)
+
+        fun getDescription(context: Context) = context.getString(descriptionRes)
     }
 
     class Reset(
@@ -51,7 +69,7 @@ data class Goal(
         @field:TypeConverters(Goal::class) val unit: ChronoUnit
     ) {
 
-        operator fun times(n: Int): Reset {
+        operator fun times(n: Long): Reset {
 
             return Reset(multiple * n, unit)
         }
@@ -82,6 +100,10 @@ data class Goal(
     @androidx.room.Dao
     interface Dao {
 
+        // RELEASE Remove
+        @Query("UPDATE Goal SET progress = 0")
+        suspend fun forceZeroProgress()
+
         @Query("SELECT * FROM Goal")
         fun getAll(): LiveData<List<Goal>>
 
@@ -94,14 +116,14 @@ data class Goal(
         @Insert
         suspend fun insert(goal: Goal)
 
-        @Query("SELECT * FROM Goal WHERE id = :id LIMIT 1")
-        fun find(id: Int): LiveData<Goal>
+        @Query("SELECT * FROM Goal WHERE id = :id")
+        fun get(id: Int): LiveData<Goal>
 
         @Query("UPDATE Goal SET progress = progress + :progress WHERE id = :id")
         suspend fun incrementProgress(id: Int, progress: Long)
 
-        @Query("UPDATE Goal SET increasePaused = :pause WHERE id = :id")
-        suspend fun pauseIncrease(id: Int, pause: Boolean)
+        @Query("UPDATE Goal SET increasePaused = NOT increasePaused WHERE id = :id")
+        suspend fun pauseIncrease(id: Int)
 
         class ResetUpdate(val id: Int, val newResetDate: Long, val newTarget: Long)
 
@@ -123,15 +145,10 @@ data class Goal(
 
     companion object {
 
+        // TODO Needed?
         fun getResetDateFrom(from: LocalDate, reset: Reset): Long {
 
-            return when (reset.unit) {
-
-                ChronoUnit.DAYS -> from.plusDays(reset.multiple)
-                ChronoUnit.MONTHS -> from.plusMonths(reset.multiple)
-                ChronoUnit.YEARS -> from.plusYears(reset.multiple)
-                else -> throw Reset.UnitException()
-            }.toEpochDay()
+            return from.plus(reset).toEpochDay()
         }
 
         @TypeConverter

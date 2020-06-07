@@ -8,6 +8,11 @@
 
     <declare-styleable name="GoalTypeView">
 
+        <attr name="goalTypeStyle" format="reference" />
+
+        <attr name="goalTypeTextColor" format="color" />
+        <attr name="goalTypeIconTint" format="color" />
+
         <attr name="goalTypeTitle" format="string" />
         <attr name="goalTypeIcon" format="reference" />
         <attr name="goalTypeDescription" format="string" />

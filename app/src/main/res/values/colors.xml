@@ -12,5 +12,6 @@
 
     <color name="off_white">#F1F1F1</color>
 
+    <color name="goal_progress_thumb_color">#353535</color>
     <color name="goal_card">#FBFBFE</color>
 </resources>

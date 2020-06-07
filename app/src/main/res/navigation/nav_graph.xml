@@ -1,51 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/fragmentMain">
 
 
     <fragment
         android:id="@+id/fragmentMain"
-        android:name="com.twisthenry8gmail.weeklyphoenix.view.main.FragmentMain"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.main.FragmentMain2"
         android:label="FragmentMain">
         <action
             android:id="@+id/action_fragmentMain_to_fragmentAddGoalTitle"
-            app:enterAnim="@anim/slide_up_enter_animation"
-            app:exitAnim="@anim/fade_exit_animation"
             app:destination="@id/nav_add_goal"
-            app:popEnterAnim="@anim/slide_down_enter_animation"
-            app:popExitAnim="@anim/fade_exit_animation" />
+            app:enterAnim="@anim/scale_enter_animation"
+            app:exitAnim="@anim/scale_exit_animation"
+            app:popEnterAnim="@anim/scale_pop_enter_animation"
+            app:popExitAnim="@anim/scale_pop_exit_animation" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentGoalSuccess"
             app:destination="@id/fragmentGoalSuccess"
-            app:enterAnim="@anim/slide_up_enter_animation"
-            app:exitAnim="@anim/fade_exit_animation"
-            app:popEnterAnim="@anim/slide_down_enter_animation"
-            app:popExitAnim="@anim/fade_exit_animation" />
+            app:enterAnim="@anim/scale_enter_animation"
+            app:exitAnim="@anim/scale_exit_animation"
+            app:popEnterAnim="@anim/scale_pop_enter_animation"
+            app:popExitAnim="@anim/scale_pop_exit_animation" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentGoalTimer"
             app:destination="@id/fragmentGoalTimer"
-            app:enterAnim="@anim/slide_up_enter_animation"
-            app:exitAnim="@anim/fade_exit_animation"
-            app:popEnterAnim="@anim/slide_down_enter_animation"
-            app:popExitAnim="@anim/fade_exit_animation"
+            app:enterAnim="@anim/scale_enter_animation"
+            app:exitAnim="@anim/scale_exit_animation"
+            app:popEnterAnim="@anim/scale_pop_enter_animation"
+            app:popExitAnim="@anim/scale_pop_exit_animation"
             app:popUpTo="@id/fragmentMain"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentViewGoal"
             app:destination="@id/fragmentViewGoal"
-            app:enterAnim="@anim/slide_up_enter_animation"
-            app:exitAnim="@anim/fade_exit_animation"
-            app:popEnterAnim="@anim/slide_down_enter_animation"
-            app:popExitAnim="@anim/fade_exit_animation" />
+            app:enterAnim="@anim/scale_enter_animation"
+            app:exitAnim="@anim/scale_exit_animation"
+            app:popEnterAnim="@anim/scale_pop_enter_animation"
+            app:popExitAnim="@anim/scale_pop_exit_animation" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentOnboarding"
-            app:destination="@id/fragmentOnboarding" />
+            app:destination="@id/fragmentOnboarding"
+            app:enterAnim="@anim/scale_enter_animation"
+            app:exitAnim="@anim/scale_exit_animation"
+            app:popEnterAnim="@anim/scale_pop_enter_animation"
+            app:popExitAnim="@anim/scale_pop_exit_animation" />
     </fragment>
     <fragment
         android:id="@+id/fragmentGoalSuccess"
-        android:name="com.twisthenry8gmail.weeklyphoenix.view.FragmentGoalSuccess"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.success.FragmentGoalSuccess2"
         android:label="FragmentGoalSuccess" />
     <fragment
         android:id="@+id/fragmentGoalTimer"
@@ -63,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentViewGoal"
-        android:name="com.twisthenry8gmail.weeklyphoenix.view.FragmentViewGoal"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.viewgoal.FragmentViewGoal"
         android:label="FragmentViewGoal" />
     <navigation
         android:id="@+id/nav_add_goal"
@@ -118,9 +123,7 @@
                 app:enterAnim="@anim/slide_left_enter_animation"
                 app:exitAnim="@anim/fade_exit_animation"
                 app:popEnterAnim="@anim/slide_right_enter"
-                app:popExitAnim="@anim/fade_exit_animation"
-                app:popUpTo="@id/fragmentAddGoalType"
-                app:popUpToInclusive="true" />
+                app:popExitAnim="@anim/fade_exit_animation" />
         </fragment>
     </navigation>
     <fragment
@@ -130,10 +133,10 @@
     <action
         android:id="@+id/action_global_fragmentMain"
         app:destination="@id/fragmentMain"
-        app:enterAnim="@anim/slide_down_enter_animation"
-        app:exitAnim="@anim/fade_exit_animation"
-        app:popEnterAnim="@anim/slide_up_enter_animation"
-        app:popExitAnim="@anim/fade_exit_animation"
+        app:enterAnim="@anim/scale_enter_animation"
+        app:exitAnim="@anim/scale_exit_animation"
+        app:popEnterAnim="@anim/scale_pop_enter_animation"
+        app:popExitAnim="@anim/scale_pop_exit_animation"
         app:popUpTo="@id/fragmentMain"
         app:popUpToInclusive="true" />
 </navigation>

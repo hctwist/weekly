@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalDoneBinding
@@ -97,7 +98,7 @@ class FragmentAddGoalDone : Fragment() {
         }
     }
 
-    // TODO View binding here? Better architecture solution?
+    // TODO View binding here? Better architecture solution? MaterialDatePicker?
     class EndDatePickerDialog : DialogFragment() {
 
         private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)

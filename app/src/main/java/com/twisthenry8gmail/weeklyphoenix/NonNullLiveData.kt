@@ -1,8 +1,8 @@
 package com.twisthenry8gmail.weeklyphoenix
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 
-class NonNullLiveData<T>(initialValue: T) : MutableLiveData<T>() {
+open class NonNullLiveData<T>(initialValue: T) : LiveData<T>() {
 
     constructor(valueProvider: () -> T) : this(valueProvider())
 
@@ -14,5 +14,18 @@ class NonNullLiveData<T>(initialValue: T) : MutableLiveData<T>() {
     override fun getValue(): T {
 
         return super.getValue()!!
+    }
+}
+
+class NonNullMutableLiveData<T>(initialValue: T) : NonNullLiveData<T>(initialValue) {
+
+    constructor(valueProvider: () -> T) : this(valueProvider())
+
+    public override fun setValue(value: T) {
+        super.setValue(value)
+    }
+
+    public override fun postValue(value: T) {
+        super.postValue(value)
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.twisthenry8gmail.weeklyphoenix.view.success.GoalSuccessFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/goal_success_controller"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/GoalCard"
+        android:layout_width="96dp"
+        android:transitionName="card"
+        android:layout_height="96dp"
+        android:layout_gravity="center" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.twisthenry8gmail.weeklyphoenix.view.success.GoalSuccessFrameLayout>

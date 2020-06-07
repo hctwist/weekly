@@ -62,33 +62,36 @@ class FragmentGoalTimer : Fragment(R.layout.fragment_timed_goal) {
                 findNavController().navigate(R.id.action_fragmentMain_to_fragmentGoalSuccess)
             } else {
 
-                timed_goal_progress.setBackingArcColor(ColorUtil.lightenGoalColor(it.updatedGoal.color))
-                timed_goal_progress.setColor(it.updatedGoal.color)
-                timed_goal_progress.target = it.updatedGoal.target
-                timed_goal_progress.setProgress(it.updatedGoal.progress, false)
+                // TODO
+//                timed_goal_progress.setBackingArcColor(ColorUtil.lightenGoalColor(it.updatedGoal.color))
+//                timed_goal_progress.setColor(it.updatedGoal.color)
+//                timed_goal_progress.target = it.updatedGoal.target
+//                timed_goal_progress.setProgress(it.originalGoal.progress, false)
+//
+//                val fadeTransition = Fade().apply {
+//
+//                    addListener(object : TransitionListenerAdapter() {
+//
+//                        override fun onTransitionEnd(transition: Transition) {
+//
+//                            timed_goal_progress.setProgress(it.updatedGoal.progress, true) {
+//
+//                                Handler().postDelayed(
+//                                    { findNavController().navigate(R.id.action_fragmentGoalTimer_to_fragmentMain) },
+//                                    1000
+//                                )
+//                            }
+//                        }
+//                    })
+//                }
 
-                val fadeTransition = Fade().apply {
+//                val constraintSet = ConstraintSet().apply { clone(timed_goal_root) }
+//                constraintSet.setVisibility(R.id.timed_goal_stop, View.INVISIBLE)
+//                constraintSet.setVisibility(R.id.timed_goal_progress, View.VISIBLE)
+//                TransitionManager.beginDelayedTransition(timed_goal_root, fadeTransition)
+//                constraintSet.applyTo(timed_goal_root)
 
-                    addListener(object : TransitionListenerAdapter() {
-
-                        override fun onTransitionEnd(transition: Transition) {
-
-                            timed_goal_progress.setProgress(it.updatedGoal.progress, true) {
-
-                                Handler().postDelayed(
-                                    { findNavController().navigate(R.id.action_fragmentGoalTimer_to_fragmentMain) },
-                                    1000
-                                )
-                            }
-                        }
-                    })
-                }
-
-                val constraintSet = ConstraintSet().apply { clone(timed_goal_root) }
-                constraintSet.setVisibility(R.id.timed_goal_stop, View.INVISIBLE)
-                constraintSet.setVisibility(R.id.timed_goal_progress, View.VISIBLE)
-                TransitionManager.beginDelayedTransition(timed_goal_root, fadeTransition)
-                constraintSet.applyTo(timed_goal_root)
+                findNavController().navigate(R.id.fragmentMain)
             }
         })
     }

@@ -1,53 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/large_content_margin"
-    android:paddingBottom="@dimen/large_content_margin">
+<layout>
 
-    <ImageButton
-        android:id="@+id/periodic_increase_minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_content_margin"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/cd_decrease"
-        android:padding="@dimen/accessibility_padding"
-        android:src="@drawable/round_remove_24"
-        app:layout_constraintBottom_toBottomOf="@id/periodic_increase_value"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/periodic_increase_value" />
+    <data>
 
-    <TextView
-        android:id="@+id/periodic_increase_value"
-        style="@style/Display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@id/periodic_increase_plus"
-        app:layout_constraintStart_toEndOf="@id/periodic_increase_minus"
-        app:layout_constraintTop_toTopOf="parent" />
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
 
-    <ImageButton
-        android:id="@+id/periodic_increase_plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/large_content_margin"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/cd_increase"
-        android:padding="@dimen/accessibility_padding"
-        android:src="@drawable/round_add_24"
-        app:layout_constraintBottom_toBottomOf="@id/periodic_increase_value"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/periodic_increase_value" />
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel" />
+    </data>
 
-    <TextView
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/double_margin"
-        android:text="@string/add_goal_increase_hint"
-        android:textAlignment="viewStart"
-        app:layout_constraintEnd_toEndOf="@id/periodic_increase_plus"
-        app:layout_constraintStart_toStartOf="@id/periodic_increase_minus"
-        app:layout_constraintTop_toBottomOf="@id/periodic_increase_value" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:paddingTop="@dimen/large_content_margin"
+        android:paddingBottom="@dimen/large_content_margin">
+
+        <ImageButton
+            android:id="@+id/periodic_increase_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_decrease"
+            android:onClick="@{() -> viewmodel.onIncreaseDecrement()}"
+            android:padding="@dimen/accessibility_padding"
+            android:src="@drawable/round_remove_24"
+            app:layout_constraintBottom_toBottomOf="@id/periodic_increase_value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/periodic_increase_value" />
+
+        <TextView
+            android:id="@+id/periodic_increase_value"
+            style="@style/Display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.type, viewmodel.increase)}"
+            app:layout_constraintEnd_toStartOf="@id/periodic_increase_plus"
+            app:layout_constraintStart_toEndOf="@id/periodic_increase_minus"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/periodic_increase_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/large_content_margin"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_increase"
+            android:onClick="@{() -> viewmodel.onIncreaseIncrement()}"
+            android:padding="@dimen/accessibility_padding"
+            android:src="@drawable/round_add_24"
+            app:layout_constraintBottom_toBottomOf="@id/periodic_increase_value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/periodic_increase_value" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/double_margin"
+            android:text="@string/add_goal_increase_hint"
+            android:textAlignment="viewStart"
+            app:layout_constraintEnd_toEndOf="@id/periodic_increase_plus"
+            app:layout_constraintStart_toStartOf="@id/periodic_increase_minus"
+            app:layout_constraintTop_toBottomOf="@id/periodic_increase_value" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,10 +1,12 @@
 package com.twisthenry8gmail.weeklyphoenix.view.add
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.twisthenry8gmail.weeklyphoenix.Event
@@ -30,6 +32,7 @@ class FragmentAddGoalType : Fragment(R.layout.fragment_add_goal_type) {
 
         val binding = FragmentAddGoalTypeBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 

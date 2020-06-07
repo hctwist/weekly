@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="goal_suggested_titles">
+
+        <item>Play the violin</item>
+        <item>Learn to code</item>
+        <item>Learn Spanish</item>
+        <item>Learn French</item>
+        <item>Apply for a job</item>
+    </string-array>
+</resources>

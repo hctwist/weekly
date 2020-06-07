@@ -28,16 +28,22 @@
 
             <TextView
                 android:id="@+id/goal_complete_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{goal.title}"
+                android:layout_marginEnd="@dimen/margin"
+                android:ellipsize="end"
                 android:fontFamily="sans-serif-medium"
+                android:lines="1"
+                android:text="@{goal.title}"
+                android:textAlignment="viewStart"
                 android:textSize="@dimen/goal_title"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/goal_complete_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/goal_complete_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/cd_goal_complete"
