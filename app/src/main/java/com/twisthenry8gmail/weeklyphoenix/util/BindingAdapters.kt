@@ -14,11 +14,41 @@ import com.twisthenry8gmail.weeklyphoenix.view.views.GoalProgressView2
 
 object BindingAdapters {
 
+    // TODO Mess
+
     @BindingAdapter("goneUnless")
     @JvmStatic
     fun goneUnless(view: View, bool: Boolean) {
 
         view.visibility = if (bool) View.VISIBLE else View.GONE
+    }
+
+    @BindingAdapter("backingColor")
+    @JvmStatic
+    fun setBackingColor(progressView: ProgressView, color: Int) {
+
+        progressView.setBackingColor(color)
+    }
+
+    @BindingAdapter("color")
+    @JvmStatic
+    fun setColor(progressView: ProgressView, color: Int) {
+
+        progressView.setColor(color)
+    }
+
+    @BindingAdapter("progress")
+    @JvmStatic
+    fun setProgress(progressView: ProgressView, progress: Long) {
+
+        progressView.setProgress(progress, true)
+    }
+
+    @BindingAdapter("target")
+    @JvmStatic
+    fun setTarget(progressView: ProgressView, target: Long) {
+
+        progressView.target = target
     }
 
     @BindingAdapter("goal", "bindProgress", requireAll = false)
@@ -35,7 +65,7 @@ object BindingAdapters {
 
                 target = it.target
                 setColor(it.color)
-                setBackingArcColor(ColorUtil.lightenGoalColor(it.color))
+                setBackingColor(ColorUtil.lightenGoalColor(it.color))
                 if (bindProgress != false) setProgress(it.progress)
             }
         }
@@ -53,7 +83,7 @@ object BindingAdapters {
 
             target = goalHistory.target
             setColor(goal.color)
-            setBackingArcColor(ColorUtil.lightenGoalColor(goal.color))
+            setBackingColor(ColorUtil.lightenGoalColor(goal.color))
             setProgress(goalHistory.progress)
         }
     }

@@ -17,11 +17,16 @@ class AddGoalViewModel(
     private val goalRepository: GoalRepository
 ) : NavigatorViewModel() {
 
+    private val _page = NonNullMutableLiveData(0)
+    val page: NonNullLiveData<Int>
+        get() = _page
+
     private val _type = NonNullMutableLiveData(Goal.Type.COUNTED)
     val type: NonNullLiveData<Goal.Type>
         get() = _type
 
-    val suggestedTitles: Array<String> = androidResources.getStringArray(R.array.goal_suggested_titles)
+    val suggestedTitles: Array<String> =
+        androidResources.getStringArray(R.array.goal_suggested_titles)
     private val _titleHint = NonNullMutableLiveData(suggestedTitles.random())
     val titleHint: NonNullLiveData<String>
         get() = _titleHint
@@ -65,6 +70,21 @@ class AddGoalViewModel(
         val value = cTypedArray.getColor(Random.nextInt(cTypedArray.length()), 0)
         cTypedArray.recycle()
         value
+    }
+
+    // TODO Navigation mess
+    fun onConfirm() {
+
+        when (page.value) {
+
+            0 -> {
+
+                navigateTo(R.id.action_fragmentAddGoalType2_to_fragmentAddGoalTitle2)
+            }
+            1 -> onConfirmTitle()
+        }
+
+        _page.value++
     }
 
     fun onBack() {

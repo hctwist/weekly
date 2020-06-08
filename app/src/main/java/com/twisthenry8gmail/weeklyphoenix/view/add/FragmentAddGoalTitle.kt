@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.twisthenry8gmail.weeklyphoenix.Event
@@ -13,11 +14,15 @@ import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalTitleBindin
 import com.twisthenry8gmail.weeklyphoenix.util.hideSoftKeyboard
 import com.twisthenry8gmail.weeklyphoenix.util.showSoftKeyboard
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
+import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_add_goal_title.*
 
 class FragmentAddGoalTitle : Fragment() {
 
-    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
+    private val viewModel by viewModels<AddGoalViewModel>({ requireParentFragment() }, {
+
+        AddGoalViewModel.Factory(resources, weeklyApplication().goalRepository)
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,

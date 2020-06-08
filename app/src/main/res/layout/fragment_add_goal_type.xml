@@ -15,39 +15,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
-            android:id="@+id/add_goal_type_back"
-            style="@style/SecondaryImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/double_margin"
-            android:layout_marginTop="@dimen/double_margin"
-            android:onClick="@{() -> viewmodel.onBack()}"
-            android:src="@drawable/round_close_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/add_goal_type_title"
-            style="@style/Header"
+            style="@style/Display"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_content_margin"
             android:text="What type of goal are you aiming for?"
             app:layout_constraintEnd_toEndOf="@id/add_goal_type_timed"
             app:layout_constraintStart_toStartOf="@id/add_goal_type_counted"
-            app:layout_constraintTop_toBottomOf="@id/add_goal_type_back" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.twisthenry8gmail.weeklyphoenix.view.views.GoalTypeView
             android:id="@+id/add_goal_type_counted"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_content_margin"
-            android:layout_marginTop="@dimen/double_margin"
+            android:layout_marginStart="@dimen/double_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
             android:checkable="true"
             android:checked="@{viewmodel.type == Goal.Type.COUNTED}"
             android:onClick="@{() -> viewmodel.onSelectType(Goal.Type.COUNTED)}"
-            app:goalTypeDescription="@string/goal_type_counted_description"
             app:goalTypeIcon="@drawable/round_plus_one_24"
             app:goalTypeTitle="@string/goal_type_counted"
             app:layout_constraintEnd_toStartOf="@id/add_goal_type_timed"
@@ -59,11 +46,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
-            android:layout_marginEnd="@dimen/large_content_margin"
+            android:layout_marginEnd="@dimen/double_margin"
             android:checkable="true"
             android:checked="@{viewmodel.type == Goal.Type.TIMED}"
             android:onClick="@{() -> viewmodel.onSelectType(Goal.Type.TIMED)}"
-            app:goalTypeDescription="@string/goal_type_timed_description"
             app:goalTypeIcon="@drawable/round_play_arrow_24"
             app:goalTypeTitle="@string/goal_type_timed"
             app:layout_constraintEnd_toEndOf="parent"
@@ -80,17 +66,5 @@
             app:layout_constraintEnd_toEndOf="@id/add_goal_type_timed"
             app:layout_constraintStart_toStartOf="@id/add_goal_type_counted"
             app:layout_constraintTop_toBottomOf="@id/add_goal_type_counted" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/ContinueButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/large_content_margin"
-            android:onClick="@{() -> viewmodel.onConfirmType()}"
-            android:text="@string/cont"
-            app:icon="@drawable/round_arrow_forward_24"
-            app:layout_constraintEnd_toEndOf="@id/add_goal_type_desc"
-            app:layout_constraintTop_toBottomOf="@id/add_goal_type_desc" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

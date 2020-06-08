@@ -93,7 +93,7 @@ class Main2ViewModel(
 
     fun onAddGoal() {
 
-        navigateTo(R.id.action_fragmentMain_to_fragmentAddGoalTitle)
+        navigateTo(R.id.action_fragmentMain_to_fragmentAddGoal)
     }
 
     fun onGoalClick(goal: Goal) {

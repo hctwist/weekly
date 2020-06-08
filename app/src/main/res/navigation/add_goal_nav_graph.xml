@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/add_goal_nav_graph"
+    app:startDestination="@id/fragmentAddGoalType2">
+
+    <fragment
+        android:id="@+id/fragmentAddGoalTitle2"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoalTitle"
+        android:label="FragmentAddGoalTitle" />
+    <fragment
+        android:id="@+id/fragmentAddGoalType2"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoalType"
+        android:label="FragmentAddGoalType" >
+        <action
+            android:id="@+id/action_fragmentAddGoalType2_to_fragmentAddGoalTitle2"
+            app:destination="@id/fragmentAddGoalTitle2" />
+    </fragment>
+</navigation>

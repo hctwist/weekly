@@ -47,6 +47,9 @@
             app:exitAnim="@anim/scale_exit_animation"
             app:popEnterAnim="@anim/scale_pop_enter_animation"
             app:popExitAnim="@anim/scale_pop_exit_animation" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentAddGoal"
+            app:destination="@id/fragmentAddGoal" />
     </fragment>
     <fragment
         android:id="@+id/fragmentGoalSuccess"
@@ -139,4 +142,8 @@
         app:popExitAnim="@anim/scale_pop_exit_animation"
         app:popUpTo="@id/fragmentMain"
         app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/fragmentAddGoal"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoal"
+        android:label="FragmentAddGoal" />
 </navigation>

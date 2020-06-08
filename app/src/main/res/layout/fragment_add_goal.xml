@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+            android:id="@+id/add_goal_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/double_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> viewmodel.onBack()}"
+            android:src="@drawable/round_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.twisthenry8gmail.progresscircles.ProgressLineView
+            android:id="@+id/add_goal_progress"
+            backingColor="@{@color/color_primary_light}"
+            color="@{@color/color_primary}"
+            progress="@{viewmodel.page}"
+            target="7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginEnd="@dimen/double_margin"
+            app:layout_constraintBottom_toBottomOf="@id/add_goal_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_goal_back"
+            app:layout_constraintTop_toTopOf="@id/add_goal_back" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/add_goal_container"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/add_goal_continue"
+            app:layout_constraintTop_toBottomOf="@id/add_goal_back"
+            app:navGraph="@navigation/add_goal_nav_graph" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/double_margin"
+            android:layout_marginBottom="@dimen/large_content_margin"
+            android:onClick="@{() -> viewmodel.onConfirm()}"
+            android:text="@string/cont"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
