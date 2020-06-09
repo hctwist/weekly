@@ -16,29 +16,25 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel
     val progressUpdate = MutableLiveData<ProgressUpdate>()
 
     private val startTime = goalRepository.getTimingGoalStartTime()
-    private val duration = MutableLiveData<Long>().apply {
-
-        value = System.currentTimeMillis() - startTime
-    }
+    private val _durationSeconds = MutableLiveData((System.currentTimeMillis() - startTime) / 1000)
+    val durationSeconds: LiveData<Long>
+        get() = _durationSeconds
 
     private val updateHandler = Handler()
     private val updateRunnable = Runnable {
 
-        duration.value = System.currentTimeMillis() - startTime
+        _durationSeconds.value = (System.currentTimeMillis() - startTime) / 1000
         postDurationUpdate()
+    }
+
+    init {
+
+        updateHandler.postDelayed(updateRunnable, GoalTimerUtil.calculateScheduleOffset(startTime))
     }
 
     private fun postDurationUpdate() {
 
         updateHandler.postDelayed(updateRunnable, 60 * 1000)
-    }
-
-    fun getDuration(): LiveData<Long> {
-
-        updateHandler.removeCallbacks(updateRunnable)
-        updateHandler.postDelayed(updateRunnable, GoalTimerUtil.calculateScheduleOffset(startTime))
-
-        return duration
     }
 
     fun stopTimer(context: Context) {
