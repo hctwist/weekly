@@ -16,51 +16,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
-            android:id="@+id/add_goal_frequency_back"
-            style="@style/SecondaryImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_content_margin"
-            android:layout_marginTop="@dimen/double_margin"
-            android:onClick="@{() -> viewmodel.onBack()}"
-            android:src="@drawable/round_arrow_back_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.chip.Chip
-            style="@style/AddGoalChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin"
-            android:layout_marginEnd="@dimen/large_content_margin"
-            android:ellipsize="end"
-            android:text="@{@string/add_goal_target_chip(GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.type, viewmodel.target))}"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="@id/add_goal_frequency_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintStart_toEndOf="@id/add_goal_frequency_back"
-            app:layout_constraintTop_toTopOf="@id/add_goal_frequency_back" />
-
         <TextView
             android:id="@+id/add_goal_frequency_title"
-            style="@style/Header"
-            android:layout_width="wrap_content"
+            style="@style/Display"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginStart="@dimen/double_margin"
             android:layout_marginTop="@dimen/large_content_margin"
+            android:layout_marginEnd="@dimen/double_margin"
             android:text="@string/add_goal_reset_hint"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_back" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.twisthenry8gmail.weeklyphoenix.view.TypingAnimatedTextView
             android:id="@+id/add_goal_frequency_display"
-            style="@style/Display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_content_margin"
-            android:layout_marginTop="@dimen/double_margin"
+            android:layout_marginStart="@dimen/double_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
+            android:textSize="@dimen/add_goal_input_size"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_title" />
 
@@ -68,26 +41,11 @@
             android:id="@+id/add_goal_frequency_chips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_content_margin"
+            android:layout_marginStart="@dimen/double_margin"
             android:layout_marginTop="@dimen/double_margin"
-            android:layout_marginEnd="@dimen/large_content_margin"
+            android:layout_marginEnd="@dimen/double_margin"
             app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_display"
             app:selectionRequired="true"
             app:singleSelection="true" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_goal_frequency_continue"
-            style="@style/ContinueButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/large_content_margin"
-            android:layout_marginEnd="@dimen/large_content_margin"
-            android:onClick="@{() -> viewmodel.onConfirmReset()}"
-            android:text="@string/cont"
-            app:icon="@drawable/round_arrow_forward_24"
-            app:iconGravity="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_goal_frequency_chips" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

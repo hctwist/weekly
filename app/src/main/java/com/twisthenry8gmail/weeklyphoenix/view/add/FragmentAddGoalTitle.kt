@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.twisthenry8gmail.weeklyphoenix.Event
-import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalTitleBinding
 import com.twisthenry8gmail.weeklyphoenix.util.hideSoftKeyboard
 import com.twisthenry8gmail.weeklyphoenix.util.showSoftKeyboard
@@ -19,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_add_goal_title.*
 
 class FragmentAddGoalTitle : Fragment() {
 
-    private val viewModel by viewModels<AddGoalViewModel>({ requireParentFragment() }, {
+    private val viewModel by viewModels<AddGoalViewModel>({ requireParentFragment().requireParentFragment() }, {
 
         AddGoalViewModel.Factory(resources, weeklyApplication().goalRepository)
     })
@@ -40,11 +38,6 @@ class FragmentAddGoalTitle : Fragment() {
 
         // TODO Showing and hiding of the keyboard
         add_goal_title.showSoftKeyboard()
-
-        viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
-
-            it.navigateWith(findNavController())
-        })
     }
 
     override fun onDetach() {

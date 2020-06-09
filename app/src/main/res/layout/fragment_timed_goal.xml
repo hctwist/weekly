@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
+
         <variable
             name="viewmodel"
             type="com.twisthenry8gmail.weeklyphoenix.viewmodel.GoalTimerViewModel" />
@@ -20,7 +22,7 @@
             style="@style/Header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/extra_large_content_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
             android:layout_marginBottom="@dimen/double_margin"
             android:text="@{viewmodel.goal.title}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,22 +34,12 @@
             style="@style/Display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayGoalTime(context.resources, viewmodel.duration / 1000)}"
             android:textSize="@dimen/display_numbers"
-            app:layout_constraintBottom_toTopOf="@id/timed_goal_progress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timed_goal_name"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <com.twisthenry8gmail.weeklyphoenix.view.views.GoalProgressView2
-            android:id="@+id/timed_goal_progress"
-            goal="@{viewmodel.goal}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/extra_large_content_margin"
-            android:layout_marginEnd="@dimen/extra_large_content_margin"
-            app:layout_constraintBottom_toTopOf="@id/timed_goal_stop"
-            app:layout_constraintTop_toBottomOf="@id/timed_goal_time" />
+            app:layout_constraintTop_toBottomOf="@id/timed_goal_name" />
 
         <ImageButton
             android:id="@+id/timed_goal_stop"
@@ -59,9 +51,18 @@
             android:padding="@dimen/accessibility_padding"
             android:src="@drawable/round_stop_24"
             android:tint="@color/red"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timed_goal_progress" />
+            app:layout_constraintTop_toBottomOf="@id/timed_goal_time" />
+
+        <com.twisthenry8gmail.weeklyphoenix.view.views.GoalProgressView2
+            android:id="@+id/timed_goal_progress"
+            goal="@{viewmodel.goal}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/extra_large_content_margin"
+            android:layout_marginEnd="@dimen/extra_large_content_margin"
+            android:layout_marginBottom="@dimen/large_content_margin"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

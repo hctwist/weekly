@@ -2,7 +2,9 @@ package com.twisthenry8gmail.weeklyphoenix.view
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +16,8 @@ import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import androidx.transition.TransitionManager
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentTimedGoalBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentTimedGoalBindingImpl
 import com.twisthenry8gmail.weeklyphoenix.util.BindingAdapters
 import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil
@@ -22,7 +26,7 @@ import com.twisthenry8gmail.weeklyphoenix.viewmodel.GoalTimerViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_timed_goal.*
 
-class FragmentGoalTimer : Fragment(R.layout.fragment_timed_goal) {
+class FragmentGoalTimer : Fragment() {
 
     private val viewModel by viewModels<GoalTimerViewModel> {
         GoalTimerViewModel.Factory(
@@ -30,16 +34,23 @@ class FragmentGoalTimer : Fragment(R.layout.fragment_timed_goal) {
         )
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val binding = FragmentTimedGoalBinding.inflate(inflater, container, false)
+        binding.viewmodel = viewModel
+
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         viewModel.goal.observe(viewLifecycleOwner, Observer {
 
             timed_goal_name.text = it.title
-        })
-
-        viewModel.getDuration().observe(viewLifecycleOwner, Observer {
-
-            timed_goal_time.text = GoalDisplayUtil.displayGoalTime(resources, it / 1000)
         })
 
         timed_goal_stop.setOnClickListener {

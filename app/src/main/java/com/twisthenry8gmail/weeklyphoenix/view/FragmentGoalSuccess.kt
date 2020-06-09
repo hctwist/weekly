@@ -2,26 +2,19 @@ package com.twisthenry8gmail.weeklyphoenix.view
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.twisthenry8gmail.weeklyphoenix.Event
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.CurrentGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentGoalSuccessBinding
-import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.GoalSuccessViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_goal_success.*
 import kotlinx.android.synthetic.main.fragment_goal_success_circle.*
-import kotlinx.coroutines.launch
 
 class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
 

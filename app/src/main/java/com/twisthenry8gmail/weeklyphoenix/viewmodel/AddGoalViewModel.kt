@@ -2,12 +2,14 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.content.res.Resources
 import androidx.lifecycle.*
+import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.NonNullLiveData
 import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigationCommand
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigationCommander
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.random.Random
@@ -15,17 +17,30 @@ import kotlin.random.Random
 class AddGoalViewModel(
     private val androidResources: Resources,
     private val goalRepository: GoalRepository
-) : NavigatorViewModel() {
+) : ViewModel() {
+
+    private val _parentNavigationCommander = NavigationCommander()
+    val parentNavigationCommander: LiveData<Event<NavigationCommand>>
+        get() = _parentNavigationCommander
+
+    private val _childNavigationCommander = NavigationCommander()
+    val childNavigationCommander: LiveData<Event<NavigationCommand>>
+        get() = _childNavigationCommander
 
     private val _page = NonNullMutableLiveData(0)
     val page: NonNullLiveData<Int>
         get() = _page
 
+    val continueButtonText: LiveData<String> = Transformations.map(page) {
+
+        getContinueButtonText(it)
+    }
+
     private val _type = NonNullMutableLiveData(Goal.Type.COUNTED)
     val type: NonNullLiveData<Goal.Type>
         get() = _type
 
-    val suggestedTitles: Array<String> =
+    private val suggestedTitles: Array<String> =
         androidResources.getStringArray(R.array.goal_suggested_titles)
     private val _titleHint = NonNullMutableLiveData(suggestedTitles.random())
     val titleHint: NonNullLiveData<String>
@@ -34,19 +49,20 @@ class AddGoalViewModel(
         set(value) {
 
             field = value
-            _validTitle.value = isTitleValid()
+            updateCanContinue()
         }
     private var existingGoalTitles: List<String>? = null
-    private val _validTitle = MediatorLiveData<Boolean>().apply {
+
+    private val _canContinue = MediatorLiveData<Boolean>().apply {
 
         addSource(goalRepository.getTitles()) {
 
             existingGoalTitles = it
-            value = isTitleValid()
+            updateCanContinue()
         }
     }
-    val validTitle: LiveData<Boolean>
-        get() = _validTitle
+    val canContinue: LiveData<Boolean>
+        get() = _canContinue
 
     private var _target: Long? = null
         get() = field ?: type.value.minIncrement
@@ -72,64 +88,107 @@ class AddGoalViewModel(
         value
     }
 
-    // TODO Navigation mess
+    private fun getContinueButtonText(page: Int): String {
+
+        return when (page) {
+
+            4 -> androidResources.getString(R.string.add_goal_done_add_goal)
+            else -> androidResources.getString(R.string.cont)
+        }
+    }
+
     fun onConfirm() {
 
-        when (page.value) {
-
-            0 -> {
-
-                navigateTo(R.id.action_fragmentAddGoalType2_to_fragmentAddGoalTitle2)
-            }
-            1 -> onConfirmTitle()
-        }
-
+        val currentPage = _page.value
         _page.value++
+        updateCanContinue()
+
+        when (currentPage) {
+
+            0 -> onConfirmType()
+            1 -> onConfirmTitle()
+            2 -> onConfirmTarget()
+            3 -> onConfirmReset()
+            4 -> onDone()
+        }
+    }
+
+    private fun onConfirmType() {
+
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalType2_to_fragmentAddGoalTitle2)
+    }
+
+    private fun onConfirmTitle() {
+
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalTitle2_to_fragmentAddGoalTarget2)
+    }
+
+    private fun onConfirmTarget() {
+
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalTarget2_to_fragmentAddGoalReset2)
+    }
+
+    private fun onConfirmReset() {
+
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalReset2_to_fragmentAddGoalDone2)
+    }
+
+    private fun onDone() {
+
+        viewModelScope.launch {
+
+            goalRepository.add(build())
+
+            _parentNavigationCommander.navigateTo(R.id.action_global_fragmentMain)
+        }
     }
 
     fun onBack() {
 
-        navigateBack()
+        if (page.value == 0) {
+
+            _parentNavigationCommander.navigateBack()
+        } else {
+
+            _childNavigationCommander.navigateBack()
+            _page.value--
+        }
+        updateCanContinue()
+    }
+
+    private fun updateCanContinue() {
+
+        _canContinue.value = when (page.value) {
+
+            1 -> {
+
+                val resolvedTitle = resolveTitle()
+                resolvedTitle.isNotEmpty() && existingGoalTitles?.contains(resolvedTitle) != true
+            }
+
+            else -> true
+        }
     }
 
     fun onSelectType(type: Goal.Type) {
 
+        if (_type.value != type) {
+
+            target = type.minIncrement
+            increase.value = 0L
+        }
         _type.value = type
     }
 
-    fun onConfirmType() {
-
-        navigateTo(R.id.action_fragmentAddGoalType_to_fragmentAddGoalTitle)
-    }
-
-    private fun isTitleValid(): Boolean {
+    fun resolveTitle(): String {
 
         return if (title.isEmpty()) {
 
-            existingGoalTitles?.contains(_titleHint.value) != true
+            titleHint.value
         } else {
 
-            existingGoalTitles?.contains(title) != true
+            title.trim()
         }
-    }
-
-    fun onConfirmTitle() {
-
-        if (title.isEmpty()) {
-
-            title = titleHint.value
-        }
-        navigateTo(R.id.action_fragmentAddGoalTitle_to_fragmentAddGoalTarget)
-    }
-
-    fun onConfirmTarget() {
-
-        navigateTo(R.id.action_fragmentAddGoalTarget_to_fragmentAddGoalReset)
-    }
-
-    fun onConfirmReset() {
-
-        navigateTo(R.id.action_fragmentAddGoalReset_to_fragmentAddGoalDone)
     }
 
     fun onIncreaseDecrement() {
@@ -145,22 +204,12 @@ class AddGoalViewModel(
         increase.value += type.value.minIncrement
     }
 
-    fun onDone() {
-
-        viewModelScope.launch {
-
-            goalRepository.add(build())
-
-            navigateTo(R.id.action_global_fragmentMain)
-        }
-    }
-
     private fun build(): Goal {
 
         return Goal(
             0,
             type.value,
-            title,
+            resolveTitle(),
             0,
             target,
             reset,

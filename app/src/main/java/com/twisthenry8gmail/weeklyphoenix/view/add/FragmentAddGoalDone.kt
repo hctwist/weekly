@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalDoneBinding
@@ -22,7 +22,7 @@ import java.time.LocalDate
 
 class FragmentAddGoalDone : Fragment() {
 
-    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
+    private val viewModel by viewModels<AddGoalViewModel>({ requireParentFragment().requireParentFragment() })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,11 +37,6 @@ class FragmentAddGoalDone : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
-
-            it.navigateWith(findNavController())
-        })
 
         add_goal_done_start.setOnClickListener {
 

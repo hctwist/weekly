@@ -6,13 +6,55 @@
     <fragment
         android:id="@+id/fragmentAddGoalTitle2"
         android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoalTitle"
-        android:label="FragmentAddGoalTitle" />
+        android:label="FragmentAddGoalTitle" >
+        <action
+            android:id="@+id/action_fragmentAddGoalTitle2_to_fragmentAddGoalTarget2"
+            app:destination="@id/fragmentAddGoalTarget2"
+            app:enterAnim="@anim/slide_left_enter_animation"
+            app:exitAnim="@anim/fade_exit_animation"
+            app:popEnterAnim="@anim/slide_right_enter"
+            app:popExitAnim="@anim/fade_exit_animation" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentAddGoalType2"
         android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoalType"
         android:label="FragmentAddGoalType" >
         <action
             android:id="@+id/action_fragmentAddGoalType2_to_fragmentAddGoalTitle2"
-            app:destination="@id/fragmentAddGoalTitle2" />
+            app:destination="@id/fragmentAddGoalTitle2"
+            app:enterAnim="@anim/slide_left_enter_animation"
+            app:exitAnim="@anim/fade_exit_animation"
+            app:popEnterAnim="@anim/slide_right_enter"
+            app:popExitAnim="@anim/fade_exit_animation" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentAddGoalTarget2"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoalTarget"
+        android:label="FragmentAddGoalTarget" >
+        <action
+            android:id="@+id/action_fragmentAddGoalTarget2_to_fragmentAddGoalReset2"
+            app:destination="@id/fragmentAddGoalReset2"
+            app:enterAnim="@anim/slide_left_enter_animation"
+            app:exitAnim="@anim/fade_exit_animation"
+            app:popEnterAnim="@anim/slide_right_enter"
+            app:popExitAnim="@anim/fade_exit_animation" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAddGoalReset2"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoalReset"
+        android:label="FragmentAddGoalReset" >
+        <action
+            android:id="@+id/action_fragmentAddGoalReset2_to_fragmentAddGoalDone2"
+            app:destination="@id/fragmentAddGoalDone2"
+            app:enterAnim="@anim/slide_left_enter_animation"
+            app:exitAnim="@anim/fade_exit_animation"
+            app:popEnterAnim="@anim/slide_right_enter"
+            app:popExitAnim="@anim/fade_exit_animation" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAddGoalDone2"
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddGoalDone"
+        android:label="FragmentAddGoalDone" />
 </navigation>
+
+<!-- TODO Rename '2' fragments -->

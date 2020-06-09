@@ -22,10 +22,12 @@ class NonNullMutableLiveData<T>(initialValue: T) : NonNullLiveData<T>(initialVal
     constructor(valueProvider: () -> T) : this(valueProvider())
 
     public override fun setValue(value: T) {
+
         super.setValue(value)
     }
 
     public override fun postValue(value: T) {
+
         super.postValue(value)
     }
 }

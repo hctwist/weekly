@@ -14,7 +14,7 @@ import com.twisthenry8gmail.weeklyphoenix.view.views.GoalProgressView2
 
 object BindingAdapters {
 
-    // TODO Mess
+    // TODO Mess, use bind namespace?
 
     @BindingAdapter("goneUnless")
     @JvmStatic
@@ -44,7 +44,7 @@ object BindingAdapters {
         progressView.setProgress(progress, true)
     }
 
-    @BindingAdapter("target")
+    @BindingAdapter("bind:target")
     @JvmStatic
     fun setTarget(progressView: ProgressView, target: Long) {
 
