@@ -10,7 +10,6 @@ object DateTimeUtil {
 
     fun displayMediumDate(localDate: LocalDate): String {
 
-
         return DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).format(localDate)
     }
 
@@ -29,8 +28,13 @@ object DateTimeUtil {
         return DateTimeFormatter.ofPattern("MMM yy").format(ld(epochDay))
     }
 
-    fun displayDay(epochDay: Long): String {
+    fun displayShortDay(epochDay: Long): String {
 
         return DateTimeFormatter.ofPattern("EEE").format(ld(epochDay))
+    }
+
+    fun displayDayOfMonth(epochDay: Long): String {
+
+        return ld(epochDay).dayOfMonth.toString()
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -55,5 +56,23 @@ class FragmentAddGoal : Fragment() {
 
             it.navigateWith(add_goal_container.findNavController())
         })
+    }
+
+    companion object {
+
+        fun viewModelFromChild(childFragment: Fragment): Lazy<AddGoalViewModel> {
+
+            return childFragment.viewModels({
+                childFragment.requireParentFragment().requireParentFragment()
+            })
+        }
+
+        fun viewModelFromDialog(dialogFragment: DialogFragment): Lazy<AddGoalViewModel> {
+
+            return dialogFragment.viewModels({
+                dialogFragment.requireParentFragment().requireParentFragment()
+                    .requireParentFragment()
+            })
+        }
     }
 }

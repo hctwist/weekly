@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil" />
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewTaskDayViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/view_task_day_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/vertical_layout_margin"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> viewmodel.onClose()}"
+                android:src="@drawable/round_close_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:touchPadding="@dimen/accessibility_padding" />
+
+            <TextView
+                android:id="@+id/view_task_date"
+                style="@style/Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/section_margin"
+                android:text="@{DateTimeUtil.INSTANCE.displayMediumDate(viewmodel.date)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_task_day_close" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/section_margin"
+                android:paddingHorizontal="@dimen/horizontal_layout_margin"
+                app:layout_constraintTop_toBottomOf="@id/view_task_date" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

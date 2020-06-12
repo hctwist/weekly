@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.DiffUtil
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 
 class GoalAdapter2Diff(
-    private val oldItems: List<Goal>,
-    private val newItems: List<Goal>
+    private val oldItems: List<Goal?>,
+    private val newItems: List<Goal?>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
@@ -23,7 +23,7 @@ class GoalAdapter2Diff(
         val oldItem = oldItems[oldItemPosition]
         val newItem = newItems[newItemPosition]
 
-        return oldItem.id == newItem.id
+        return oldItem?.id == newItem?.id
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -39,7 +39,7 @@ class GoalAdapter2Diff(
         val oldItem = oldItems[oldItemPosition]
         val newItem = newItems[newItemPosition]
 
-        if (oldItem.progress != newItem.progress) {
+        if (oldItem!!.progress != newItem!!.progress) {
 
             return GoalAdapter2.Change.PROGRESS
         }

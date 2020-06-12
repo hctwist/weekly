@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.data.Goal" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.GoalTimerViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/timed_goal_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <TextView
+            android:id="@+id/timed_goal_name"
+            style="@style/Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/double_margin"
+            android:layout_marginTop="@dimen/large_content_margin"
+            android:text="@{viewmodel.goal.title}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/timed_goal_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/half_margin"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, Goal.Type.TIMED, viewmodel.goal.progress)}"
+            app:layout_constraintBottom_toTopOf="@id/timed_goal_time"
+            app:layout_constraintEnd_toEndOf="@id/timed_goal_time"
+            app:layout_constraintStart_toStartOf="@id/timed_goal_time"
+            app:layout_constraintTop_toBottomOf="@id/timed_goal_name"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/timed_goal_plus"
+            style="@style/Display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ "
+            app:layout_constraintBaseline_toBaselineOf="@id/timed_goal_time"
+            app:layout_constraintEnd_toStartOf="@id/timed_goal_time" />
+
+        <TextView
+            android:id="@+id/timed_goal_time"
+            style="@style/Display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{GoalDisplayUtil.INSTANCE.displayGoalTime(context.resources, viewmodel.durationSeconds)}"
+            app:layout_constraintBottom_toTopOf="@id/timed_goal_stop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/timed_goal_progress" />
+
+        <com.twisthenry8gmail.weeklyphoenix.ButtonSwitcher
+            android:id="@+id/timed_goal_stop"
+            animatedBackgroundColor="@{viewmodel.timingStopped ? @color/color_primary : @color/red}"
+            animatedText='@{viewmodel.timingStopped ? "Done" : "Stop timer"}'
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/large_content_margin"
+            android:backgroundTint="@color/red"
+            android:contentDescription="@string/cd_stop_timing"
+            android:onClick="@{() -> viewmodel.timingStopped ? viewmodel.onDone() : viewmodel.stopTimer(context)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            goneUnless="@{viewmodel.timingStopped}"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="@dimen/large_content_margin"-->
+        <!--            android:onClick="@{() -> viewmodel.onDone()}"-->
+        <!--            android:text="Done"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

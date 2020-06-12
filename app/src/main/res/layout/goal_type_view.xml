@@ -15,7 +15,7 @@
             android:layout_marginTop="@dimen/margin"
             android:text="Timed"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="@dimen/add_goal_input_size"
+            android:textSize="@dimen/main_input_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

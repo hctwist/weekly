@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.Resources
 import android.view.View
 import androidx.lifecycle.*
-import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
 import com.twisthenry8gmail.weeklyphoenix.*
@@ -13,6 +12,7 @@ import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
 import com.twisthenry8gmail.weeklyphoenix.util.GoalComparator
 import com.twisthenry8gmail.weeklyphoenix.util.NotificationHelper
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapter2Diff
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.Dispatchers
@@ -98,7 +98,9 @@ class Main2ViewModel(
 
     fun onGoalClick(goal: Goal) {
 
-        navigateTo(R.id.action_fragmentMain_to_fragmentViewGoal, GoalIdBundle(goal.id))
+        navigateTo(R.id.action_fragmentMain_to_fragmentViewGoal,
+            GoalIdBundle(goal.id)
+        )
     }
 
     fun onGoalAction(context: Context, goal: Goal, card: View) {
@@ -117,7 +119,9 @@ class Main2ViewModel(
                     card.transitionName = "card"
                     navigateTo(
                         R.id.action_fragmentMain_to_fragmentGoalSuccess,
-                        GoalIdBundle(goal.id),
+                        GoalIdBundle(
+                            goal.id
+                        ),
                         FragmentNavigatorExtras(card to "card")
                     )
                 }

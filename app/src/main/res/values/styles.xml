@@ -47,6 +47,36 @@
         <item name="cardElevation">0dp</item>
     </style>
 
+    <style name="GoalCardAdd" parent="Widget.MaterialComponents.CardView">
+
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">@dimen/corner_radius</item>
+        <item name="strokeWidth">@dimen/stroke_width</item>
+        <item name="strokeColor">@color/light_grey</item>
+    </style>
+
+    <style name="TaskCard" parent="Widget.MaterialComponents.CardView">
+
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">@dimen/corner_radius</item>
+        <item name="strokeColor">@color/light_grey</item>
+        <item name="strokeWidth">@dimen/stroke_width</item>
+    </style>
+
+    <style name="TaskCardTitle">
+
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="MainInput" parent="Widget.AppCompat.EditText">
+
+        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="android:importantForAutofill">no</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:textSize">@dimen/main_input_size</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
     <style name="GoalTypeView" parent="Widget.MaterialComponents.CardView">
 
         <item name="contentPaddingBottom">@dimen/half_margin</item>
@@ -74,12 +104,18 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
+    <style name="SectionHeader">
+
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
 
         <item name="android:elevation">0dp</item>
         <item name="cornerRadius">@dimen/corner_radius</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:paddingVertical">12dp</item>
+        <item name="android:paddingVertical">8dp</item>
     </style>
 
     <style name="ContinueButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
@@ -127,11 +163,5 @@
         <item name="strokeWidth">2dp</item>
         <item name="strokeColor">@color/light_grey</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-    </style>
-
-    <style name="SecondaryImageButton">
-
-        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
-        <item name="touchPadding">12dp</item>
     </style>
 </resources>

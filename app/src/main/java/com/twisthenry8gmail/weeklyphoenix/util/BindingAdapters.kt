@@ -1,20 +1,50 @@
 package com.twisthenry8gmail.weeklyphoenix.util
 
+import android.content.res.Resources
+import android.icu.text.MessageFormat
+import android.icu.text.PluralRules
+import android.util.TypedValue
 import android.view.View
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.google.android.material.card.MaterialCardView
 import com.twisthenry8gmail.dragline.DraglineView
 import com.twisthenry8gmail.progresscircles.ProgressView
+import com.twisthenry8gmail.weeklyphoenix.ButtonSwitcher
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistory
 import com.twisthenry8gmail.weeklyphoenix.view.GoalProgressView
+import com.twisthenry8gmail.weeklyphoenix.view.TypingAnimatedTextView
 import com.twisthenry8gmail.weeklyphoenix.view.views.GoalProgressView2
+import java.util.*
 
 object BindingAdapters {
 
-    // TODO Mess, use bind namespace?
+    // TODO Mess
+
+    // TODO Better solution?
+    @BindingAdapter("textColorAttr")
+    @JvmStatic
+    fun setTextColorAttr(textView: TextView, colorAttr: Int) {
+
+        val context = textView.context
+
+        try {
+
+            textView.setTextColor(context.getColor(colorAttr))
+            return
+        } catch (e: Resources.NotFoundException) {
+
+            val typedValue = TypedValue()
+            context.theme.resolveAttribute(colorAttr, typedValue, true)
+
+            val colorRes =
+                if (typedValue.resourceId == 0) typedValue.data else typedValue.resourceId
+            textView.setTextColor(context.getColor(colorRes))
+        }
+    }
 
     @BindingAdapter("goneUnless")
     @JvmStatic
@@ -128,11 +158,29 @@ object BindingAdapters {
         goalProgressView.initialise(goal)
     }
 
-    @BindingAdapter("goal")
+    // TODO Rename this goal progress view? Graph view?
+    @BindingAdapter("goal", "useLightGoalColor", requireAll = false)
     @JvmStatic
-    fun bindGoalToProgressView(goalProgressView: GoalProgressView2, goal: Goal) {
+    fun bindGoalToProgressView(
+        goalProgressView: GoalProgressView2,
+        goal: Goal?,
+        useLightGoalColor: Boolean?
+    ) {
 
-        goalProgressView.initialise(goal)
+        goal?.let { g ->
+
+            if (!goalProgressView.hasBeenInitialised()) {
+
+                if (useLightGoalColor == null) {
+                    goalProgressView.initialise(g)
+                } else {
+                    goalProgressView.initialise(g, useLightGoalColor)
+                }
+            } else {
+
+                goalProgressView.updateProgress(g.progress, g.target, true)
+            }
+        }
     }
 //    @BindingAdapter("value")
 //    @JvmStatic

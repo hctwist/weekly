@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_periodic_increase.*
 
 class FragmentAddGoalIncrease : BottomSheetDialogFragment() {
 
-    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
+    private val viewModel by FragmentAddGoal.viewModelFromDialog(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,

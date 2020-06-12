@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.*
 import com.twisthenry8gmail.graphview.GraphElement
-import com.twisthenry8gmail.weeklyphoenix.GoalIdBundle
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistoryRepository
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
@@ -19,7 +19,7 @@ class ViewGoalViewModel(
     private val goalHistoryRepository: GoalHistoryRepository
 ) : NavigatorViewModel() {
 
-    val goal = goalRepository.get(GoalIdBundle.fetchId(args))
+    val goal = goalRepository.get(GoalIdBundle.extractId(args))
 
     val goalHistoryGraphData: LiveData<List<GraphElement>> =
         Transformations.switchMap(goal) { goal ->

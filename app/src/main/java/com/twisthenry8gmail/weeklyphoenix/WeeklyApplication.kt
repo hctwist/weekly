@@ -14,6 +14,7 @@ class WeeklyApplication : Application() {
 
     lateinit var goalRepository: GoalRepository
     lateinit var goalHistoryRepository: GoalHistoryRepository
+    lateinit var taskRepository: TaskRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -25,14 +26,22 @@ class WeeklyApplication : Application() {
 
         goalHistoryRepository = GoalHistoryRepository(RoomModel.getInstance(this).goalHistoryDao())
 
+        taskRepository = TaskRepository(RoomModel.getInstance(this).tasksDao())
+
         GlobalScope.launch {
 
             resetGoals()
         }
     }
 
+    private suspend fun addTestTasks() {
+
+
+    }
+
     private suspend fun resetGoals() {
 
+        // RELEASE Remove
         val test = false
 
         if (test) {

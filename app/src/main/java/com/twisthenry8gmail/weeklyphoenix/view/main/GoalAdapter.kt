@@ -1,13 +1,10 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
-import android.content.Context
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.ColorUtils
 import androidx.databinding.OnRebindCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.twisthenry8gmail.weeklyphoenix.R

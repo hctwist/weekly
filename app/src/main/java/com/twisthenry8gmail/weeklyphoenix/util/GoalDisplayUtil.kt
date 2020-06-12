@@ -40,7 +40,7 @@ object GoalDisplayUtil {
 
             goal.reset.unit == ChronoUnit.DAYS && goal.reset.multiple == 1L -> {
 
-                DateTimeUtil.displayDay(date)
+                DateTimeUtil.displayShortDay(date)
             }
 
             goal.reset.unit == ChronoUnit.YEARS -> {

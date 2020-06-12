@@ -19,6 +19,7 @@
     <string name="goal_reset_date">Reset date</string>
 
     <!-- Frequencies -->
+    <string name="goal_frequency_never">Never</string>
     <string name="goal_frequency_daily">Daily</string>
     <string name="goal_frequency_weekly">Weekly</string>
     <string name="goal_frequency_fortnight">Fortnightly</string>
@@ -58,5 +59,4 @@
     <string name="goal_delete">Delete goal</string>
     <string name="goal_next_reset">Next resets</string>
     <string name="goal_history">History </string>
-
 </resources>

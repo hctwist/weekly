@@ -74,6 +74,8 @@ data class Goal(
             return Reset(multiple * n, unit)
         }
 
+        fun isNever() = multiple == 0L
+
         fun isPreset(resetPreset: ResetPreset): Boolean {
 
             return multiple == resetPreset.multiple && unit == resetPreset.unit
@@ -92,7 +94,8 @@ data class Goal(
         WEEKLY(7, ChronoUnit.DAYS, R.string.goal_frequency_weekly),
         FORTNIGHTLY(14, ChronoUnit.DAYS, R.string.goal_frequency_fortnight),
         MONTHLY(1, ChronoUnit.MONTHS, R.string.goal_frequency_monthly),
-        YEARLY(1, ChronoUnit.YEARS, R.string.goal_frequency_yearly);
+        YEARLY(1, ChronoUnit.YEARS, R.string.goal_frequency_yearly),
+        NEVER(0, ChronoUnit.DAYS, R.string.goal_frequency_never);
 
         fun toReset() = Reset(multiple, unit)
     }
@@ -110,7 +113,7 @@ data class Goal(
         @Query("SELECT title FROM Goal")
         fun getTitles(): LiveData<List<String>>
 
-        @Query("SELECT * FROM GOAL WHERE resetDate <= :threshold")
+        @Query("SELECT * FROM GOAL WHERE resetDate > 0 AND resetDate <= :threshold")
         suspend fun getAllThatRequireReset(threshold: Long): List<Goal>
 
         @Insert
@@ -148,7 +151,7 @@ data class Goal(
         // TODO Needed?
         fun getResetDateFrom(from: LocalDate, reset: Reset): Long {
 
-            return from.plus(reset).toEpochDay()
+            return if (reset.isNever()) -1 else from.plus(reset).toEpochDay()
         }
 
         @TypeConverter

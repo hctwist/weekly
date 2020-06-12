@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 // RELEASE Reset to 1
-@Database(entities = [Goal::class, GoalHistory::class], version = 5)
+@Database(entities = [Goal::class, GoalHistory::class, Task::class], version = 6)
 abstract class RoomModel : RoomDatabase() {
 
     companion object {
@@ -38,4 +38,6 @@ abstract class RoomModel : RoomDatabase() {
     abstract fun goalsDao(): Goal.Dao
 
     abstract fun goalHistoryDao(): GoalHistory.Dao
+
+    abstract fun tasksDao(): Task.Dao
 }

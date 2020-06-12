@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_color_dot.*
 
 class FragmentAddGoalColor : BottomSheetDialogFragment() {
 
-    private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
+    private val viewModel by FragmentAddGoal.viewModelFromDialog(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,

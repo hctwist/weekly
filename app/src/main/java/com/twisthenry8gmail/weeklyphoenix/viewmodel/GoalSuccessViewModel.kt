@@ -3,7 +3,7 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.twisthenry8gmail.weeklyphoenix.GoalIdBundle
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 
@@ -12,7 +12,7 @@ class GoalSuccessViewModel(
     private val goalRepository: GoalRepository
 ) : NavigatorViewModel() {
 
-    val goal = goalRepository.get(GoalIdBundle.fetchId(arguments))
+    val goal = goalRepository.get(GoalIdBundle.extractId(arguments))
     var shouldAnimateViews = true
 
     fun onDone() {

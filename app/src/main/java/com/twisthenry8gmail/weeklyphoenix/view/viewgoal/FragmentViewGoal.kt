@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewGoalBinding
-import com.twisthenry8gmail.weeklyphoenix.view.MarginItemDecoration
+import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoal2ViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_view_goal.*
@@ -69,7 +69,7 @@ class FragmentViewGoal : Fragment() {
         with(view_goal_history) {
 
             layoutManager = LinearLayoutManager(context)
-            addItemDecoration(MarginItemDecoration(resources.getDimensionPixelSize(R.dimen.margin)))
+            addItemDecoration(LinearMarginItemDecoration(resources.getDimension(R.dimen.margin)))
             adapter = historyAdapter
         }
     }

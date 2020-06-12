@@ -30,7 +30,10 @@ class GoalProgressView2(context: Context, attrs: AttributeSet) : View(context, a
         color = context.getColor(R.color.goal_progress_thumb_color)
     }
 
+    private var goalId = 0
+
     private val thumbRadius = context.resources.getDimension(R.dimen.goal_progress_thumb_radius)
+    private val thumbOffset = context.resources.getDimension(R.dimen.goal_progress_thumb_offset)
 
     private val linePath = Path()
     private val linePathMeasure = PathMeasure()
@@ -57,17 +60,21 @@ class GoalProgressView2(context: Context, attrs: AttributeSet) : View(context, a
     private var animatedThumbFraction = 0F
     private var thumbFraction = 0F
 
-    fun initialise(goal: Goal) {
+    fun hasBeenInitialised() = goalId > 0
 
-        linePaint.color = ColorUtil.lightenGoalColor(goal.color)
-        updateProgress(goal)
+    fun initialise(goal: Goal, useLightColor: Boolean = true) {
+
+        goalId = goal.id
+
+        linePaint.color = if (useLightColor) ColorUtil.lightenGoalColor(goal.color) else goal.color
+        updateProgress(goal.progress, goal.target)
     }
 
-    fun updateProgress(goal: Goal, animate: Boolean = false) {
+    fun updateProgress(progress: Long, target: Long, animate: Boolean = false) {
 
-        val newThumbFraction = goal.progress.toFloat() / goal.target
-        val majorSeed = goal.id.toLong()
-        val minorSeed = goal.progress
+        val newThumbFraction = progress.toFloat() / target
+        val majorSeed = goalId.toLong()
+        val minorSeed = progress
 
         if (animate) {
 
@@ -117,21 +124,21 @@ class GoalProgressView2(context: Context, attrs: AttributeSet) : View(context, a
         }
     }
 
-    private fun getLinePadding() = max(linePaint.strokeWidth / 2, thumbRadius)
-
     private fun generateState(randomState: SeededRandomState, w: Int, h: Int) {
 
         if (w + h > 0) {
 
-            val linePadding = getLinePadding()
-            lineRectAlloc.set(linePadding, linePadding, w - linePadding, h - linePadding)
+            val strokeRadius = linePaint.strokeWidth / 2
+            val verticalOffset = max(strokeRadius, thumbRadius)
+
+            lineRectAlloc.set(-strokeRadius, verticalOffset, w + strokeRadius, h - verticalOffset)
             randomState.generate(lineRectAlloc)
         }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
-        val heightRatio = 0.6F
+        val heightRatio = 0.4F
 
         val heightSize = (MeasureSpec.getSize(widthMeasureSpec) * heightRatio).toInt()
         super.onMeasure(
@@ -187,7 +194,10 @@ class GoalProgressView2(context: Context, attrs: AttributeSet) : View(context, a
 
             c.drawPath(linePath, linePaint)
 
-            val drawThumbFraction = if (animating) animatedThumbFraction else thumbFraction
+            // TODO Try using x coordinate as opposed to distance along line
+            val thumbOffsetFraction = 0.1F
+            val drawThumbFraction =
+                thumbOffsetFraction + (if (animating) animatedThumbFraction else thumbFraction) * (1 - 2 * thumbOffsetFraction)
             linePathMeasure.setPath(linePath, false)
             linePathMeasure.getPosTan(
                 linePathMeasure.length * drawThumbFraction,

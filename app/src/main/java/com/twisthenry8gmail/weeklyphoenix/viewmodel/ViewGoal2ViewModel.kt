@@ -2,11 +2,9 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.lifecycle.*
-import com.twisthenry8gmail.graphview.GraphElement
-import com.twisthenry8gmail.weeklyphoenix.GoalIdBundle
-import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
+import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistory
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistoryRepository
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
@@ -20,7 +18,7 @@ class ViewGoal2ViewModel(
     private val goalHistoryRepository: GoalHistoryRepository
 ) : NavigatorViewModel() {
 
-    val goal = goalRepository.get(GoalIdBundle.fetchId(args))
+    val goal = goalRepository.get(GoalIdBundle.extractId(args))
 
     val histories: LiveData<List<GoalHistory>> = Transformations.switchMap(goal) {
 
@@ -39,6 +37,33 @@ class ViewGoal2ViewModel(
             goalRepository.delete(goal.value!!.id)
         }
         navigateBack()
+    }
+
+    fun onAction() {
+
+        goal.value?.let { g ->
+
+            when (g.type) {
+
+                Goal.Type.COUNTED -> {
+
+                    viewModelScope.launch {
+
+                        goalRepository.addProgress(g.id, 1)
+                    }
+
+                    if (g.withProgressIncrement(1).isComplete()) {
+
+                        // TODO
+                    }
+                }
+
+                Goal.Type.TIMED -> {
+
+                    // TODO
+                }
+            }
+        }
     }
 
     fun onPauseIncrease() {

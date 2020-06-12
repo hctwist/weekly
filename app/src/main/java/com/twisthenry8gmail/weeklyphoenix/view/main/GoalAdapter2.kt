@@ -49,7 +49,11 @@ class GoalAdapter2 : RecyclerView.Adapter<GoalAdapter2.VH>() {
 
                             override fun onPreBind(binding: GoalCard2Binding?): Boolean {
 
-                                binding?.goalCardProgress?.updateProgress(goal, true)
+                                binding?.goalCardProgress?.updateProgress(
+                                    goal.progress,
+                                    goal.target,
+                                    true
+                                )
                                 binding?.goalCardProgressText?.text =
                                     GoalDisplayUtil.displayProgressToTarget(
                                         holder.itemView.context.resources,

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.DiffUtil
-import com.twisthenry8gmail.weeklyphoenix.GoalIdBundle
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
@@ -77,7 +77,9 @@ class MainViewModel(
 
     fun onGoalClick(goal: Goal) {
 
-        navigateTo(R.id.action_fragmentMain_to_fragmentViewGoal, GoalIdBundle(goal.id))
+        navigateTo(R.id.action_fragmentMain_to_fragmentViewGoal,
+            GoalIdBundle(goal.id)
+        )
     }
 
     fun onGoalAction(context: Context, goal: Goal) {
@@ -94,7 +96,8 @@ class MainViewModel(
                 if (goal.progress + 1 == goal.target) {
 
                     navigateTo(
-                        R.id.action_fragmentMain_to_fragmentGoalSuccess, GoalIdBundle(
+                        R.id.action_fragmentMain_to_fragmentGoalSuccess,
+                        GoalIdBundle(
                             goal.id
                         )
                     )

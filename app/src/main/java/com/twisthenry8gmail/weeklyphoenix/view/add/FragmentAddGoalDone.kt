@@ -64,7 +64,7 @@ class FragmentAddGoalDone : Fragment() {
 
     class StartDatePickerDialog : DialogFragment() {
 
-        private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
+        private val viewModel by FragmentAddGoal.viewModelFromDialog(this)
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -96,7 +96,7 @@ class FragmentAddGoalDone : Fragment() {
     // TODO View binding here? Better architecture solution? MaterialDatePicker?
     class EndDatePickerDialog : DialogFragment() {
 
-        private val viewModel by navGraphViewModels<AddGoalViewModel>(R.id.nav_add_goal)
+        private val viewModel by FragmentAddGoal.viewModelFromDialog(this)
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 

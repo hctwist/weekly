@@ -3,17 +3,17 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 import android.content.Context
 import android.os.Handler
 import androidx.lifecycle.*
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
+import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
+import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
 import com.twisthenry8gmail.weeklyphoenix.util.GoalTimerUtil
 import com.twisthenry8gmail.weeklyphoenix.util.NotificationHelper
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.launch
 
-class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel() {
+class GoalTimerViewModel(private val goalRepository: GoalRepository) : NavigatorViewModel() {
 
-    // TODO Data binding here
     val goal = goalRepository.getTimingGoal()
-    val progressUpdate = MutableLiveData<ProgressUpdate>()
 
     private val startTime = goalRepository.getTimingGoalStartTime()
     private val _durationSeconds = MutableLiveData((System.currentTimeMillis() - startTime) / 1000)
@@ -26,6 +26,10 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel
         _durationSeconds.value = (System.currentTimeMillis() - startTime) / 1000
         postDurationUpdate()
     }
+
+    private val _timingStopped = NonNullMutableLiveData(false)
+    val timingStopped: LiveData<Boolean>
+        get() = _timingStopped
 
     init {
 
@@ -50,18 +54,20 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : ViewModel
             goal.value?.let {
 
                 goalRepository.addProgress(it.id, progressIncrement)
-                progressUpdate.value =
-                    ProgressUpdate(it, it.withProgressIncrement(progressIncrement))
+                _timingStopped.value = true
             }
         }
+    }
+
+    fun onDone() {
+
+        navigateTo(R.id.action_fragmentGoalTimer_to_fragmentMain)
     }
 
     override fun onCleared() {
 
         updateHandler.removeCallbacks(updateRunnable)
     }
-
-    class ProgressUpdate(val originalGoal: Goal, val updatedGoal: Goal)
 
     class Factory(private val goalRepository: GoalRepository) : ViewModelProvider.Factory {
 

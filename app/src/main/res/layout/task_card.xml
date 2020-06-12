@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.TaskDisplayUtil" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.R" />
+
+        <variable
+            name="taskday"
+            type="com.twisthenry8gmail.weeklyphoenix.data.TaskDay" />
+
+        <variable
+            name="clickhandler"
+            type="com.twisthenry8gmail.weeklyphoenix.view.main.TaskDayAdapter.ClickHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- TODO Width needs to be calculated based upon largest text -->
+        <TextView
+            android:id="@+id/task_card_day"
+            textColorAttr="@{taskday.today ? R.color.color_primary : android.R.attr.textColorSecondary}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="3"
+            android:fontFamily="sans-serif-medium"
+            android:text="@{DateTimeUtil.INSTANCE.displayShortDay(taskday.date)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/task_card_date"
+            textColorAttr="@{taskday.today ? R.color.color_primary : android.R.attr.textColorSecondary}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@{DateTimeUtil.INSTANCE.displayDayOfMonth(taskday.date)}"
+            app:layout_constraintStart_toStartOf="@id/task_card_day"
+            app:layout_constraintTop_toBottomOf="@id/task_card_day" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/task_card_card"
+            style="@style/TaskCard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="@{() -> clickhandler.onTaskDayClick(taskday)}"
+            app:layout_constraintBottom_toBottomOf="@id/task_card_bottom_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/task_card_day"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/task_card_nothing"
+            goneUnless="@{!taskday.hasTasks()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:text="Nothing"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@id/task_card_card"
+            app:layout_constraintTop_toTopOf="@id/task_card_card" />
+
+        <TextView
+            android:id="@+id/task_card_overdue_label"
+            style="@style/TaskCardTitle"
+            goneUnless="@{taskday.hasOverdueTasks()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:text="Overdue"
+            android:textColor="@color/red"
+            app:layout_constraintStart_toStartOf="@id/task_card_card"
+            app:layout_constraintTop_toBottomOf="@id/task_card_nothing" />
+
+        <TextView
+            android:id="@+id/task_card_overdue"
+            goneUnless="@{taskday.hasOverdueTasks()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin"
+            android:layout_marginTop="@dimen/half_margin"
+            android:text="@{TaskDisplayUtil.INSTANCE.displayTasks(taskday.overdueTasks)}"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toEndOf="@id/task_card_card"
+            app:layout_constraintStart_toStartOf="@id/task_card_card"
+            app:layout_constraintTop_toBottomOf="@id/task_card_overdue_label" />
+
+        <!-- TODO These overlap the add button -->
+        <TextView
+            android:id="@+id/task_card_due"
+            goneUnless="@{taskday.hasCurrentTasks()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            android:text="@{TaskDisplayUtil.INSTANCE.displayTasks(taskday.currentTasks)}"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toEndOf="@id/task_card_card"
+            app:layout_constraintStart_toStartOf="@id/task_card_card"
+            app:layout_constraintTop_toBottomOf="@id/task_card_overdue" />
+
+        <Space
+            android:id="@+id/task_card_bottom_margin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin"
+            app:layout_constraintTop_toBottomOf="@id/task_card_due" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> clickhandler.onAddTask(taskday)}"
+            android:padding="@dimen/accessibility_padding"
+            android:src="@drawable/round_add_24"
+            android:tint="@color/color_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/task_card_card"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

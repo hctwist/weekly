@@ -1,10 +1,10 @@
-package com.twisthenry8gmail.weeklyphoenix
+package com.twisthenry8gmail.weeklyphoenix.util.bundles
 
 import android.os.Bundle
 
 object GoalIdBundle {
 
-    const val GOAL_ID = "goal_id"
+    private const val GOAL_ID = "goal_id"
 
     operator fun invoke(id: Int): Bundle {
 
@@ -14,7 +14,7 @@ object GoalIdBundle {
         }
     }
 
-    fun fetchId(bundle: Bundle?): Int {
+    fun extractId(bundle: Bundle?): Int {
 
         if (bundle?.containsKey(GOAL_ID) != true) throw IllegalArgumentException("This must have a goal id passed through it's argument")
         return bundle.getInt(GOAL_ID)
