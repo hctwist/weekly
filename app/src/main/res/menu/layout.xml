@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_layout_full"
+        android:icon="@drawable/round_view_agenda_24"
+        android:title="Full" />
+
+    <item
+        android:id="@+id/menu_layout_goals"
+        android:icon="@drawable/round_view_carousel_24"
+        android:title="Goals" />
+
+    <item
+        android:id="@+id/menu_layout_tasks"
+        android:icon="@drawable/round_view_list_24"
+        android:title="Tasks" />
+</menu>

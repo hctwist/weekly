@@ -5,10 +5,7 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.DiffUtil
 import com.twisthenry8gmail.weeklyphoenix.*
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
-import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
-import com.twisthenry8gmail.weeklyphoenix.data.TaskDay
-import com.twisthenry8gmail.weeklyphoenix.data.TaskRepository
+import com.twisthenry8gmail.weeklyphoenix.data.*
 import com.twisthenry8gmail.weeklyphoenix.util.GoalComparator
 import com.twisthenry8gmail.weeklyphoenix.util.GreetingGenerator
 import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
@@ -53,17 +50,25 @@ class Main3ViewModel(
     val goalsDiffData: LiveData<DiffUtil.DiffResult>
         get() = _goalsDiffData
 
-    private var _taskDays = taskRepository.getAllDays()
+    val overdueTasks = taskRepository.getOverdue()
+
+    private val _taskDays = taskRepository.getAllDays()
     val taskDays: LiveData<List<TaskDay>>
         get() = _taskDays
 
     val title = GreetingGenerator.generate(androidResources)
 
+    private val _showLayoutMenu = MutableLiveData<Event<Unit>>()
+    val showLayoutMenu: LiveData<Event<Unit>>
+        get() = _showLayoutMenu
+
     init {
 
+
+        // TODO With splash screen instead
         if (goalRepository.isTiming()) {
 
-            navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
+//            navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
         } else if (mainRepository.isFirstTime()) {
 
             navigateTo(R.id.action_fragmentMain_to_fragmentOnboarding)

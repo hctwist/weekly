@@ -4,8 +4,8 @@ import com.twisthenry8gmail.weeklyphoenix.data.Task
 
 object TaskDisplayUtil {
 
-    fun displayTasks(tasks: List<Task>): String {
+    fun displayTasks(tasks: List<Task>?): String {
 
-        return tasks.joinToString("\n") { it.title }
+        return tasks?.joinToString("\n") { it.title } ?: ""
     }
 }

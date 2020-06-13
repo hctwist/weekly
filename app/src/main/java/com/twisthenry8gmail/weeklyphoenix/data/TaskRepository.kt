@@ -10,46 +10,11 @@ import java.time.LocalDate
 
 class TaskRepository(private val tasksDao: Task.Dao) {
 
-    fun getFor(epochDay: Long): LiveData<TaskDay> {
+    fun getDay(epochDay: Long): LiveData<TaskDay> {
 
-        val data = MutableLiveData<TaskDay>()
+        return Transformations.map(tasksDao.getFor(epochDay)) {
 
-        val now = LocalDate.now()
-        val date = LocalDate.ofEpochDay(epochDay)
-
-        return object : MediatorLiveData<TaskDay>() {
-
-            var current: List<Task>? = null
-            var overdue: List<Task>? = null
-
-            init {
-
-                addSource(tasksDao.getFor(epochDay)) {
-
-                    current = it
-                    onSourceChanged()
-                }
-
-                if (now == date) {
-
-                    addSource(tasksDao.getOverdue(now.toEpochDay())) {
-
-                        overdue = it
-                        onSourceChanged()
-                    }
-                } else {
-
-                    overdue = listOf()
-                }
-            }
-
-            fun onSourceChanged() {
-
-                if (current != null && overdue != null) {
-
-                    value = TaskDay(epochDay, current!!, overdue!!)
-                }
-            }
+            TaskDay(epochDay, it)
         }
     }
 
@@ -58,27 +23,33 @@ class TaskRepository(private val tasksDao: Task.Dao) {
         val now = LocalDate.now()
         val todayEpoch = now.toEpochDay()
 
-        val incompleteTasks = tasksDao.getAllActive(todayEpoch)
+        val tasks = tasksDao.getFrom(todayEpoch)
 
-        return Transformations.map(incompleteTasks) { tasks ->
+        return Transformations.map(tasks) { t ->
 
             val taskDays = ArrayList<TaskDay>(7)
 
-            val todayTasks = tasks.filter { it.date <= todayEpoch }
-            val partitionedTasks = todayTasks.partition { it.date == todayEpoch }
-            taskDays.add(TaskDay(todayEpoch, partitionedTasks.first, partitionedTasks.second))
-
-            for (i in 1L..6L) {
+            for (i in 0L..6L) {
 
                 val date = now.plusDays(i)
                 val dateEpoch = date.toEpochDay()
-                val datedTasks = tasks.filter { it.date == dateEpoch }
+                val datedTasks = t.filter { it.date == dateEpoch }
 
-                taskDays.add(TaskDay(dateEpoch, datedTasks, listOf()))
+                taskDays.add(TaskDay(dateEpoch, datedTasks))
             }
 
             taskDays
         }
+    }
+
+    fun getOverdue(): LiveData<List<Task>> {
+
+        return tasksDao.getOverdue(LocalDate.now().toEpochDay())
+    }
+
+    suspend fun setComplete(taskId: Int, complete: Boolean) {
+
+        tasksDao.setComplete(taskId, complete)
     }
 
     suspend fun add(task: Task) {

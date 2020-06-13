@@ -26,7 +26,10 @@ data class Task(
         @Query("SELECT * FROM Task WHERE date = :epochDay")
         fun getFor(epochDay: Long): LiveData<List<Task>>
 
-        @Query("SELECT * FROM Task WHERE complete = 0 OR date >= :fromEpoch")
-        fun getAllActive(fromEpoch: Long): LiveData<List<Task>>
+        @Query("SELECT * FROM Task WHERE date >= :fromEpoch")
+        fun getFrom(fromEpoch: Long): LiveData<List<Task>>
+
+        @Query("UPDATE Task SET complete = :complete WHERE id = :id")
+        suspend fun setComplete(id: Int, complete: Boolean)
     }
 }

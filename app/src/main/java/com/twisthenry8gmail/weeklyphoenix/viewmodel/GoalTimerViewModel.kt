@@ -3,11 +3,14 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 import android.content.Context
 import android.os.Handler
 import androidx.lifecycle.*
+import com.twisthenry8gmail.weeklyphoenix.Event
+import com.twisthenry8gmail.weeklyphoenix.HandledEvent
 import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
 import com.twisthenry8gmail.weeklyphoenix.util.GoalTimerUtil
 import com.twisthenry8gmail.weeklyphoenix.util.NotificationHelper
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.launch
 
@@ -27,8 +30,8 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : Navigator
         postDurationUpdate()
     }
 
-    private val _timingStopped = NonNullMutableLiveData(false)
-    val timingStopped: LiveData<Boolean>
+    private val _timingStopped = NonNullMutableLiveData<Event<Boolean>>(HandledEvent(false))
+    val timingStopped: LiveData<Event<Boolean>>
         get() = _timingStopped
 
     init {
@@ -54,14 +57,17 @@ class GoalTimerViewModel(private val goalRepository: GoalRepository) : Navigator
             goal.value?.let {
 
                 goalRepository.addProgress(it.id, progressIncrement)
-                _timingStopped.value = true
+                _timingStopped.value = Event(true)
             }
         }
     }
 
     fun onDone() {
 
-        navigateTo(R.id.action_fragmentGoalTimer_to_fragmentMain)
+        goal.value?.let {
+
+            navigateTo(R.id.action_fragmentGoalTimer_to_fragmentViewGoal, GoalIdBundle(it.id))
+        }
     }
 
     override fun onCleared() {

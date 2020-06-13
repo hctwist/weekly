@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.ChangeBounds
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewGoalBinding
 import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
+import com.twisthenry8gmail.weeklyphoenix.view.Transitions
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoal2ViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_view_goal.*
@@ -28,7 +31,16 @@ class FragmentViewGoal : Fragment() {
         )
     }
 
+    private lateinit var binding: FragmentViewGoalBinding
+
     private val historyAdapter = GoalHistoryAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedElementEnterTransition =
+            Transitions.initialiseExitTransition(requireContext(), ChangeBounds())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +48,7 @@ class FragmentViewGoal : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentViewGoalBinding.inflate(inflater, container, false)
+        binding = FragmentViewGoalBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -47,6 +59,16 @@ class FragmentViewGoal : Fragment() {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
+            if (it.getId() == R.id.action_fragmentViewGoal_to_fragmentGoalTimer) {
+
+                it.setNavigatorExtras(
+                    FragmentNavigatorExtras(
+
+                        view_goal_title to Transitions.ViewGoal.TRANSITION_NAME_TITLE,
+                        view_goal_progress_text to Transitions.ViewGoal.TRANSITION_NAME_PROGRESS
+                    )
+                )
+            }
             it.navigateWith(findNavController())
         })
 

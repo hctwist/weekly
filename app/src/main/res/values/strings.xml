@@ -54,6 +54,10 @@
     <!-- Goal success -->
     <string name="goal_success">Well done on completing your goal.</string>
 
+    <!-- Goal timing -->
+    <string name="goal_timing_stop">Stop timing</string>
+    <string name="goal_timing_done">Done</string>
+
     <!-- Goal view -->
     <string name="goal_view_progress">%1$s/%2$s</string>
     <string name="goal_delete">Delete goal</string>

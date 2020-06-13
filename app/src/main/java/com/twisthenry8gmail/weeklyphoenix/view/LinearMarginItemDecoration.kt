@@ -9,7 +9,6 @@ import kotlin.math.roundToInt
 
 class LinearMarginItemDecoration(private val margin: Float) : RecyclerView.ItemDecoration() {
 
-    // TODO Rtl support?
     override fun getItemOffsets(
         outRect: Rect,
         view: View,

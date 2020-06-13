@@ -3,12 +3,14 @@
 
     <data>
 
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.TaskDisplayUtil" />
+
         <variable
             name="viewmodel"
             type="com.twisthenry8gmail.weeklyphoenix.viewmodel.Main3ViewModel" />
     </data>
 
-    <!-- Overscroll now showing -->
+    <!-- TODO Overscroll not showing -->
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,12 +31,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/main_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/horizontal_layout_margin"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:onClick="@{() -> viewmodel.onLayoutButtonClick()}"
-                android:src="@drawable/round_expand_more_24"
+                android:src="@drawable/round_view_agenda_24"
                 app:layout_constraintBottom_toBottomOf="@id/main_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/main_title"
@@ -60,15 +63,56 @@
                 app:layout_constraintTop_toBottomOf="@id/main_goals_header" />
 
             <TextView
-                android:id="@+id/main_week_header"
+                android:id="@+id/main_tasks_header"
                 style="@style/SectionHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
                 android:layout_marginTop="@dimen/section_margin"
-                android:text="Week"
+                android:text="Tasks"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main_goals" />
+
+            <!-- TODO Better solution? Multiple view types in adapter? -->
+            <TextView
+                android:id="@+id/main_tasks_overdue_spacer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:ems="3"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/main_tasks_overdue" />
+
+            <ImageView
+                goneUnless="@{!viewmodel.overdueTasks.empty}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:src="@drawable/round_assignment_late_24"
+                android:tint="@color/red"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/main_tasks_overdue" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/main_tasks_overdue"
+                style="@style/TaskCard"
+                goneUnless="@{!viewmodel.overdueTasks.empty}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/main_tasks_overdue_spacer"
+                app:layout_constraintTop_toBottomOf="@id/main_tasks_header"
+                app:strokeColor="@color/red">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:text="@{TaskDisplayUtil.INSTANCE.displayTasks(viewmodel.overdueTasks)}" />
+            </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/main_task_days"
@@ -78,7 +122,7 @@
                 android:overScrollMode="never"
                 android:paddingHorizontal="@dimen/horizontal_layout_margin"
                 android:paddingBottom="@dimen/vertical_layout_margin"
-                app:layout_constraintTop_toBottomOf="@id/main_week_header" />
+                app:layout_constraintTop_toBottomOf="@id/main_tasks_overdue" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

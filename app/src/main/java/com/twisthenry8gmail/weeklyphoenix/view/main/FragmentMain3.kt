@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -46,6 +47,7 @@ class FragmentMain3 : Fragment() {
 
         val binding = FragmentMain3Binding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -60,6 +62,11 @@ class FragmentMain3 : Fragment() {
             it.navigateWith(findNavController())
         })
 
+        viewModel.showLayoutMenu.observe(viewLifecycleOwner, Event.Observer {
+
+            showLayoutMenu()
+        })
+
         viewModel.goals.observe(viewLifecycleOwner, Observer {
 
             goalsAdapter.goals = it
@@ -68,6 +75,8 @@ class FragmentMain3 : Fragment() {
         viewModel.goalsDiffData.observe(viewLifecycleOwner, Observer {
 
             it.dispatchUpdatesTo(goalsAdapter)
+            // TODO Remove and find a better solution
+            main_goals.scrollToPosition(0)
         })
 
         viewModel.taskDays.observe(viewLifecycleOwner, Observer {
@@ -122,5 +131,15 @@ class FragmentMain3 : Fragment() {
             addItemDecoration(LinearMarginItemDecoration(resources.getDimension(R.dimen.margin)))
             adapter = taskDaysAdapter
         }
+    }
+
+    private fun showLayoutMenu() {
+
+        // TODO Use ListPopupWindow to get icons as well as text
+
+        val popup = PopupMenu(context, main_layout)
+        popup.inflate(R.menu.layout)
+
+        popup.show()
     }
 }

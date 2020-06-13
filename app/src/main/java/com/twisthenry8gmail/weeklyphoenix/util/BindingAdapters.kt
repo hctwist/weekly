@@ -53,6 +53,13 @@ object BindingAdapters {
         view.visibility = if (bool) View.VISIBLE else View.GONE
     }
 
+    @BindingAdapter("invisibleUnless")
+    @JvmStatic
+    fun invisibleUnless(view: View, bool: Boolean) {
+
+        view.visibility = if (bool) View.VISIBLE else View.INVISIBLE
+    }
+
     @BindingAdapter("backingColor")
     @JvmStatic
     fun setBackingColor(progressView: ProgressView, color: Int) {

@@ -148,7 +148,6 @@ data class Goal(
 
     companion object {
 
-        // TODO Needed?
         fun getResetDateFrom(from: LocalDate, reset: Reset): Long {
 
             return if (reset.isNever()) -1 else from.plus(reset).toEpochDay()

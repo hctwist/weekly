@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
-                android:layout_marginTop="@dimen/vertical_layout_margin"
+                android:layout_marginTop="@dimen/horizontal_layout_margin"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:onClick="@{() -> viewmodel.onClose()}"
                 android:src="@drawable/round_close_24"
@@ -31,23 +31,37 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:touchPadding="@dimen/accessibility_padding" />
 
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/view_task_day_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/horizontal_layout_margin"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> viewmodel.onAddTask()}"
+                android:src="@drawable/round_add_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:touchPadding="@dimen/accessibility_padding" />
+
             <TextView
-                android:id="@+id/view_task_date"
+                android:id="@+id/view_task_day_date"
                 style="@style/Header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
-                android:layout_marginTop="@dimen/section_margin"
+                android:layout_marginTop="@dimen/vertical_layout_margin"
                 android:text="@{DateTimeUtil.INSTANCE.displayMediumDate(viewmodel.date)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_task_day_close" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/view_task_day_tasks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/section_margin"
                 android:paddingHorizontal="@dimen/horizontal_layout_margin"
-                app:layout_constraintTop_toBottomOf="@id/view_task_date" />
+                app:layout_constraintTop_toBottomOf="@id/view_task_day_date" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

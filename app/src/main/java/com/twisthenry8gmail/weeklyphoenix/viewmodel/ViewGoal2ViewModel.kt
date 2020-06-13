@@ -3,11 +3,12 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.lifecycle.*
-import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
+import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistory
 import com.twisthenry8gmail.weeklyphoenix.data.GoalHistoryRepository
 import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.launch
 
@@ -60,7 +61,8 @@ class ViewGoal2ViewModel(
 
                 Goal.Type.TIMED -> {
 
-                    // TODO
+                    goalRepository.startTimer(g.id)
+                    navigateTo(R.id.action_fragmentViewGoal_to_fragmentGoalTimer)
                 }
             }
         }

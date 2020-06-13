@@ -30,7 +30,7 @@ class MainViewModel(
 
         if (goalRepository.isTiming()) {
 
-            navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
+//            navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
         } else if (mainRepository.isFirstTime()) {
 
             navigateTo(R.id.action_fragmentMain_to_fragmentOnboarding)
@@ -107,7 +107,7 @@ class MainViewModel(
             Goal.Type.TIMED -> {
 
                 startGoalTimer(context, goal.id)
-                navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
+//                navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
             }
         }
     }

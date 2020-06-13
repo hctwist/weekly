@@ -36,12 +36,11 @@ class FragmentAddGoalTitle : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // TODO Showing and hiding of the keyboard
         add_goal_title.showSoftKeyboard()
     }
 
     override fun onDetach() {
         super.onDetach()
-        hideSoftKeyboard()
+//        hideSoftKeyboard()
     }
 }
