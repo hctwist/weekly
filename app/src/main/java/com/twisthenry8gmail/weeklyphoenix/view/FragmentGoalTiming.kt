@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeBounds
@@ -14,6 +13,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentGoalTimingBinding
+import com.twisthenry8gmail.weeklyphoenix.util.Transitions
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.GoalTimerViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_goal_timing.*

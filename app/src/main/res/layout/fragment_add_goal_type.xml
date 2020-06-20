@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="com.twisthenry8gmail.weeklyphoenix.data.Goal" />
+        <import type="com.twisthenry8gmail.weeklyphoenix.data.goals.Goal" />
 
         <variable
             name="viewmodel"
@@ -20,19 +20,20 @@
             style="@style/Display"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/large_content_margin"
+            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+            android:layout_marginTop="@dimen/vertical_layout_margin"
             android:text="What type of goal are you aiming for?"
-            app:layout_constraintEnd_toEndOf="@id/add_goal_type_timed"
-            app:layout_constraintStart_toStartOf="@id/add_goal_type_counted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.twisthenry8gmail.weeklyphoenix.view.views.GoalTypeView
+        <com.twisthenry8gmail.weeklyphoenix.view.addgoal.GoalTypeView
             android:id="@+id/add_goal_type_counted"
+            bind:checked="@{viewmodel.type == Goal.Type.COUNTED}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/double_margin"
-            android:layout_marginTop="@dimen/large_content_margin"
-            android:checked="@{viewmodel.type == Goal.Type.COUNTED}"
+            android:layout_marginStart="@dimen/horizontal_layout_margin"
+            android:layout_marginTop="@dimen/section_margin"
             android:onClick="@{() -> viewmodel.onSelectType(Goal.Type.COUNTED)}"
             app:goalTypeIcon="@drawable/round_plus_one_24"
             app:goalTypeTitle="@string/goal_type_counted"
@@ -40,12 +41,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_goal_type_title" />
 
-        <com.twisthenry8gmail.weeklyphoenix.view.views.GoalTypeView
+        <com.twisthenry8gmail.weeklyphoenix.view.addgoal.GoalTypeView
             android:id="@+id/add_goal_type_timed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
-            android:layout_marginEnd="@dimen/double_margin"
+            android:layout_marginEnd="@dimen/horizontal_layout_margin"
             android:checked="@{viewmodel.type == Goal.Type.TIMED}"
             android:onClick="@{() -> viewmodel.onSelectType(Goal.Type.TIMED)}"
             app:goalTypeIcon="@drawable/round_play_arrow_24"

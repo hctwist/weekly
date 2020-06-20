@@ -1,10 +1,11 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
 import androidx.recyclerview.widget.DiffUtil
+import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 
 class GoalAdapterDiff(
-    private val oldItems: List<GoalAdapter.Data>,
-    private val newItems: List<GoalAdapter.Data>
+    private val oldItems: List<Goal?>,
+    private val newItems: List<Goal?>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
@@ -22,16 +23,7 @@ class GoalAdapterDiff(
         val oldItem = oldItems[oldItemPosition]
         val newItem = newItems[newItemPosition]
 
-        if (oldItem.type != newItem.type) {
-
-            return false
-        }
-
-        return when (oldItem.type) {
-
-            GoalAdapter.Data.Type.HEADER -> true
-            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_ENDED -> return oldItem.asGoal().id == newItem.asGoal().id
-        }
+        return oldItem?.id == newItem?.id
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -39,33 +31,12 @@ class GoalAdapterDiff(
         val oldItem = oldItems[oldItemPosition]
         val newItem = newItems[newItemPosition]
 
-        return when (oldItem.type) {
+        return if (oldItem == null || newItem == null) {
 
-            GoalAdapter.Data.Type.HEADER -> oldItem.asHeader() == newItem.asHeader()
-            GoalAdapter.Data.Type.GOAL, GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_ENDED -> oldItem.asGoal() == newItem.asGoal()
-        }
-    }
+            oldItem == newItem
+        } else {
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-
-        val oldItem = oldItems[oldItemPosition]
-        val newItem = newItems[newItemPosition]
-
-        // Here the items must be of the same type
-        return when (oldItem.type) {
-
-            GoalAdapter.Data.Type.HEADER -> null
-            GoalAdapter.Data.Type.GOAL -> {
-
-                return if (oldItem.asGoal().progress == newItem.asGoal().progress) {
-
-                    null
-                } else {
-
-                    GoalAdapter.Change.PROGRESS
-                }
-            }
-            GoalAdapter.Data.Type.GOAL_COMPLETE, GoalAdapter.Data.Type.GOAL_SCHEDULED, GoalAdapter.Data.Type.GOAL_ENDED -> null
+            oldItem.title == newItem.title && oldItem.progress == newItem.progress
         }
     }
 }

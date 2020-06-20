@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.GreetingGenerator" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.view.main.MainLayout" />
+
+        <import type="java.time.format.TextStyle" />
+
+        <import type="java.util.Locale" />
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.MainTasksViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/colorBackground"
+            app:liftOnScroll="true">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_layout_margin"
+                app:layout_scrollFlags="scroll">
+
+                <TextView
+                    style="@style/Display"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/horizontal_layout_margin"
+                    android:text="@{GreetingGenerator.INSTANCE.generate(context.resources)}" />
+
+                <com.twisthenry8gmail.weeklyphoenix.view.main.LayoutPopupView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                    bind:layoutSelected="@{MainLayout.TASKS}"
+                    bind:layoutSelectedListener="@{(layout) -> viewmodel.onLayoutSelected(layout)}" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_scrollFlags="scroll|enterAlways|snapMargins">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/main_tasks_month"
+                    style="@style/DropdownButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_layout_margin"
+                    android:minWidth="0dp"
+                    android:paddingHorizontal="0dp"
+                    android:text="@{viewmodel.currentMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/main_tasks_year"
+                    style="@style/DropdownButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/double_margin"
+                    android:paddingHorizontal="0dp"
+                    android:minWidth="0dp"
+                    android:text="@{String.valueOf(viewmodel.currentMonth.year)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_tasks_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="@dimen/horizontal_layout_margin"
+            android:paddingBottom="@dimen/vertical_layout_margin"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

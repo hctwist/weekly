@@ -1,6 +1,6 @@
 package com.twisthenry8gmail.weeklyphoenix.util
 
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import java.time.LocalDate
 
 class GoalComparator : Comparator<Goal> {
@@ -33,6 +33,6 @@ class GoalComparator : Comparator<Goal> {
 
     private fun compareContents(g1: Goal, g2: Goal): Int {
 
-        return g1.title.compareTo(g2.title)
+        return g1.sortOrder.compareTo(g2.sortOrder)
     }
 }

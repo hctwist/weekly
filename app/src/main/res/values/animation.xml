@@ -6,7 +6,4 @@
 
     <integer name="shared_enter_transition_duration">250</integer>
     <integer name="shared_exit_transition_duration">200</integer>
-
-    <!-- RELEASE Deprecated -->
-    <integer name="transition_duration">150</integer>
 </resources>

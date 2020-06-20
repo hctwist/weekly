@@ -1,36 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="task"
-            type="com.twisthenry8gmail.weeklyphoenix.data.Task" />
+            type="com.twisthenry8gmail.weeklyphoenix.data.tasks.Task" />
 
         <variable
             name="clickhandler"
-            type="com.twisthenry8gmail.weeklyphoenix.view.TaskAdapter.ClickHandler" />
+            type="com.twisthenry8gmail.weeklyphoenix.view.viewtasks.TaskAdapter.ClickHandler" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.twisthenry8gmail.weeklyphoenix.view.viewtasks.TaskRowView
+        android:id="@+id/task_row_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:layout_width="@dimen/view_task_day_circle"
-            android:layout_height="@dimen/view_task_day_circle"
-            android:background="@drawable/task_incomplete_circle"
-            android:onClick="@{() -> clickhandler.onToggleTaskComplete(task)}"
-            android:src="@{task.complete ? null : @drawable/round_done_24}" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin"
-            android:text="@{task.title}"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="@dimen/view_task_day_text" />
-    </LinearLayout>
+        android:paddingVertical="4dp"
+        bind:checked="@{task.complete}"
+        bind:onCheckChangedListener="@{(checked) -> clickhandler.onTaskCompleteChanged(task, checked)}"
+        bind:text="@{task.title}" />
 </layout>

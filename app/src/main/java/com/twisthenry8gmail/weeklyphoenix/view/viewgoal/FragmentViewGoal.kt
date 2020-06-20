@@ -15,15 +15,15 @@ import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewGoalBinding
 import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
-import com.twisthenry8gmail.weeklyphoenix.view.Transitions
-import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoal2ViewModel
+import com.twisthenry8gmail.weeklyphoenix.util.Transitions
+import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_view_goal.*
 
 class FragmentViewGoal : Fragment() {
 
-    private val viewModel by viewModels<ViewGoal2ViewModel> {
-        ViewGoal2ViewModel.Factory(
+    private val viewModel by viewModels<ViewGoalViewModel> {
+        ViewGoalViewModel.Factory(
             arguments,
             resources,
             weeklyApplication().goalRepository,

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
-import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalRepository
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 
 class GoalSuccessViewModel(

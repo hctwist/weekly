@@ -2,7 +2,7 @@ package com.twisthenry8gmail.weeklyphoenix.util
 
 import android.content.res.Resources
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import java.text.DecimalFormat
 import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
@@ -54,7 +54,7 @@ object GoalDisplayUtil {
 
     fun displayEndDate(resources: Resources, endDate: Long): String {
 
-        return if (GoalPropertyUtil.hasEndDate(endDate)) DateTimeUtil.displayMediumDate(endDate) else resources.getString(
+        return if (Goal.hasEndDate(endDate)) DateTimeUtil.displayMediumDate(endDate) else resources.getString(
             R.string.goal_no_end
         )
     }

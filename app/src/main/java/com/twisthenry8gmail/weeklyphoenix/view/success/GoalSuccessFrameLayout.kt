@@ -8,9 +8,9 @@ import android.widget.FrameLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.google.android.material.card.MaterialCardView
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
-import com.twisthenry8gmail.weeklyphoenix.view.views.setAsLerpBetween
+import com.twisthenry8gmail.weeklyphoenix.util.setAsLerpBetween
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin

@@ -3,8 +3,8 @@ package com.twisthenry8gmail.weeklyphoenix.view.viewgoal
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
-import com.twisthenry8gmail.weeklyphoenix.data.GoalHistory
+import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalHistory
 import com.twisthenry8gmail.weeklyphoenix.databinding.GoalHistoryRowBinding
 
 class GoalHistoryAdapter : RecyclerView.Adapter<GoalHistoryAdapter.VH>() {

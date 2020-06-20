@@ -4,9 +4,9 @@
 
     <data>
 
-        <import type="com.twisthenry8gmail.weeklyphoenix.view.Transitions" />
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.Transitions" />
 
-        <import type="com.twisthenry8gmail.weeklyphoenix.data.Goal" />
+        <import type="com.twisthenry8gmail.weeklyphoenix.data.goals.Goal" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
 

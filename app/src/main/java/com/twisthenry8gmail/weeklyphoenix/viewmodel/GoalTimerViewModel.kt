@@ -7,7 +7,7 @@ import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.HandledEvent
 import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalRepository
 import com.twisthenry8gmail.weeklyphoenix.util.GoalTimerUtil
 import com.twisthenry8gmail.weeklyphoenix.util.NotificationHelper
 import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle

@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalHistory
+import com.twisthenry8gmail.weeklyphoenix.data.tasks.Task
 
 // RELEASE Reset to 1
-@Database(entities = [Goal::class, GoalHistory::class, Task::class], version = 6)
+@Database(entities = [Goal::class, GoalHistory::class, Task::class], version = 8)
 abstract class RoomModel : RoomDatabase() {
 
     companion object {

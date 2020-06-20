@@ -14,4 +14,11 @@
 
     <color name="goal_progress_thumb_color">#353535</color>
     <color name="goal_card">#FBFBFE</color>
+
+    <color name="tasks_card_empty">@color/off_white</color>
+    <color name="tasks_card_active">@color/color_primary_light</color>
+    <color name="tasks_card_overdue">#FFE4DF</color>
+
+    <color name="task_row_view_dash">@color/color_primary</color>
+    <color name="task_row_view_strike">@color/light_grey</color>
 </resources>

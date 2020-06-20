@@ -1,6 +1,6 @@
 rootProject.name='Weekly Phoenix'
-include ':app', ':dragline', ':buttons', ':progresscircles', ':graphview'
+include ':app', ':dragline', ':buttons', ':progresscircles', ':recyclerextensions'
 project(':dragline').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/dragline')
 project(':buttons').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/buttons')
 project(':progresscircles').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/progresscircles')
-project(':graphview').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/graphview')
+project(':recyclerextensions').projectDir = new File('C:/Users/henry/Documents/Projects/ProjectSource/recyclerextensions')

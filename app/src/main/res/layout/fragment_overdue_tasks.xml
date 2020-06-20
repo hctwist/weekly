@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil" />
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.OverdueTasksViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:elevation="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                    android:id="@+id/overdue_tasks_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_layout_margin"
+                    android:layout_marginTop="@dimen/horizontal_layout_margin"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{() -> viewmodel.onClose()}"
+                    android:src="@drawable/round_close_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:touchPadding="@dimen/accessibility_padding" />
+
+                <TextView
+                    android:id="@+id/view_tasks_date"
+                    style="@style/Header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_layout_margin"
+                    android:layout_marginTop="@dimen/vertical_layout_margin"
+                    android:text="@string/overdue_tasks_title"
+                    android:textColor="@color/red"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/overdue_tasks_close" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/overdue_tasks_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+            android:layout_marginTop="@dimen/section_margin"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="@dimen/vertical_layout_margin"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintTop_toBottomOf="@id/view_tasks_date" />
+
+        <!-- TODO  -->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/overdue_tasks_empty"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:gravity="center"-->
+        <!--            android:text="You have no tasks"-->
+        <!--            android:textAlignment="center"-->
+        <!--            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />-->
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

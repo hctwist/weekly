@@ -3,23 +3,23 @@
 
     <array name="goal_colors">
 
-        <item>#44CFCB</item>
-        <item>#F9C846</item>
-        <item>#F96E46</item>
-        <item>#545863</item>
-        <item>#59CD90</item>
-        <item>#1C77C3</item>
-        <item>#E67F0D</item>
+        <item>#CBAFD5</item>
+        <item>#C5F056</item>
+        <item>#FE8585</item>
+        <item>#85C0FF</item>
+        <item>#7BE0CC</item>
+        <item>#646B7D</item>
+        <item>#FEEB72</item>
     </array>
 
     <string-array name="goal_color_names">
 
-        <item>Teal</item>
-        <item>Bumble bee</item>
+        <item>Lavender</item>
+        <item>Lime</item>
         <item>Coral</item>
-        <item>Gunmetal</item>
+        <item>Sky blue</item>
         <item>Emerald</item>
-        <item>Royal blue</item>
-        <item>Hot orange</item>
+        <item>Night sky</item>
+        <item>Corn</item>
     </string-array>
 </resources>

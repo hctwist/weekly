@@ -17,8 +17,8 @@
             android:id="@+id/add_goal_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/double_margin"
-            android:layout_marginTop="@dimen/large_content_margin"
+            android:layout_marginStart="@dimen/horizontal_layout_margin"
+            android:layout_marginTop="@dimen/horizontal_layout_margin"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:onClick="@{() -> viewmodel.onBack()}"
             android:src="@drawable/round_arrow_back_24"
@@ -27,17 +27,17 @@
 
         <com.twisthenry8gmail.progresscircles.ProgressLineView
             android:id="@+id/add_goal_progress"
-            backingColor="@{@color/color_primary_light}"
-            color="@{@color/color_primary}"
             progress="@{viewmodel.page}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_content_margin"
-            android:layout_marginEnd="@dimen/double_margin"
+            android:layout_marginStart="@dimen/double_margin"
+            android:layout_marginEnd="@dimen/horizontal_layout_margin"
             app:layout_constraintBottom_toBottomOf="@id/add_goal_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/add_goal_back"
             app:layout_constraintTop_toTopOf="@id/add_goal_back"
+            bind:backingColor="@{@color/color_primary_light}"
+            bind:color="@{@color/color_primary}"
             bind:target="@{4}" />
 
         <androidx.fragment.app.FragmentContainerView
@@ -53,8 +53,8 @@
             android:id="@+id/add_goal_continue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/double_margin"
-            android:layout_marginBottom="@dimen/large_content_margin"
+            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+            android:layout_marginBottom="@dimen/vertical_layout_margin"
             android:enabled="@{viewmodel.canContinue}"
             android:onClick="@{() -> viewmodel.onConfirm()}"
             android:text="@{viewmodel.continueButtonText}"

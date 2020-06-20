@@ -6,8 +6,9 @@ import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.NonNullLiveData
 import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.Goal
-import com.twisthenry8gmail.weeklyphoenix.data.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.data.goals.NewGoal
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigationCommand
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigationCommander
 import kotlinx.coroutines.launch
@@ -204,23 +205,16 @@ class AddGoalViewModel(
         increase.value += type.value.minIncrement
     }
 
-    private fun build(): Goal {
-
-        return Goal(
-            0,
-            type.value,
-            resolveTitle(),
-            0,
-            target,
-            reset,
-            Goal.getResetDateFrom(LocalDate.ofEpochDay(startDate.value), reset),
-            increase.value,
-            false,
-            startDate.value,
-            endDate.value,
-            color.value
-        )
-    }
+    private fun build() = NewGoal(
+        type.value,
+        resolveTitle(),
+        target,
+        reset,
+        increase.value,
+        startDate.value,
+        endDate.value,
+        color.value
+    )
 
     class Factory(
         private val androidResources: Resources,

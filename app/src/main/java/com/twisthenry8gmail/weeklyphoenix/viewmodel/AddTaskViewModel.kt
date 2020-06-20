@@ -6,19 +6,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.twisthenry8gmail.weeklyphoenix.NonNullLiveData
 import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
-import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.Task
-import com.twisthenry8gmail.weeklyphoenix.data.TaskRepository
-import com.twisthenry8gmail.weeklyphoenix.view.add.FragmentAddTask
+import com.twisthenry8gmail.weeklyphoenix.data.tasks.Task
+import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskRepository
+import com.twisthenry8gmail.weeklyphoenix.util.bundles.TaskDateBundle
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
-import java.time.LocalDate
 
 class AddTaskViewModel(private val args: Bundle?, private val tasksRepository: TaskRepository) :
     NavigatorViewModel() {
 
-    val date = args!!.getLong(FragmentAddTask.DATE)
+    val date = TaskDateBundle.extractDate(args)
     var title = ""
         set(value) {
 
@@ -49,7 +47,7 @@ class AddTaskViewModel(private val args: Bundle?, private val tasksRepository: T
 
         viewModelScope.launch {
 
-            tasksRepository.add(Task(0, resolveTitle(), date, false))
+            tasksRepository.add(Task(0, System.currentTimeMillis(), resolveTitle(), date, false))
             navigateBack()
         }
     }

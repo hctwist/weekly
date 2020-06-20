@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_layout_margin"
-            android:layout_marginTop="@dimen/large_content_margin"
+            android:layout_marginTop="@dimen/horizontal_layout_margin"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:onClick="@{() -> viewmodel.onBack()}"
             android:src="@drawable/round_arrow_back_24"
@@ -31,30 +31,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_layout_margin"
-            android:layout_marginTop="@dimen/section_margin"
+            android:layout_marginTop="@dimen/vertical_layout_margin"
             android:text="What is your task?"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_task_back" />
 
         <EditText
+            android:id="@+id/add_task_input"
             style="@style/MainInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
-            android:id="@+id/add_task_input"
             android:layout_marginTop="@dimen/section_margin"
             android:text="@={viewmodel.title}"
             app:layout_constraintTop_toBottomOf="@id/add_task_header" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_goal_continue"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/double_margin"
+            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
             android:layout_marginBottom="@dimen/vertical_layout_margin"
             android:enabled="@{viewmodel.canAdd}"
             android:onClick="@{() -> viewmodel.onAdd()}"
-            android:paddingHorizontal="@dimen/main_button_horizontal_padding"
             android:text="Add task"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

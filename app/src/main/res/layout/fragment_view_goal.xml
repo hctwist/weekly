@@ -3,7 +3,9 @@
 
     <data>
 
-        <import type="com.twisthenry8gmail.weeklyphoenix.view.Transitions" />
+        <import type="com.twisthenry8gmail.weeklyphoenix.R" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.Transitions" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
 
@@ -11,7 +13,7 @@
 
         <variable
             name="viewmodel"
-            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoal2ViewModel" />
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoalViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -86,33 +88,36 @@
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/view_goal_increment"
+                extended="@{!viewmodel.goal.complete}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/horizontal_layout_margin"
-                android:backgroundTint="@color/color_primary"
+                android:backgroundTint="@color/enableable_button_background"
+                android:enabled="@{!viewmodel.goal.complete}"
                 android:onClick="@{() -> viewmodel.onAction()}"
                 android:stateListAnimator="@null"
-                android:text="Add progress"
+                android:text="@string/view_goal_add_progress"
                 android:textAllCaps="false"
                 android:textColor="?android:attr/textColorPrimaryInverse"
                 app:elevation="0dp"
-                app:icon="@{context.getDrawable(viewmodel.goal.type.actionIconRes)}"
-                app:iconTint="?android:attr/textColorPrimaryInverse"
+                app:icon="@{viewmodel.goal.complete ? context.getDrawable(R.drawable.round_done_24) : context.getDrawable(viewmodel.goal.type.actionIconRes)}"
+                app:iconTint="@color/enableable_button_foreground"
                 app:layout_constraintBottom_toBottomOf="@id/view_goal_progress_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/view_goal_progress_text" />
 
             <TextView
+                style="@style/SectionHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin"
-                android:text="TARGET"
+                android:text="@string/view_goal_target"
                 app:layout_constraintBottom_toBottomOf="@id/view_goal_target_text"
                 app:layout_constraintStart_toEndOf="@id/view_goal_target_text"
                 app:layout_constraintTop_toTopOf="@id/view_goal_target_text" />
 
 
-            <com.twisthenry8gmail.weeklyphoenix.view.views.GoalProgressView2
+            <com.twisthenry8gmail.weeklyphoenix.view.goals.GoalProgressView
                 android:id="@+id/view_goal_progress"
                 goal="@{viewmodel.goal}"
                 useLightGoalColor="@{false}"
@@ -188,15 +193,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/view_goal_end_label" />
 
-            <View
-                android:id="@+id/view_goal_periodic_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
-                android:background="@color/off_white"
-                app:layout_constraintBottom_toTopOf="@id/view_goal_periodic_label"
-                app:layout_constraintTop_toBottomOf="@id/view_goal_end_label" />
-
             <TextView
                 android:id="@+id/view_goal_periodic_label"
                 android:layout_width="wrap_content"
@@ -238,22 +234,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids="
-                view_goal_periodic_divider,
                 view_goal_periodic_label,
                 view_goal_periodic,
                 view_goal_periodic_pause" />
 
-            <View
-                android:id="@+id/view_goal_history_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
-                android:background="@color/off_white"
-                app:layout_constraintBottom_toTopOf="@id/view_goal_history_label"
-                app:layout_constraintTop_toBottomOf="@id/view_goal_periodic_label" />
-
             <TextView
                 android:id="@+id/view_goal_history_label"
+                style="@style/SectionHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
@@ -276,7 +263,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids="
-                view_goal_history_divider,
                 view_goal_history_label,
                 view_goal_history" />
 

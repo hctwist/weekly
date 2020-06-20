@@ -1,11 +1,9 @@
 package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.twisthenry8gmail.weeklyphoenix.MainRepository
-import com.twisthenry8gmail.weeklyphoenix.NonNullLiveData
+import com.twisthenry8gmail.weeklyphoenix.data.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
 

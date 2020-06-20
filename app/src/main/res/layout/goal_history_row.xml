@@ -7,11 +7,11 @@
 
         <variable
             name="goal"
-            type="com.twisthenry8gmail.weeklyphoenix.data.Goal" />
+            type="com.twisthenry8gmail.weeklyphoenix.data.goals.Goal" />
 
         <variable
             name="goalhistory"
-            type="com.twisthenry8gmail.weeklyphoenix.data.GoalHistory" />
+            type="com.twisthenry8gmail.weeklyphoenix.data.goals.GoalHistory" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

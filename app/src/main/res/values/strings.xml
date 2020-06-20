@@ -6,7 +6,7 @@
     <string name="time_pattern">%1$s:%2$s</string>
     <string name="percentage_pattern">%1$s%%</string>
 
-    <!-- Goal properties -->
+    <!-- Goals -->
     <string name="goal_type_counted">Counted</string>
     <string name="goal_type_timed">Timed</string>
     <string name="goal_type_counted_description">A basic goal in which you keep track of how many times you want to complete your task.</string>
@@ -17,17 +17,15 @@
     <string name="goal_end_date">End date</string>
     <string name="goal_resets">Resets</string>
     <string name="goal_reset_date">Reset date</string>
+    <string name="goal_no_end">-</string>
 
-    <!-- Frequencies -->
+    <!-- Goal resets -->
     <string name="goal_frequency_never">Never</string>
     <string name="goal_frequency_daily">Daily</string>
     <string name="goal_frequency_weekly">Weekly</string>
     <string name="goal_frequency_fortnight">Fortnightly</string>
     <string name="goal_frequency_monthly">Monthly</string>
     <string name="goal_frequency_yearly">Yearly</string>
-
-    <!-- Goals -->
-    <string name="goal_no_end">-</string>
 
     <!-- Goal subtitle patterns -->
     <string name="goal_subtitle_pattern_left">Only %1$s to go.</string>
@@ -38,6 +36,13 @@
     <string name="goal_scheduled">This goal is scheduled for %1$s</string>
     <string name="goals_empty">You currently do not have any goals.</string>
     <string name="goals_empty_add">Add a goal</string>
+    <string name="main_tasks_none">No tasks</string>
+    <string name="main_tasks_done">All done</string>
+
+    <!-- Layouts -->
+    <string name="main_layout_default">Default</string>
+    <string name="main_layout_tasks">Tasks</string>
+    <string name="main_layout_goals">Goals</string>
 
     <!-- Add goal -->
     <string name="add_goal_title">Add goal</string>
@@ -58,9 +63,14 @@
     <string name="goal_timing_stop">Stop timing</string>
     <string name="goal_timing_done">Done</string>
 
-    <!-- Goal view -->
+    <!-- View goal -->
+    <string name="view_goal_add_progress">Add progress</string>
+    <string name="view_goal_target">Target</string>
     <string name="goal_view_progress">%1$s/%2$s</string>
     <string name="goal_delete">Delete goal</string>
     <string name="goal_next_reset">Next resets</string>
     <string name="goal_history">History </string>
+
+    <!-- Overdue tasks -->
+    <string name="overdue_tasks_title">Overdue</string>
 </resources>

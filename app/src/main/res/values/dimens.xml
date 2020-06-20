@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- TODO Naming mess, sort after removing all old files -->
+
+    <!-- Main -->
     <dimen name="half_margin">8dp</dimen>
     <dimen name="margin">16dp</dimen>
     <dimen name="double_margin">32dp</dimen>
@@ -11,16 +14,15 @@
     <dimen name="section_margin">42dp</dimen>
     <dimen name="large_section_margin">64dp</dimen>
 
-    <dimen name="main_button_horizontal_padding">32dp</dimen>
+    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="stroke_width">2dp</dimen>
+    <dimen name="default_elevation">8dp</dimen>
 
     <dimen name="main_input_size">18sp</dimen>
 
     <!-- TODO Deprecated -->
     <dimen name="large_content_margin">48dp</dimen>
     <dimen name="extra_large_content_margin">96dp</dimen>
-
-    <dimen name="corner_radius">6dp</dimen>
-    <dimen name="stroke_width">2dp</dimen>
 
     <dimen name="goal_corner_radius">12dp</dimen>
     <dimen name="goal_progress_stroke">4dp</dimen>
@@ -35,6 +37,12 @@
     <dimen name="goal_title">18sp</dimen>
     <dimen name="goal_progress">64dp</dimen>
     <dimen name="goal_card_size">196dp</dimen>
+
+    <!-- Tasks -->
+    <dimen name="task_day_circle">72dp</dimen>
+
+    <!-- Main -->
+    <dimen name="main_layout_popup_icon_size">96dp</dimen>
 
     <!-- Add goal -->
     <dimen name="add_goal_color_dot_size">48dp</dimen>
@@ -55,7 +63,14 @@
     <dimen name="goal_progress_thumb_radius">12dp</dimen>
     <dimen name="goal_progress_thumb_offset">16dp</dimen>
 
+    <!-- Task row view -->
+    <dimen name="task_row_view_dash_size">16dp</dimen>
+    <dimen name="task_row_view_text_padding">24dp</dimen>
+    <dimen name="task_row_view_tick_size">20dp</dimen>
+    <dimen name="task_row_view_dash_stroke_width">2dp</dimen>
+    <dimen name="task_row_checked_threshold">148dp</dimen>
+    <dimen name="task_row_max_translate_x">64dp</dimen>
+
     <!-- View task day -->
-    <dimen name="view_task_day_circle">24dp</dimen>
     <dimen name="view_task_day_text">18sp</dimen>
 </resources>

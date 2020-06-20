@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.twisthenry8gmail.weeklyphoenix.Event
-import com.twisthenry8gmail.weeklyphoenix.MainRepository
+import com.twisthenry8gmail.weeklyphoenix.data.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.OnboardingViewModel
 import kotlinx.android.synthetic.main.fragment_onboarding.*
@@ -19,7 +19,11 @@ class FragmentOnboarding : Fragment(R.layout.fragment_onboarding) {
     private val viewModel by viewModels<OnboardingViewModel>(
         factoryProducer = {
             OnboardingViewModel.Factory(
-                MainRepository((requireActivity().getPreferences(Context.MODE_PRIVATE)))
+                MainRepository(
+                    (requireActivity().getPreferences(
+                        Context.MODE_PRIVATE
+                    ))
+                )
             )
         })
 

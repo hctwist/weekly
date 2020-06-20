@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DataBinding" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.viewmodel.MainTasksViewModel" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.TaskDisplayUtil" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.R" />
+
+        <variable
+            name="loading"
+            type="boolean" />
+
+        <variable
+            name="tasksnapshot"
+            type="com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot" />
+
+        <variable
+            name="clickhandler"
+            type="com.twisthenry8gmail.weeklyphoenix.view.main.TaskSnapshotAdapter.ClickHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/task_snapshot_card_day"
+            goneUnless="@{!loading}"
+            textColorAttr="@{tasksnapshot.today ? R.color.color_primary : android.R.attr.textColorPrimary}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="3"
+            android:fontFamily="sans-serif-medium"
+            android:text="@{DateTimeUtil.INSTANCE.displayShortDay(tasksnapshot.date)}"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/task_snapshot_card_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/task_snapshot_card_date"
+            goneUnless="@{!loading}"
+            textColorAttr="@{tasksnapshot.today ? R.color.color_primary : android.R.attr.textColorPrimary}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@{DateTimeUtil.INSTANCE.displayDayOfMonth(tasksnapshot.date)}"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/task_snapshot_card_day"
+            app:layout_constraintStart_toStartOf="@id/task_snapshot_card_day"
+            app:layout_constraintTop_toBottomOf="@id/task_snapshot_card_day" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/task_snapshot_card_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin"
+            android:onClick="@{() -> clickhandler.onCardClick(tasksnapshot)}"
+            app:cardBackgroundColor="@{loading ? @color/off_white : TaskDisplayUtil.INSTANCE.getCardBackgroundColor(context, tasksnapshot)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/task_snapshot_card_day"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/task_snapshot_card_placeholder"
+                    goneUnless="@{tasksnapshot.incompleteTasks.empty}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:text="@string/main_tasks_none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/task_snapshot_card_tasks"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:text="@{TaskDisplayUtil.INSTANCE.displayTasks(tasksnapshot.incompleteTasks, MainTasksViewModel.MAX_TASKS_DISPLAY)}"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/task_snapshot_card_add"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/task_snapshot_card_add"
+                    goneUnless="@{DataBinding.INSTANCE.and(!loading ,!tasksnapshot.inThePast())}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{() -> clickhandler.onAdd(tasksnapshot)}"
+                    android:padding="@dimen/margin"
+                    android:src="@drawable/round_add_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
