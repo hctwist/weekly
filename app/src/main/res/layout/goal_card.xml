@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.ColorUtil" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.R" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.Transitions" />
 
         <variable
             name="loading"
             type="boolean" />
 
         <variable
-            name="goal"
-            type="com.twisthenry8gmail.weeklyphoenix.data.goals.Goal" />
+            name="goalsnapshot"
+            type="com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot" />
 
         <variable
             name="listener"
@@ -23,13 +27,12 @@
     <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/goal_card"
-        style="@style/GoalCard"
         android:layout_width="@dimen/goal_card_size"
         android:layout_height="@dimen/goal_card_size"
-        android:background="@color/red"
         android:clickable="@{!loading}"
-        android:onClick="@{() -> listener.onGoalClick(goal)}"
-        app:cardBackgroundColor="@{loading ? @color/light_grey : goal.color}">
+        android:onClick="@{(view) -> listener.onGoalClick(goalsnapshot, view)}"
+        android:transitionName="@{Transitions.Names.INSTANCE.goalCard(goalsnapshot.id)}"
+        app:cardBackgroundColor="@{loading ? @color/light_grey : ColorUtil.INSTANCE.lightenColor(goalsnapshot.color)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/goal_card_root"
@@ -46,8 +49,8 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-medium"
                 android:lines="1"
-                android:text="@{goal.title}"
-                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:text="@{goalsnapshot.title}"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +58,9 @@
 
             <com.twisthenry8gmail.weeklyphoenix.view.goals.GoalProgressView
                 android:id="@+id/goal_card_progress"
-                goal="@{goal}"
+                goalId="@{goalsnapshot.id}"
+                goalProgress="@{goalsnapshot.progress}"
+                goalTarget="@{goalsnapshot.target}"
                 goneUnless="@{!loading}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -64,7 +69,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/goal_card_title" />
+                app:layout_constraintTop_toBottomOf="@id/goal_card_title"
+                bind:lineColor="@{goalsnapshot.color}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

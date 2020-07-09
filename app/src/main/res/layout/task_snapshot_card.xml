@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.Transitions" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.util.DataBinding" />
 
@@ -18,12 +21,16 @@
             type="boolean" />
 
         <variable
+            name="maxdisplay"
+            type="int" />
+
+        <variable
             name="tasksnapshot"
             type="com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot" />
 
         <variable
             name="clickhandler"
-            type="com.twisthenry8gmail.weeklyphoenix.view.main.TaskSnapshotAdapter.ClickHandler" />
+            type="com.twisthenry8gmail.weeklyphoenix.view.tasks.TaskSnapshotAdapter.ClickHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,15 +38,21 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/task_snapshot_card_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/task_snapshot_card_day"
             goneUnless="@{!loading}"
             textColorAttr="@{tasksnapshot.today ? R.color.color_primary : android.R.attr.textColorPrimary}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="3"
             android:fontFamily="sans-serif-medium"
             android:text="@{DateTimeUtil.INSTANCE.displayShortDay(tasksnapshot.date)}"
-            android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@id/task_snapshot_card_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,15 +60,14 @@
 
         <TextView
             android:id="@+id/task_snapshot_card_date"
-            goneUnless="@{!loading}"
+            invisibleUnless="@{!loading}"
             textColorAttr="@{tasksnapshot.today ? R.color.color_primary : android.R.attr.textColorPrimary}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:text="@{DateTimeUtil.INSTANCE.displayDayOfMonth(tasksnapshot.date)}"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@id/task_snapshot_card_day"
-            app:layout_constraintStart_toStartOf="@id/task_snapshot_card_day"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/task_snapshot_card_day" />
 
         <com.google.android.material.card.MaterialCardView
@@ -63,11 +75,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
-            android:onClick="@{() -> clickhandler.onCardClick(tasksnapshot)}"
+            android:onClick="@{(view) -> clickhandler.onCardClick(tasksnapshot, view)}"
+            android:transitionName="@{Transitions.Names.INSTANCE.taskCard(tasksnapshot.date)}"
             app:cardBackgroundColor="@{loading ? @color/off_white : TaskDisplayUtil.INSTANCE.getCardBackgroundColor(context, tasksnapshot)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/task_snapshot_card_day"
+            app:layout_constraintStart_toEndOf="@id/task_snapshot_card_placeholder"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,8 +88,8 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/task_snapshot_card_placeholder"
-                    goneUnless="@{tasksnapshot.incompleteTasks.empty}"
+                    android:id="@+id/task_snapshot_card_empty"
+                    invisibleUnless="@{tasksnapshot.incompleteTasks.empty}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin"
@@ -85,26 +98,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <com.twisthenry8gmail.weeklyphoenix.view.LinedTextView
                     android:id="@+id/task_snapshot_card_tasks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin"
-                    android:text="@{TaskDisplayUtil.INSTANCE.displayTasks(tasksnapshot.incompleteTasks, MainTasksViewModel.MAX_TASKS_DISPLAY)}"
-                    android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/task_snapshot_card_add"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lineTextAppearance="@style/TaskRowLine"
+                    bind:lines="@{TaskDisplayUtil.INSTANCE.getTaskLines(tasksnapshot.incompleteTasks, maxdisplay)}" />
 
                 <ImageButton
                     android:id="@+id/task_snapshot_card_add"
                     goneUnless="@{DataBinding.INSTANCE.and(!loading ,!tasksnapshot.inThePast())}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/task_snapshot_min_height"
+                    android:layout_height="@dimen/task_snapshot_min_height"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:onClick="@{() -> clickhandler.onAdd(tasksnapshot)}"
-                    android:padding="@dimen/margin"
                     android:src="@drawable/round_add_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

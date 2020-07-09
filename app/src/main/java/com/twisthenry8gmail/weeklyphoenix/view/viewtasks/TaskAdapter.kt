@@ -39,7 +39,6 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.VH>() {
 
                         val task = tasks[position]
 
-                        // TODO Can this be done in goal adapter somehow? It is great!
                         holder.binding.taskRowView.animateChecked(task.complete)
                         holder.bind(task, clickHandler)
                     }

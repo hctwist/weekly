@@ -2,8 +2,8 @@
 <resources>
 
     <color name="color_primary">#7A90DF</color>
-    <color name="color_primary_light">#EAEEFA</color>
-    <color name="color_accent">#A0CFD3</color>
+    <color name="color_primary_light">#247A90DE</color>
+    <color name="color_accent">#333333</color>
 
     <color name="red">#D5573B</color>
 

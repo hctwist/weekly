@@ -13,4 +13,9 @@
         <attr name="goalTypeTitle" format="string" />
         <attr name="goalTypeIcon" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="LinedTextView">
+
+        <attr name="lineTextAppearance" format="reference" />
+    </declare-styleable>
 </resources>

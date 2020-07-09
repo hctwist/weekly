@@ -1,5 +1,7 @@
 package com.twisthenry8gmail.weeklyphoenix
 
+import android.view.animation.PathInterpolator
+import androidx.core.view.animation.PathInterpolatorCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,15 +24,17 @@ abstract class DiffLiveData<TI, TO>(
             processingJob?.cancel()
             processingJob = processingScope.launch(Dispatchers.Default) {
 
-                // TODO Do I need to check isActive after every line to support cancellation?
-
                 val oldData = oldDataCache
                 val mappedNewData = map(newData)
+
+                ensureActive()
 
                 val diff = if (oldData != null) {
 
                     DiffUtil.calculateDiff(getCallback(oldData, mappedNewData))
                 } else null
+
+                ensureActive()
 
                 oldDataCache = mappedNewData
                 postValue(DiffData(mappedNewData, diff))

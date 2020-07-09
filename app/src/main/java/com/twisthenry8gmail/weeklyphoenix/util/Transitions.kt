@@ -7,6 +7,8 @@ import com.twisthenry8gmail.weeklyphoenix.R
 
 object Transitions {
 
+    const val CONTAINER_COLOR = "container_color"
+
     fun initialiseEnterTransition(context: Context, transition: Transition): Transition {
 
         transition.duration =
@@ -25,9 +27,16 @@ object Transitions {
         return transition
     }
 
-    object ViewGoal {
 
-        const val TRANSITION_NAME_TITLE = "title"
-        const val TRANSITION_NAME_PROGRESS = "progress"
+    object Names {
+
+        const val VIEW_GOAL_TITLE = "title"
+        const val VIEW_GOAL_PROGRESS = "progress"
+
+        const val VIEW_OVERDUE_TASKS_CONTAINER = "overdue_container"
+
+        fun goalCard(goalId: Int) = "goal_card$goalId"
+
+        fun taskCard(taskSnapshotDate: Long) = "task_card$taskSnapshotDate"
     }
 }

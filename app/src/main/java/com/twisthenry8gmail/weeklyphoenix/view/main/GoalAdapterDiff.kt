@@ -2,10 +2,11 @@ package com.twisthenry8gmail.weeklyphoenix.view.main
 
 import androidx.recyclerview.widget.DiffUtil
 import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot
 
 class GoalAdapterDiff(
-    private val oldItems: List<Goal?>,
-    private val newItems: List<Goal?>
+    private val oldItems: List<GoalSnapshot?>,
+    private val newItems: List<GoalSnapshot?>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {

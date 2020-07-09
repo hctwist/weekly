@@ -16,8 +16,6 @@
 
         <com.twisthenry8gmail.progresscircles.ProgressCircleView
             android:id="@+id/goal_success_progress"
-            bindProgress="@{!viewmodel.shouldAnimateViews}"
-            goal="@{viewmodel.goal}"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

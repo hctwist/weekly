@@ -5,9 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
+import androidx.databinding.*
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.twisthenry8gmail.dragline.DraglineView
 import com.twisthenry8gmail.progresscircles.ProgressView
@@ -15,33 +13,10 @@ import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalHistory
 import com.twisthenry8gmail.weeklyphoenix.view.goals.GoalProgressView
 
+@InverseBindingMethods(value = [InverseBindingMethod(type = DraglineView::class, attribute = "value", method = "getValue")])
 object DataBinding {
 
-    fun and(b1: Boolean, b2: Boolean) = b1 && b2
-
-    // TODO Mess
-
-    // TODO Better solution?
-    @BindingAdapter("textColorAttr")
-    @JvmStatic
-    fun setTextColorAttr(textView: TextView, colorAttr: Int) {
-
-        val context = textView.context
-
-        try {
-
-            textView.setTextColor(context.getColor(colorAttr))
-            return
-        } catch (e: Resources.NotFoundException) {
-
-            val typedValue = TypedValue()
-            context.theme.resolveAttribute(colorAttr, typedValue, true)
-
-            val colorRes =
-                if (typedValue.resourceId == 0) typedValue.data else typedValue.resourceId
-            textView.setTextColor(context.getColor(colorRes))
-        }
-    }
+    fun and(vararg booleans: Boolean) = booleans.all { it }
 
     @BindingAdapter("goneUnless")
     @JvmStatic
@@ -57,69 +32,25 @@ object DataBinding {
         view.visibility = if (bool) View.VISIBLE else View.INVISIBLE
     }
 
-    @BindingAdapter("progress")
+    @BindingAdapter("textColorAttr")
     @JvmStatic
-    fun setProgress(progressView: ProgressView, progress: Long) {
+    fun setTextColorAttr(textView: TextView, colorAttr: Int) {
 
-        progressView.setProgress(progress, false)
-    }
+        val context = textView.context
 
-    @BindingAdapter("goal", "bindProgress", requireAll = false)
-    @JvmStatic
-    fun bindGoalToProgressView(
-        progressView: ProgressView,
-        goal: Goal?,
-        bindProgress: Boolean?
-    ) {
+        try {
 
-        goal?.let {
+            textView.setTextColor(context.getColor(colorAttr))
+            return
+        } catch (e: Resources.NotFoundException) {
 
-            progressView.run {
-
-                target = it.target
-                setColor(it.color)
-                setBackingColor(ColorUtil.lightenGoalColor(it.color))
-                if (bindProgress != false) setProgress(it.progress)
-            }
+            textView.setTextColor(ColorUtil.resolveColorAttribute(context, colorAttr))
         }
     }
 
-    @BindingAdapter("goal", "goalHistory")
-    @JvmStatic
-    fun bindGoalToProgressView(
-        progressView: ProgressView,
-        goal: Goal,
-        goalHistory: GoalHistory
-    ) {
-
-        progressView.run {
-
-            target = goalHistory.target
-            setColor(goal.color)
-            setBackingColor(ColorUtil.lightenGoalColor(goal.color))
-            setProgress(goalHistory.progress)
-        }
-    }
-
-    interface DraglineTextFactory {
-
-        fun generateTextFor(value: Long): String
-    }
-
-    @BindingAdapter("draglineTextFactory")
-    @JvmStatic
-    fun setDraglineTextFactory(draglineView: DraglineView, textFactory: DraglineTextFactory) {
-
-        draglineView.textFactory = {
-
-            textFactory.generateTextFor(it)
-        }
-    }
-
-    // TODO Sort out, why do I need some of these?! - STACK
     @BindingAdapter("valueAttrChanged")
     @JvmStatic
-    fun setDraglineListener(draglineView: DraglineView, listener: InverseBindingListener) {
+    fun setDraglineViewListener(draglineView: DraglineView, listener: InverseBindingListener) {
 
         draglineView.valueChangedListener = {
 
@@ -127,35 +58,22 @@ object DataBinding {
         }
     }
 
-    @InverseBindingAdapter(attribute = "value")
+    // TODO Improve this? Maybe the view needs to be refactored?
+    @BindingAdapter("goalId", "goalProgress", "goalTarget")
     @JvmStatic
-    fun getValueTest(draglineView: DraglineView): Long {
-
-        return draglineView.value
-    }
-
-    // TODO Rename this goal progress view? Graph view?
-    @BindingAdapter("goal", "useLightGoalColor", requireAll = false)
-    @JvmStatic
-    fun bindGoalToProgressView(
+    fun bindGoalProgressView(
         goalProgressView: GoalProgressView,
-        goal: Goal?,
-        useLightGoalColor: Boolean?
+        goalId: Int,
+        goalProgress: Long,
+        goalTarget: Long
     ) {
 
-        goal?.let { g ->
+        if (!goalProgressView.hasBeenInitialised()) {
 
-            if (!goalProgressView.hasBeenInitialised()) {
+            goalProgressView.initialise(goalId, goalProgress, goalTarget)
+        } else {
 
-                if (useLightGoalColor == null) {
-                    goalProgressView.initialise(g)
-                } else {
-                    goalProgressView.initialise(g, useLightGoalColor)
-                }
-            } else {
-
-                goalProgressView.updateProgress(g.progress, g.target, true)
-            }
+            goalProgressView.updateProgress(goalProgress, goalTarget, true)
         }
     }
 

@@ -23,7 +23,7 @@
 
             <TextView
                 android:id="@+id/add_goal_done_text"
-                style="@style/Display"
+                style="@style/Display.Medium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
@@ -136,6 +136,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_goal_done_color"
+                style="@style/OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/half_margin"
@@ -143,6 +144,7 @@
                 android:minWidth="@dimen/add_goal_more_button_min"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_goal_done_increase"
+                app:strokeWidth="0dp"
                 bind:backgroundColor="@{viewmodel.color}" />
 
             <TextView

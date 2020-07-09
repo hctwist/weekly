@@ -9,14 +9,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.MaterialContainerTransform
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.Task
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentOverdueTasksBinding
+import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
+import com.twisthenry8gmail.weeklyphoenix.util.Transitions
 import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.OverdueTasksViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_overdue_tasks.*
 
 class FragmentOverdueTasks : Fragment() {
 
@@ -25,7 +27,21 @@ class FragmentOverdueTasks : Fragment() {
         OverdueTasksViewModel.Factory(weeklyApplication().taskRepository)
     }
 
+    private lateinit var binding: FragmentOverdueTasksBinding
+
     private val taskAdapter = TaskAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+
+            arguments?.getInt(Transitions.CONTAINER_COLOR)?.let { startContainerColor = it }
+            endContainerColor =
+                ColorUtil.resolveColorAttribute(requireContext(), android.R.attr.colorBackground)
+        }
+        sharedElementReturnTransition = null
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,8 +49,9 @@ class FragmentOverdueTasks : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentOverdueTasksBinding.inflate(inflater, container, false)
+        binding = FragmentOverdueTasksBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
+        binding.executePendingBindings()
 
         return binding.root
     }
@@ -45,7 +62,7 @@ class FragmentOverdueTasks : Fragment() {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            it.navigateFrom(findNavController())
         })
 
         viewModel.overdueDiffData.observe(viewLifecycleOwner, Observer {
@@ -69,7 +86,7 @@ class FragmentOverdueTasks : Fragment() {
 
     private fun setupList() {
 
-        overdue_tasks_tasks.run {
+        binding.overdueTasksTasks.run {
 
             layoutManager = LinearLayoutManager(context)
             adapter = taskAdapter

@@ -1,5 +1,10 @@
 <resources>
 
+    <style name="AppTheme.Splash">
+
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <item name="colorPrimary">@color/color_primary</item>
@@ -9,12 +14,25 @@
         <item name="android:statusBarColor">?android:colorBackground</item>
         <item name="android:navigationBarColor">?android:colorBackground</item>
 
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearanceSmall</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearanceMedium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceLarge</item>
+
         <item name="materialButtonStyle">@style/MaterialButtonStyle</item>
         <item name="chipStyle">@style/ChipStyle</item>
         <item name="progressCircleStyle">@style/ProgressCircleStyle</item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceLarge</item>
         <item name="goalTypeStyle">@style/GoalTypeView</item>
         <item name="materialCardViewStyle">@style/MaterialCardView</item>
+    </style>
+
+    <style name="ShapeAppearanceSmall" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+
+        <item name="cornerSize">@dimen/corner_radius</item>
+    </style>
+
+    <style name="ShapeAppearanceMedium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+
+        <item name="cornerSize">@dimen/corner_radius</item>
     </style>
 
     <style name="ShapeAppearanceLarge" parent="ShapeAppearance.MaterialComponents.LargeComponent">
@@ -30,6 +48,7 @@
 
     <style name="DropdownButton" parent="MaterialButtonStyle">
 
+        <item name="android:stateListAnimator">@null</item>
         <item name="backgroundTint">@android:color/transparent</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="iconTint">?android:attr/textColorPrimary</item>
@@ -37,17 +56,9 @@
         <item name="iconGravity">end</item>
     </style>
 
-    <style name="GoalCard" parent="Widget.MaterialComponents.CardView">
-
-        <item name="cardBackgroundColor">@color/off_white</item>
-        <item name="cardCornerRadius">@dimen/corner_radius</item>
-        <item name="cardElevation">0dp</item>
-    </style>
-
     <style name="GoalCardAdd" parent="Widget.MaterialComponents.CardView">
 
         <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">@dimen/corner_radius</item>
         <item name="strokeWidth">@dimen/stroke_width</item>
         <item name="strokeColor">@color/light_grey</item>
     </style>
@@ -55,15 +66,13 @@
     <style name="MaterialCardView" parent="Widget.MaterialComponents.CardView">
 
         <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">@dimen/corner_radius</item>
     </style>
 
     <style name="OutlinedCardView" parent="MaterialCardView">
 
-        <item name="cardElevation">0dp</item>
         <item name="strokeColor">@color/checkable_stroke</item>
         <item name="strokeWidth">@dimen/stroke_width</item>
-        <item name="cardBackgroundColor">@color/checkable_background</item>
+        <item name="cardForegroundColor">@android:color/transparent</item>
         <item name="checkedIconTint">@color/color_primary</item>
     </style>
 
@@ -74,11 +83,10 @@
 
     <style name="MainInput" parent="Widget.AppCompat.EditText">
 
-        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="android:background">@null</item>
         <item name="android:importantForAutofill">no</item>
         <item name="android:inputType">textCapSentences</item>
         <item name="android:textSize">@dimen/main_input_size</item>
-        <item name="android:padding">16dp</item>
     </style>
 
     <style name="GoalTypeView" parent="OutlinedCardView">
@@ -90,30 +98,63 @@
 
     <style name="Display">
 
-        <item name="android:textSize">@dimen/display_text</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="Header">
+    <style name="Display.Small">
 
-        <item name="android:textSize">@dimen/header_text</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Display.Medium">
+
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="Display.Large">
+
+        <item name="android:textSize">32sp</item>
     </style>
 
     <style name="SectionHeader">
 
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textAllCaps">true</item>
         <item name="fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
 
-        <item name="android:elevation">0dp</item>
-        <item name="cornerRadius">@dimen/corner_radius</item>
+        <item name="iconSize">@dimen/small_component_icon</item>
+        <item name="iconGravity">end</item>
+        <item name="iconPadding">16dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="backgroundTint">@color/enableable_button_background</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:paddingVertical">8dp</item>
+    </style>
+
+    <style name="RoundedMaterialButton" parent="MaterialButtonStyle">
+
+        <item name="shapeAppearanceOverlay">@style/RoundedMaterialButtonShapeOverlay</item>
+    </style>
+
+    <style name="RoundedMaterialButtonShapeOverlay">
+
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="InputButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+
+        <item name="android:minWidth">128dp</item>
+        <item name="shapeAppearanceOverlay">@style/InputButtonShape</item>
+    </style>
+
+    <style name="InputButtonShape">
+
+        <item name="cornerSize">16dp</item> <!-- TODO Percentage not working -->
     </style>
 
     <style name="ContinueButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
@@ -124,20 +165,22 @@
 
     <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
 
+        <item name="chipBackgroundColor">@android:color/transparent</item>
         <item name="chipStrokeWidth">@dimen/stroke_width</item>
         <item name="chipStrokeColor">@color/checkable_stroke</item>
-        <item name="chipBackgroundColor">@color/checkable_background</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="chipStartPadding">8dp</item>
         <item name="chipEndPadding">8dp</item>
-        <item name="chipCornerRadius">@dimen/corner_radius</item>
         <item name="android:stateListAnimator">@null</item>
+        <item name="checkedIconEnabled">true</item>
+        <item name="checkedIconVisible">true</item>
+        <item name="chipIconSize">@dimen/small_component_icon</item>
+        <item name="iconEndPadding">8dp</item>
     </style>
 
     <style name="AddGoalChip" parent="Widget.MaterialComponents.Chip.Action">
 
         <item name="chipBackgroundColor">@color/off_white</item>
-        <item name="chipCornerRadius">@dimen/corner_radius</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:clickable">false</item>
     </style>
@@ -148,7 +191,6 @@
         <item name="iconTint">?android:attr/colorControlNormal</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="cornerRadius">@dimen/corner_radius</item>
         <item name="fontFamily">sans-serif</item>
         <item name="icon">@drawable/round_arrow_back_24</item>
         <item name="android:ellipsize">end</item>
@@ -169,5 +211,10 @@
         <item name="iconTint">?android:attr/textColorPrimaryInverse</item>
         <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
         <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="TaskRowLine">
+
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 </resources>

@@ -6,19 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.ChangeBounds
+import com.google.android.material.transition.MaterialContainerTransform
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewGoalBinding
-import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
+import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import com.twisthenry8gmail.weeklyphoenix.util.Transitions
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_view_goal.*
 
 class FragmentViewGoal : Fragment() {
 
@@ -33,13 +29,15 @@ class FragmentViewGoal : Fragment() {
 
     private lateinit var binding: FragmentViewGoalBinding
 
-    private val historyAdapter = GoalHistoryAdapter()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedElementEnterTransition =
-            Transitions.initialiseExitTransition(requireContext(), ChangeBounds())
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+
+            arguments?.getInt(Transitions.CONTAINER_COLOR)?.let { startContainerColor = it }
+            endContainerColor =
+                ColorUtil.resolveColorAttribute(requireContext(), android.R.attr.colorBackground)
+        }
     }
 
     override fun onCreateView(
@@ -61,38 +59,23 @@ class FragmentViewGoal : Fragment() {
 
             if (it.getId() == R.id.action_fragmentViewGoal_to_fragmentGoalTimer) {
 
-                it.setNavigatorExtras(
-                    FragmentNavigatorExtras(
-
-                        view_goal_title to Transitions.ViewGoal.TRANSITION_NAME_TITLE,
-                        view_goal_progress_text to Transitions.ViewGoal.TRANSITION_NAME_PROGRESS
-                    )
-                )
+                // TODO
+//                it.setNavigatorExtras(
+//                    FragmentNavigatorExtras(
+//
+//                        view_goal_title to Transitions.Names.VIEW_GOAL_TITLE,
+//                        view_goal_progress_text to Transitions.Names.VIEW_GOAL_PROGRESS
+//                    )
+//                )
             }
-            it.navigateWith(findNavController())
+            it.navigateFrom(findNavController())
         })
 
-        viewModel.goal.observe(viewLifecycleOwner, Observer {
+        viewModel.showingInfo.observe(viewLifecycleOwner, Event.Observer {
 
-            historyAdapter.goal = it
+            if (it) FragmentViewGoalInfo().show(childFragmentManager, null)
         })
-
-        viewModel.histories.observe(viewLifecycleOwner, Observer {
-
-            historyAdapter.histories = it
-            historyAdapter.notifyDataSetChanged()
-        })
-
-        setupHistoryList()
     }
 
-    private fun setupHistoryList() {
 
-        with(view_goal_history) {
-
-            layoutManager = LinearLayoutManager(context)
-            addItemDecoration(LinearMarginItemDecoration(resources.getDimension(R.dimen.margin)))
-            adapter = historyAdapter
-        }
-    }
 }

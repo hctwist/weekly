@@ -14,7 +14,6 @@ import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalBinding
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_add_goal.*
 
 class FragmentAddGoal : Fragment() {
 
@@ -22,6 +21,8 @@ class FragmentAddGoal : Fragment() {
 
         AddGoalViewModel.Factory(resources, weeklyApplication().goalRepository)
     }
+
+    private lateinit var binding: FragmentAddGoalBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +39,7 @@ class FragmentAddGoal : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentAddGoalBinding.inflate(inflater, container, false)
+        binding = FragmentAddGoalBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -49,12 +50,12 @@ class FragmentAddGoal : Fragment() {
 
         viewModel.parentNavigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            it.navigateFrom(findNavController())
         })
 
         viewModel.childNavigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(add_goal_container.findNavController())
+            it.navigateFrom(binding.addGoalContainer.findNavController())
         })
     }
 

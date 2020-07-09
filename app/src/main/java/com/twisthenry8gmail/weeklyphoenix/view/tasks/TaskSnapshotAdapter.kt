@@ -1,12 +1,14 @@
-package com.twisthenry8gmail.weeklyphoenix.view.main
+package com.twisthenry8gmail.weeklyphoenix.view.tasks
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot
 import com.twisthenry8gmail.weeklyphoenix.databinding.TaskSnapshotCardBinding
 
-class TaskSnapshotAdapter : RecyclerView.Adapter<TaskSnapshotViewHolder>() {
+class TaskSnapshotAdapter(private val maxDisplay: Int) :
+    RecyclerView.Adapter<TaskSnapshotViewHolder>() {
 
     var taskSnapshots = listOf<TaskSnapshot>()
     lateinit var clickHandler: ClickHandler
@@ -27,12 +29,12 @@ class TaskSnapshotAdapter : RecyclerView.Adapter<TaskSnapshotViewHolder>() {
 
     override fun onBindViewHolder(holder: TaskSnapshotViewHolder, position: Int) {
 
-        holder.bind(taskSnapshots[position], clickHandler)
+        holder.bind(taskSnapshots[position], clickHandler, maxDisplay)
     }
 
     interface ClickHandler {
 
-        fun onCardClick(taskSnapshot: TaskSnapshot)
+        fun onCardClick(taskSnapshot: TaskSnapshot, view: View)
 
         fun onAdd(taskSnapshot: TaskSnapshot)
     }

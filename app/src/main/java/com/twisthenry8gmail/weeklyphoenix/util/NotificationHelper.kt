@@ -1,23 +1,18 @@
 package com.twisthenry8gmail.weeklyphoenix.util
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import com.twisthenry8gmail.weeklyphoenix.services.GoalTimerReceiver
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.view.ActivityMain
 
 object NotificationHelper {
 
     private const val GOAL_TIMER_CHANNEL_ID = "timer_channel"
-    private const val TIMED_GOAL_NOTIFICATION_ID = 0
+    const val TIMED_GOAL_NOTIFICATION_ID = 1
 
     fun createChannels(context: Context) {
 
@@ -31,7 +26,7 @@ object NotificationHelper {
         context.getSystemService<NotificationManager>()?.createNotificationChannel(timerChannel)
     }
 
-    fun showGoalTimerNotification(context: Context, startTime: Long) {
+    fun buildGoalTimerNotification(context: Context, startTime: Long): Notification {
 
         val timeText =
             GoalDisplayUtil.displayGoalTime(
@@ -43,7 +38,7 @@ object NotificationHelper {
         contentIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         val contentPendingIntent = PendingIntent.getActivity(context, 1, contentIntent, 0)
 
-        val builder = NotificationCompat.Builder(context, GOAL_TIMER_CHANNEL_ID)
+        return NotificationCompat.Builder(context, GOAL_TIMER_CHANNEL_ID)
             .setSmallIcon(R.drawable.timer_notification)
             .setColor(context.getColor(R.color.color_primary))
             .setContentTitle(context.getString(R.string.notification_goal_timer_title))
@@ -51,29 +46,17 @@ object NotificationHelper {
             .setContentIntent(contentPendingIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
+            .build()
+    }
 
-        NotificationManagerCompat.from(context).notify(TIMED_GOAL_NOTIFICATION_ID, builder.build())
+    fun showGoalTimerNotification(context: Context, startTime: Long) {
+
+        val notification = buildGoalTimerNotification(context, startTime)
+        NotificationManagerCompat.from(context).notify(TIMED_GOAL_NOTIFICATION_ID, notification)
     }
 
     fun cancelGoalTimerNotification(context: Context) {
 
-        val alarmManager = context.getSystemService<AlarmManager>()
-        alarmManager?.cancel(
-            GoalTimerReceiver.buildPendingIntent(context)
-        )
-
-        NotificationManagerCompat.from(context)
-            .cancel(TIMED_GOAL_NOTIFICATION_ID)
-    }
-
-    fun scheduleNextGoalTimerNotification(context: Context, startTime: Long) {
-
-        val alarmManager = context.getSystemService<AlarmManager>()
-
-        alarmManager?.set(
-            AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + GoalTimerUtil.calculateScheduleOffset(startTime),
-            GoalTimerReceiver.buildPendingIntent(context)
-        )
+        NotificationManagerCompat.from(context).cancel(TIMED_GOAL_NOTIFICATION_ID)
     }
 }

@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/periodic_increase_value"
-            style="@style/Display"
+            style="@style/Display.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.type, viewmodel.increase)}"

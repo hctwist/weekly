@@ -1,6 +1,11 @@
 package com.twisthenry8gmail.weeklyphoenix.util
 
+import android.content.Context
 import android.content.res.Resources
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.SuperscriptSpan
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import java.text.DecimalFormat
@@ -59,11 +64,49 @@ object GoalDisplayUtil {
         )
     }
 
+    fun displayStyledProgressPercentage(context: Context, goal: Goal): SpannableString {
+
+        val progressPercentageValue = displayProgressPercentageValue(context.resources, goal)
+
+        val string = context.getString(R.string.percentage_pattern, progressPercentageValue)
+        val valueIndex = string.indexOf(progressPercentageValue)
+        val symbolIndex = if (valueIndex > 0) 0 else valueIndex + progressPercentageValue.length
+
+        val spannable = SpannableString(string)
+        val spans = arrayOf(
+            ForegroundColorSpan(
+                ColorUtil.resolveColorAttribute(
+                    context,
+                    android.R.attr.textColorSecondary
+                )
+            ),
+            RelativeSizeSpan(0.5F),
+            SuperscriptSpan()
+        )
+
+        spans.forEach {
+
+            spannable.setSpan(
+                it,
+                symbolIndex,
+                symbolIndex + 1,
+                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        return spannable
+    }
+
+    fun displayProgressPercentageValue(resources: Resources, goal: Goal): String {
+
+        return ((goal.progress.toDouble() / goal.target) * 100).roundToInt().toString()
+    }
+
     fun displayProgressPercentage(resources: Resources, goal: Goal): String {
 
         return resources.getString(
             R.string.percentage_pattern,
-            ((goal.progress.toDouble() / goal.target) * 100).roundToInt().toString()
+            displayProgressPercentageValue(resources, goal)
         )
     }
 

@@ -12,14 +12,15 @@ import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddTaskBinding
 import com.twisthenry8gmail.weeklyphoenix.util.showSoftKeyboard
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddTaskViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_add_task.*
 
 class FragmentAddTask : Fragment() {
 
     private val viewModel by viewModels<AddTaskViewModel> {
 
-        AddTaskViewModel.Factory(arguments, weeklyApplication().taskRepository)
+        AddTaskViewModel.Factory(resources, arguments, weeklyApplication().taskRepository)
     }
+
+    private lateinit var binding: FragmentAddTaskBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +28,7 @@ class FragmentAddTask : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentAddTaskBinding.inflate(inflater, container, false)
+        binding = FragmentAddTaskBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -36,11 +37,11 @@ class FragmentAddTask : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        add_task_input.showSoftKeyboard()
+        binding.addTaskInput.showSoftKeyboard()
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            it.navigateFrom(findNavController())
         })
     }
 }

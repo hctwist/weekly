@@ -3,6 +3,7 @@ package com.twisthenry8gmail.weeklyphoenix.view.main
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot
 import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardBinding
 import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardAddBinding
 
@@ -11,12 +12,12 @@ sealed class GoalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     class Content(val binding: GoalCardBinding) : GoalViewHolder(binding.root) {
 
         fun bind(
-            goal: Goal,
+            goalSnapshot: GoalSnapshot,
             listener: GoalAdapter.Listener
         ) {
 
             binding.loading = false
-            binding.goal = goal
+            binding.goalsnapshot = goalSnapshot
             binding.listener = listener
             binding.executePendingBindings()
         }

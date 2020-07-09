@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="onboardingdata"
+            type="com.twisthenry8gmail.weeklyphoenix.view.onboarding.OnboardingData" />
+
+        <variable
+            name="viewmodel"
+            type="com.twisthenry8gmail.weeklyphoenix.viewmodel.OnboardingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/onboarding_title"
+            style="@style/Display.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+            android:layout_marginTop="@dimen/vertical_layout_margin"
+            android:text="@{onboardingdata.titleRes}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:text="@{onboardingdata.subtitleRes}"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toEndOf="@id/onboarding_title"
+            app:layout_constraintStart_toStartOf="@id/onboarding_title"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_title" />
+
+        <ImageView
+            android:layout_width="@dimen/onboarding_image_size"
+            android:layout_height="@dimen/onboarding_image_size"
+            android:src="@{context.getDrawable(onboardingdata.imageRes)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/onboarding_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+            android:layout_marginBottom="@dimen/vertical_layout_margin"
+            android:onClick="@{() -> viewmodel.next()}"
+            android:text="@{onboardingdata.nextButtonTextRes}"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            goneUnless="@{onboardingdata.skipButtonTextRes != null}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+            android:layout_marginBottom="@dimen/margin"
+            android:onClick="@{() -> viewmodel.finish()}"
+            android:text="@{onboardingdata.skipButtonTextRes == null ? null : context.getString(onboardingdata.skipButtonTextRes)}"
+            app:layout_constraintBottom_toTopOf="@id/onboarding_next" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

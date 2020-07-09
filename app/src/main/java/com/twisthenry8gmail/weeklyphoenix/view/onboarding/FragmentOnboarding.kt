@@ -1,6 +1,5 @@
 package com.twisthenry8gmail.weeklyphoenix.view.onboarding
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -8,10 +7,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.twisthenry8gmail.weeklyphoenix.Event
-import com.twisthenry8gmail.weeklyphoenix.data.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.OnboardingViewModel
+import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 import kotlinx.android.synthetic.main.fragment_onboarding.*
 
 class FragmentOnboarding : Fragment(R.layout.fragment_onboarding) {
@@ -19,19 +19,23 @@ class FragmentOnboarding : Fragment(R.layout.fragment_onboarding) {
     private val viewModel by viewModels<OnboardingViewModel>(
         factoryProducer = {
             OnboardingViewModel.Factory(
-                MainRepository(
-                    (requireActivity().getPreferences(
-                        Context.MODE_PRIVATE
-                    ))
-                )
+                weeklyApplication().mainRepository
             )
         })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+
+                viewModel.onPageSelected(position)
+            }
+        })
+
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            it.navigateFrom(findNavController())
         })
 
         onboarding_pager.adapter = Adapter(this)
@@ -46,20 +50,12 @@ class FragmentOnboarding : Fragment(R.layout.fragment_onboarding) {
 
         override fun getItemCount(): Int {
 
-            return 4
+            return OnboardingData.values().size
         }
 
         override fun createFragment(position: Int): Fragment {
 
-            return when (position) {
-
-                0 -> FragmentOnboardingWelcome()
-                1 -> FragmentOnboardingIntro()
-                2 -> FragmentOnboardingCustomise()
-                3 -> FragmentOnboardingFinish()
-
-                else -> throw IllegalArgumentException()
-            }
+            return FragmentOnboardingBlueprint.getInstance(OnboardingData.values()[position])
         }
     }
 }

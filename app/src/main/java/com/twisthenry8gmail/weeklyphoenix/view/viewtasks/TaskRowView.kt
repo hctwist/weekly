@@ -2,7 +2,10 @@ package com.twisthenry8gmail.weeklyphoenix.view.viewtasks
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -15,9 +18,9 @@ import androidx.core.graphics.ColorUtils
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.google.android.material.math.MathUtils.lerp
 import com.twisthenry8gmail.weeklyphoenix.R
+import com.twisthenry8gmail.weeklyphoenix.util.isRtl
 import kotlin.math.*
 
-// TODO Rtl
 class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, attrs) {
 
     var onCheckChangedListener: OnCheckedChangeListener? = null
@@ -97,7 +100,7 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
     fun setText(text: CharSequence) {
 
         textView.text = text
-        lineBounds.dirty = true
+        lineBounds.invalidate()
     }
 
     fun setChecked(checked: Boolean) {
@@ -146,7 +149,7 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
     fun setTextOffset(offset: Float) {
 
         textOffset = offset
-        textView.translationX = textOffset
+        textView.translationX = if (isRtl()) -textOffset else textOffset
         invalidate()
     }
 
@@ -237,7 +240,11 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
 
         canvas?.let { c ->
 
-            if (lineBounds.dirty) lineBounds.resolve(textView)
+            val rtlSave = c.save()
+            if (isRtl()) {
+
+                c.scale(-1F, 1F, c.width.toFloat() / 2, c.height.toFloat() / 2)
+            }
 
             var lineWidthToDraw = 0F
 
@@ -248,10 +255,8 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
 
             lineWidthToDraw *= strikeProgress
 
-            // TODO Add extra strike on the right (strike padding?), looks a bit too close to the end of the text atm
-
             // Draw the dash
-            val dashCy = lineBounds.boundsFor(0).exactCenterY()
+            val dashCy = lineBounds.getBoundsFor(textView, 0).exactCenterY()
             val firstLineWidth = textView.layout.getLineWidth(0)
             val firstLineProgress = (lineWidthToDraw / firstLineWidth).coerceAtMost(1F)
             val dashRadius = dashSize / 2
@@ -278,7 +283,7 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
 
                 if (lineWidthToDraw <= 0) break
 
-                val bounds = lineBounds.boundsFor(i)
+                val bounds = lineBounds.getBoundsFor(textView, i)
                 val startX = textOffset + bounds.left.toFloat()
                 val width = textView.layout.getLineWidth(i)
                 val lineCy = bounds.exactCenterY()
@@ -294,10 +299,14 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
                 lineWidthToDraw -= width
             }
 
+            c.restoreToCount(rtlSave)
+
             if (tickProgress != 0F) {
 
                 val animatedTickRadius = (tickSize / 2) * tickProgress
-                val tickCx = checkAreaSize / 2
+                var tickCx = checkAreaSize / 2
+                if (isRtl()) tickCx = width - tickCx
+
                 tickDrawable.setBounds(
                     (tickCx - animatedTickRadius).roundToInt(),
                     (dashCy - animatedTickRadius).roundToInt(),
@@ -319,10 +328,10 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
             heightMeasureSpec
         )
 
-        // TODO Account for situation where tick is bigger than text, extra height it needed. Use first lines bounds
-        val height =
-            max(textView.measuredHeight, ceil(maxTickSize).toInt()) + paddingTop + paddingBottom
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), height)
+        val firstLineHeight = lineBounds.getBoundsFor(textView, 0).height()
+        val extra = ((maxTickSize - firstLineHeight) / 2).coerceAtLeast(0F)
+        val height = textView.measuredHeight + extra + paddingTop + paddingBottom
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), ceil(height).toInt())
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -342,7 +351,7 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
 
                 if (!touchedCheckArea && canDrag()) {
 
-                    val dX = max(0F, event.x - dragStartX)
+                    val dX = max(0F, (event.x - dragStartX) * (if (isRtl()) -1 else 1))
                     val checkedAnimationProgress = min(dX / checkDragThresholdX, 1F)
                     val translateProgress = dragTranslationInterpolator.getInterpolation(dX / width)
 
@@ -369,7 +378,7 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
                     }
                 } else if (canDrag()) {
 
-                    val dX = event.x - dragStartX
+                    val dX = (if (isRtl()) -1 else 1) * (event.x - dragStartX)
 
                     if (dX > 0) {
 
@@ -430,38 +439,52 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
 
     private fun inCheckArea(x: Float, y: Float): Boolean {
 
-        return x <= checkAreaSize
+        return if (isRtl()) x >= width - checkAreaSize else x <= checkAreaSize
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 
-        val textLeft = ceil(checkAreaSize + textPadding).toInt()
+        val textStart = ceil(checkAreaSize + textPadding).toInt()
         val textCy = (b - t).toFloat() / 2
         val textRise = textView.measuredHeight.toFloat() / 2
         val textTop = (textCy - textRise).toInt()
         val textBottom = ceil(textCy + textRise).toInt()
 
+        val textLeft = if (isRtl()) width - textView.measuredWidth - textStart else textStart
+
         textView.layout(textLeft, textTop, textLeft + textView.measuredWidth, textBottom)
+
+        lineBounds.invalidate()
     }
 
     class LineBounds {
 
-        var dirty = true
-        private var bounds: ArrayList<Rect>? = null
+        private var bounds: ArrayList<Bounds>? = null
 
-        fun resolve(textView: TextView) {
+        fun invalidate() {
 
-            ensureLineCount(textView.lineCount)
-            for (i in 0 until textView.lineCount) {
-
-                textView.getLineBounds(i, boundsFor(i))
-                boundsFor(i).offset(textView.left, textView.top)
-            }
+            bounds?.forEach { it.dirty = true }
         }
 
-        fun boundsFor(line: Int): Rect {
+        fun getBoundsFor(textView: TextView, line: Int): Rect {
 
-            return bounds!![line]
+            ensureLineCount(textView.lineCount)
+
+            val b = bounds!![line]
+            if (b.dirty) {
+
+                resolve(textView, line)
+                b.dirty = false
+            }
+
+            return b.rect
+        }
+
+        private fun resolve(textView: TextView, line: Int) {
+
+            val r = bounds!![line].rect
+            textView.getLineBounds(line, r)
+            r.offset(textView.left, textView.top)
         }
 
         private fun ensureLineCount(count: Int) {
@@ -471,16 +494,22 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
                 bounds = ArrayList(count)
                 repeat(count) {
 
-                    bounds!!.add(Rect())
+                    bounds!!.add(Bounds())
                 }
             } else if (count > bounds!!.size) {
 
                 bounds!!.ensureCapacity(count)
                 repeat(count - bounds!!.size) {
 
-                    bounds!!.add(Rect())
+                    bounds!!.add(Bounds())
                 }
             }
+        }
+
+        class Bounds {
+
+            val rect: Rect = Rect()
+            var dirty: Boolean = true
         }
     }
 

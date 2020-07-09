@@ -1,12 +1,17 @@
 package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
+import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.switchMap
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.twisthenry8gmail.weeklyphoenix.NonNullMutableLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskRepository
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot
+import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
+import com.twisthenry8gmail.weeklyphoenix.util.TaskDisplayUtil
+import com.twisthenry8gmail.weeklyphoenix.util.Transitions
 import com.twisthenry8gmail.weeklyphoenix.util.bundles.TaskDateBundle
 import com.twisthenry8gmail.weeklyphoenix.view.main.MainLayout
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.navigator.NavigatorViewModel
@@ -68,9 +73,21 @@ class MainTasksViewModel(private val taskRepository: TaskRepository) : Navigator
         navigateTo(R.id.action_global_fragmentAddTask, TaskDateBundle(snapshot.date))
     }
 
-    fun onClick(snapshot: TaskSnapshot) {
+    fun onClick(snapshot: TaskSnapshot, view: View) {
 
-        // TODO
+        navigateTo(
+            R.id.action_fragmentMainTasks_to_fragmentViewTaskDay,
+            TaskDateBundle(snapshot.date).apply {
+
+                putInt(
+                    Transitions.CONTAINER_COLOR, ColorUtil.compositeColorWithBackground(
+                        view.context,
+                        TaskDisplayUtil.getCardBackgroundColor(view.context, snapshot)
+                    )
+                )
+            },
+            FragmentNavigatorExtras(view to view.transitionName)
+        )
     }
 
     companion object {

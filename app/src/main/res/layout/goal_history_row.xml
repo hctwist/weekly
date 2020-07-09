@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.ColorUtil" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.util.GoalDisplayUtil" />
 
@@ -30,14 +32,16 @@
             app:layout_constraintWidth_percent="0.5" />
 
         <com.twisthenry8gmail.progresscircles.ProgressLineView
-            goal="@{goal}"
-            goalHistory="@{goalhistory}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/goal_history_row_date"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backingColor="@{ColorUtil.INSTANCE.lightenColor(goal.color)}"
+            bind:color="@{goal.color}"
+            bind:progress="@{goalhistory.progress}"
+            bind:target="@{goalhistory.target}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

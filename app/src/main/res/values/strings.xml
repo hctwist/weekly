@@ -65,11 +65,15 @@
 
     <!-- View goal -->
     <string name="view_goal_add_progress">Add progress</string>
-    <string name="view_goal_target">Target</string>
+    <string name="view_goal_target">/%1$s</string>
     <string name="goal_view_progress">%1$s/%2$s</string>
     <string name="goal_delete">Delete goal</string>
     <string name="goal_next_reset">Next resets</string>
     <string name="goal_history">History </string>
+
+    <!-- View tasks -->
+    <string name="view_tasks_empty_title">No tasks</string>
+    <string name="view_tasks_empty_body">Add one using the plus button above</string>
 
     <!-- Overdue tasks -->
     <string name="overdue_tasks_title">Overdue</string>

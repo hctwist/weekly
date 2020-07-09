@@ -3,7 +3,9 @@ package com.twisthenry8gmail.weeklyphoenix.services
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.twisthenry8gmail.weeklyphoenix.WeeklyApplication
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalRepository
 import com.twisthenry8gmail.weeklyphoenix.util.NotificationHelper
 
 class RebootReceiver : BroadcastReceiver() {
@@ -12,17 +14,7 @@ class RebootReceiver : BroadcastReceiver() {
 
         if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
 
-            context?.let {
-
-                val goalRepository = (it.applicationContext as WeeklyApplication).goalRepository
-
-                if (goalRepository.isTiming()) {
-
-                    val startTime = goalRepository.getTimingGoalStartTime()
-                    NotificationHelper.showGoalTimerNotification(it, startTime)
-                    NotificationHelper.scheduleNextGoalTimerNotification(it, startTime)
-                }
-            }
+            context?.startForegroundService(Intent(context, GoalTimerService::class.java))
         }
     }
 }

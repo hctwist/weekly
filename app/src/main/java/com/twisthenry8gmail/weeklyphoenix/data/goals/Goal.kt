@@ -26,12 +26,11 @@ data class Goal(
     val sortOrder: Int
 ) {
 
-    fun isComplete() = wouldBeComplete(this, progress)
+    fun isComplete() = isComplete(progress, target)
 
-    fun hasStarted(now: LocalDate) = !LocalDate.ofEpochDay(startDate).isAfter(now)
+    fun hasStarted(now: LocalDate) = hasStarted(now, startDate)
 
-    fun hasEnded(now: LocalDate) =
-        if (!hasEndDate()) false else !LocalDate.ofEpochDay(endDate).isAfter(now)
+    fun hasEnded(now: LocalDate) = hasEnded(now, endDate)
 
     fun hasEndDate() = hasEndDate(endDate)
 
@@ -100,13 +99,20 @@ data class Goal(
             multiple,
             unit
         )
+
+        companion object {
+
+            @JvmStatic
+            fun displayNames(context: Context) =
+                values().map { context.getString(it.displayNameRes) }
+        }
     }
 
     @androidx.room.Dao
     interface Dao {
 
-        @Query("SELECT * FROM Goal")
-        fun getAll(): LiveData<List<Goal>>
+        @Query("SELECT id, title, progress, target, startDate, endDate, color, sortOrder FROM Goal")
+        fun getSnapshots(): LiveData<List<GoalSnapshot>>
 
         @Query("SELECT title FROM Goal")
         fun getTitles(): LiveData<List<String>>
@@ -123,7 +129,6 @@ data class Goal(
         @Transaction
         suspend fun insert(newGoal: NewGoal) {
 
-            val x = getNewSortOrder()
             insert(newGoal.buildGoal(getNewSortOrder()))
         }
 
@@ -187,11 +192,17 @@ data class Goal(
             return if (reset.isNever()) -1 else from.plus(reset).toEpochDay()
         }
 
+        fun hasStarted(now: LocalDate, startDate: Long) =
+            !LocalDate.ofEpochDay(startDate).isAfter(now)
+
+        fun hasEnded(now: LocalDate, endDate: Long) =
+            if (!hasEndDate(endDate)) false else !LocalDate.ofEpochDay(endDate).isAfter(now)
+
         fun hasEndDate(endDate: Long) = endDate >= 0
 
-        fun wouldBeComplete(goal: Goal, progress: Long): Boolean {
+        fun isComplete(progress: Long, target: Long): Boolean {
 
-            return progress >= goal.target
+            return progress >= target
         }
 
         @TypeConverter

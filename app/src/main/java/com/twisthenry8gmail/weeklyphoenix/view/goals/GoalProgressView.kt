@@ -8,10 +8,7 @@ import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
-import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import com.twisthenry8gmail.weeklyphoenix.util.setAsLerpBetween
-import java.lang.IllegalArgumentException
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -23,6 +20,12 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
         strokeWidth = context.resources.getDimension(R.dimen.goal_progress_stroke)
         strokeCap = Paint.Cap.ROUND
         style = Paint.Style.STROKE
+    }
+
+    private var fillLine = false
+    private val fillPaint = Paint().apply {
+
+        isAntiAlias = true
     }
 
     private val thumbPaint = Paint().apply {
@@ -61,63 +64,83 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
     private var animatedThumbFraction = 0F
     private var thumbFraction = 0F
 
+    private var animator: ValueAnimator? = null
+
     fun hasBeenInitialised() = goalId > 0
 
-    fun initialise(goal: Goal, useLightColor: Boolean = true) {
+    fun setLineColor(color: Int) {
 
-        goalId = goal.id
+        linePaint.color = color
+        invalidate()
+    }
 
-        linePaint.color = if (useLightColor) ColorUtil.lightenGoalColor(goal.color) else goal.color
-        updateProgress(goal.progress, goal.target)
+    fun setFillColor(color: Int) {
+
+        fillLine = true
+        fillPaint.color = color
+        invalidate()
+    }
+
+    fun initialise(
+        goalId: Int,
+        goalProgress: Long,
+        goalTarget: Long
+    ) {
+
+        this.goalId = goalId
+
+        updateProgress(goalProgress, goalTarget)
     }
 
     fun updateProgress(progress: Long, target: Long, animate: Boolean = false) {
 
-        val newThumbFraction = progress.toFloat() / target
-        val majorSeed = goalId.toLong()
-        val minorSeed = progress
+        val newThumbFraction = (progress.toFloat() / target).coerceAtMost(1F)
 
         if (animate) {
 
+            animator?.cancel()
+
             val thumbStart = thumbFraction
-            val thumbEnd = newThumbFraction
 
             animatedThumbFraction = thumbStart
-            thumbFraction = thumbEnd
+            thumbFraction = newThumbFraction
 
             previousRandomState.clone(currentRandomState)
 
-            currentRandomState.majorSeed = majorSeed
-            currentRandomState.minorSeed = minorSeed
+            currentRandomState.majorSeed = goalId.toLong()
+            currentRandomState.minorSeed = progress
             generateState(currentRandomState, width, height)
             lineAnimationFraction = 0F
 
             animating = true
 
-            ValueAnimator.ofFloat(0F, 1F).run {
+            if (animator == null) {
 
-                duration = 1000
-                interpolator = FastOutSlowInInterpolator()
+                animator = ValueAnimator.ofFloat(0F, 1F).apply {
 
-                addUpdateListener {
+                    duration = 1000
+                    interpolator = FastOutSlowInInterpolator()
 
-                    val value = it.animatedValue as Float
-                    animatedThumbFraction = thumbStart + (thumbEnd - thumbStart) * value
-                    lineAnimationFraction = value
-                    invalidate()
+                    addUpdateListener {
+
+                        val value = it.animatedValue as Float
+                        animatedThumbFraction = thumbStart + (newThumbFraction - thumbStart) * value
+                        lineAnimationFraction = value
+                        invalidate()
+                    }
+
+                    doOnEnd {
+
+                        animating = false
+                    }
                 }
-
-                doOnEnd {
-
-                    animating = false
-                }
-
-                start()
             }
+
+            animator?.start()
         } else {
 
-            currentRandomState.majorSeed = majorSeed
-            currentRandomState.minorSeed = minorSeed
+            currentRandomState.majorSeed = goalId.toLong()
+            currentRandomState.minorSeed = progress
             generateState(currentRandomState, width, height)
             animating = false
             thumbFraction = newThumbFraction
@@ -172,7 +195,7 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
 
             drawRandomState.apply {
 
-                linePath.reset()
+                linePath.rewind()
 
                 val firstPoint = points.first()
                 linePath.moveTo(firstPoint.x, firstPoint.y)
@@ -195,7 +218,6 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
 
             c.drawPath(linePath, linePaint)
 
-            // TODO Try using x coordinate as opposed to distance along line
             val thumbOffsetFraction = 0.1F
             val drawThumbFraction =
                 thumbOffsetFraction + (if (animating) animatedThumbFraction else thumbFraction) * (1 - 2 * thumbOffsetFraction)
@@ -205,6 +227,18 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
                 linePointPosAlloc,
                 null
             )
+
+            if (fillLine) {
+
+                val w = width.toFloat()
+                val h = height.toFloat()
+                linePath.lineTo(w, h)
+                linePath.lineTo(0F, h)
+                linePath.close()
+
+                c.drawPath(linePath, fillPaint)
+            }
+
             c.drawCircle(linePointPosAlloc[0], linePointPosAlloc[1], thumbRadius, thumbPaint)
         }
     }

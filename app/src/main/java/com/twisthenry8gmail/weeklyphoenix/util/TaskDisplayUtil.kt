@@ -38,4 +38,21 @@ object TaskDisplayUtil {
             }
         }
     }
+
+    fun getTaskLines(tasks: List<Task>?, numberToDisplay: Int): List<String> {
+
+        return if (tasks.isNullOrEmpty()) {
+
+            emptyList()
+        } else {
+
+            if (tasks.size < numberToDisplay) {
+
+                tasks.subList(0, tasks.size).map { it.title }
+            } else {
+
+                return tasks.subList(0, numberToDisplay - 1).map { it.title }.plus("...")
+            }
+        }
+    }
 }

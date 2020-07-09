@@ -9,4 +9,9 @@
         <item>Learn French</item>
         <item>Apply for a job</item>
     </string-array>
+
+    <string-array name="task_suggested_titles">
+
+        <item>Buy birthday presents</item>
+    </string-array>
 </resources>

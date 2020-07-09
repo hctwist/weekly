@@ -10,14 +10,15 @@ import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalTitleBindin
 import com.twisthenry8gmail.weeklyphoenix.util.showSoftKeyboard
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.AddGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_add_goal_title.*
 
 class FragmentAddGoalTitle : Fragment() {
 
-    private val viewModel by viewModels<AddGoalViewModel>({ requireParentFragment().requireParentFragment() }, {
+    private val viewModel by viewModels<AddGoalViewModel>(
+        { requireParentFragment().requireParentFragment() },
+        { AddGoalViewModel.Factory(resources, weeklyApplication().goalRepository) }
+    )
 
-        AddGoalViewModel.Factory(resources, weeklyApplication().goalRepository)
-    })
+    private lateinit var binding: FragmentAddGoalTitleBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +26,7 @@ class FragmentAddGoalTitle : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentAddGoalTitleBinding.inflate(inflater, container, false)
+        binding = FragmentAddGoalTitleBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
         return binding.root
@@ -33,11 +34,6 @@ class FragmentAddGoalTitle : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        add_goal_title.showSoftKeyboard()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-//        hideSoftKeyboard()
+        binding.addGoalTitle.showSoftKeyboard()
     }
 }

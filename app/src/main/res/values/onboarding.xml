@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_skip">Skip</string>
+
+    <string name="onboarding_welcome_title">Welcome to Weekly</string>
+    <string name="onboarding_welcome_subtitle">Organising your aspirations</string>
+    <string name="onboarding_welcome_skip">Dive straight in</string>
+    <string name="onboarding_welcome_next">Take me through</string>
+
+    <string name="onboarding_goals_title">Set yourself flexible goals</string>
+    <string name="onboarding_goals_subtitle">Schedule repeating goals to keep track of your aspirations and customise everything to your liking</string>
+
+    <string name="onboarding_tasks_title">Schedule calendar based tasks</string>
+    <string name="onboarding_tasks_subtitle">Add tasks to upcoming days to keep yourself organised</string>
+
+    <string name="onboarding_go_title">Let\'s go</string>
+    <string name="onboarding_go_subtitle">I hope you enjoy using the app, feel free to get in touch if you have any queries or comments</string>
+    <string name="onboarding_go_next">Start organising</string>
+</resources>

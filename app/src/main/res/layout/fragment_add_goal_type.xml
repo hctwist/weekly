@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/add_goal_type_title"
-            style="@style/Display"
+            style="@style/Display.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
@@ -29,17 +29,17 @@
 
         <com.twisthenry8gmail.weeklyphoenix.view.addgoal.GoalTypeView
             android:id="@+id/add_goal_type_counted"
-            bind:checked="@{viewmodel.type == Goal.Type.COUNTED}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_layout_margin"
-            android:layout_marginTop="@dimen/section_margin"
+            android:layout_marginTop="@dimen/large_section_margin"
             android:onClick="@{() -> viewmodel.onSelectType(Goal.Type.COUNTED)}"
             app:goalTypeIcon="@drawable/round_plus_one_24"
             app:goalTypeTitle="@string/goal_type_counted"
             app:layout_constraintEnd_toStartOf="@id/add_goal_type_timed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_goal_type_title" />
+            app:layout_constraintTop_toBottomOf="@id/add_goal_type_title"
+            bind:checked="@{viewmodel.type == Goal.Type.COUNTED}" />
 
         <com.twisthenry8gmail.weeklyphoenix.view.addgoal.GoalTypeView
             android:id="@+id/add_goal_type_timed"

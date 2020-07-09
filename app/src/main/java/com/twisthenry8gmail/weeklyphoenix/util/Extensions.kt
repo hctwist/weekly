@@ -35,3 +35,5 @@ fun PointF.setAsLerpBetween(p1: PointF, p2: PointF, fraction: Float) {
     x = MathUtils.lerp(p1.x, p2.x, fraction)
     y = MathUtils.lerp(p1.y, p2.y, fraction)
 }
+
+fun View.isRtl() = layoutDirection == View.LAYOUT_DIRECTION_RTL

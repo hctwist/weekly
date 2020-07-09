@@ -49,7 +49,6 @@ class GoalsItemTouchCallback : ItemTouchHelper.Callback() {
 
         viewHolder?.itemView?.let {
 
-            // TODO Decide on animation. Slight scale inwards? Slight translation up/down? Elevation?
             it.animate().translationZ(it.context.resources.getDimension(R.dimen.default_elevation))
         }
     }
@@ -66,7 +65,6 @@ class GoalsItemTouchCallback : ItemTouchHelper.Callback() {
             val sourcePosition = viewHolder.adapterPosition
             targetAdapterPosition = target.adapterPosition
 
-            // TODO This doesn't really work as the adapter position will not be consistent with the sort order in case of deleted goals etc
             adapter.swapData(sourcePosition, targetAdapterPosition)
             adapter.notifyItemMoved(sourcePosition, targetAdapterPosition)
         }

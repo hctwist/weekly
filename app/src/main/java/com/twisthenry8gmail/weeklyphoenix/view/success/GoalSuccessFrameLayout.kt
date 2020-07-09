@@ -49,7 +49,7 @@ class GoalSuccessFrameLayout(context: Context, attrs: AttributeSet) : FrameLayou
     fun setGoal(goal: Goal) {
 
         getBox().setCardBackgroundColor(goal.color)
-        flyingPathPaint.color = ColorUtil.lightenGoalColor(goal.color)
+        flyingPathPaint.color = ColorUtil.lightenColor(goal.color)
         startAnimation()
     }
 

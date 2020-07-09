@@ -37,6 +37,11 @@ class AddGoalViewModel(
         getContinueButtonText(it)
     }
 
+    val continueButtonIconRes: LiveData<Int> = page.map {
+
+        getContinueButtonIconRes(it)
+    }
+
     private val _type = NonNullMutableLiveData(Goal.Type.COUNTED)
     val type: NonNullLiveData<Goal.Type>
         get() = _type
@@ -93,8 +98,17 @@ class AddGoalViewModel(
 
         return when (page) {
 
-            4 -> androidResources.getString(R.string.add_goal_done_add_goal)
-            else -> androidResources.getString(R.string.cont)
+            in 0..3 -> androidResources.getString(R.string.cont)
+            else -> androidResources.getString(R.string.add_goal_done_add_goal)
+        }
+    }
+
+    private fun getContinueButtonIconRes(page: Int): Int {
+
+        return when (page) {
+
+            in 0..3 -> R.drawable.round_arrow_forward_24
+            else -> R.drawable.round_done_24
         }
     }
 
@@ -116,22 +130,22 @@ class AddGoalViewModel(
 
     private fun onConfirmType() {
 
-        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalType2_to_fragmentAddGoalTitle2)
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalType_to_fragmentAddGoalTitle)
     }
 
     private fun onConfirmTitle() {
 
-        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalTitle2_to_fragmentAddGoalTarget2)
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalTitle_to_fragmentAddGoalTarget)
     }
 
     private fun onConfirmTarget() {
 
-        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalTarget2_to_fragmentAddGoalReset2)
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalTarget_to_fragmentAddGoalReset)
     }
 
     private fun onConfirmReset() {
 
-        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalReset2_to_fragmentAddGoalDone2)
+        _childNavigationCommander.navigateTo(R.id.action_fragmentAddGoalReset_to_fragmentAddGoalDone)
     }
 
     private fun onDone() {

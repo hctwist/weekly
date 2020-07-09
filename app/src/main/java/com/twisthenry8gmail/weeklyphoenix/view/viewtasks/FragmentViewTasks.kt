@@ -9,15 +9,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.MaterialContainerTransform
 import com.twisthenry8gmail.recyclerextensions.StatefulRecyclerHelper
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.Task
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewTasksBinding
+import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
+import com.twisthenry8gmail.weeklyphoenix.util.Transitions
 import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewTasksViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_view_tasks.*
 
 class FragmentViewTasks : Fragment() {
 
@@ -29,7 +31,20 @@ class FragmentViewTasks : Fragment() {
         )
     }
 
+    private lateinit var binding: FragmentViewTasksBinding
+
     private val tasksAdapterHelper = StatefulRecyclerHelper(TaskAdapter())
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+
+            arguments?.getInt(Transitions.CONTAINER_COLOR)?.let { startContainerColor = it }
+            endContainerColor =
+                ColorUtil.resolveColorAttribute(requireContext(), android.R.attr.colorBackground)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,8 +52,10 @@ class FragmentViewTasks : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentViewTasksBinding.inflate(inflater, container, false)
+        binding = FragmentViewTasksBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
+
+        binding.executePendingBindings()
 
         return binding.root
     }
@@ -47,7 +64,7 @@ class FragmentViewTasks : Fragment() {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            it.navigateFrom(findNavController())
         })
 
         viewModel.diffData.observe(viewLifecycleOwner, Observer {
@@ -72,9 +89,9 @@ class FragmentViewTasks : Fragment() {
             }
         }
 
-        tasksAdapterHelper.emptyPlaceholder = view_tasks_empty
+        tasksAdapterHelper.emptyPlaceholder = binding.viewTasksEmpty
 
-        view_tasks_tasks.run {
+        binding.viewTasksTasks.run {
 
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(

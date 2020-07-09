@@ -16,14 +16,14 @@
 
         <TextView
             android:id="@+id/goal_success_title"
-            style="@style/Display"
+            style="@style/Display.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/goal_success" />
 
         <TextView
             android:id="@+id/goal_success_name"
-            style="@style/Header"
+            style="@style/Display.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin"

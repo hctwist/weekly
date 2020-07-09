@@ -1,16 +1,25 @@
 package com.twisthenry8gmail.weeklyphoenix.viewmodel
 
 import android.content.res.Resources
-import androidx.lifecycle.*
+import android.os.Bundle
+import android.view.View
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
-import com.twisthenry8gmail.weeklyphoenix.*
+import com.twisthenry8gmail.weeklyphoenix.DiffLiveData
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.MainRepository
-import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalRepository
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskRepository
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot
+import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import com.twisthenry8gmail.weeklyphoenix.util.GoalComparator
+import com.twisthenry8gmail.weeklyphoenix.util.TaskDisplayUtil
+import com.twisthenry8gmail.weeklyphoenix.util.Transitions
 import com.twisthenry8gmail.weeklyphoenix.util.bundles.GoalIdBundle
 import com.twisthenry8gmail.weeklyphoenix.util.bundles.TaskDateBundle
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapterDiff
@@ -26,23 +35,29 @@ class MainDefaultViewModel(
     private val taskRepository: TaskRepository
 ) : NavigatorViewModel() {
 
-    val goalsDiffData = object : DiffLiveData<Goal, Goal?>(
-        goalRepository.getAll(),
+    val goalsDiffData = object : DiffLiveData<GoalSnapshot, GoalSnapshot?>(
+        goalRepository.getSnapshots(),
         viewModelScope
     ) {
 
         val goalsComparator = GoalComparator()
 
-        override fun getCallback(oldData: List<Goal?>, newData: List<Goal?>): DiffUtil.Callback {
+        override fun getCallback(
+            oldData: List<GoalSnapshot?>,
+            newData: List<GoalSnapshot?>
+        ): DiffUtil.Callback {
 
             return GoalAdapterDiff(oldData, newData)
         }
 
-        override fun map(data: List<Goal>): List<Goal?> {
+        override fun map(data: List<GoalSnapshot>): List<GoalSnapshot?> {
 
+            if (data.isEmpty()) return data
             return data.sortedWith(goalsComparator).plusElement(null)
         }
     }
+
+    val hasAddedTask = taskRepository.hasAddedTask()
 
     val overdueTasks = taskRepository.getOverdue(MAX_TASK_DISPLAY)
 
@@ -55,15 +70,6 @@ class MainDefaultViewModel(
         val now = LocalDate.now()
         _taskSnapshots =
             taskRepository.getLimitedSnapshotsBetween(MAX_TASK_DISPLAY, now, now.plusDays(6))
-
-        // TODO With splash screen instead
-        if (goalRepository.isTiming()) {
-
-//            navigateTo(R.id.action_fragmentMain_to_fragmentGoalTimer)
-        } else if (mainRepository.isFirstTime()) {
-
-            navigateTo(R.id.action_fragmentMain_to_fragmentOnboarding)
-        }
     }
 
     fun onLayoutSelected(layout: MainLayout) {
@@ -74,11 +80,21 @@ class MainDefaultViewModel(
         }
     }
 
-    fun onGoalClick(goal: Goal) {
+    fun onGoalClick(goal: GoalSnapshot, view: View) {
 
         navigateTo(
             R.id.action_fragmentMain_to_fragmentViewGoal,
-            GoalIdBundle(goal.id)
+            GoalIdBundle(goal.id).apply {
+
+                putInt(
+                    Transitions.CONTAINER_COLOR,
+                    ColorUtil.compositeColorWithBackground(
+                        view.context,
+                        ColorUtil.lightenColor(goal.color)
+                    )
+                )
+            },
+            FragmentNavigatorExtras(view to view.transitionName)
         )
     }
 
@@ -87,7 +103,7 @@ class MainDefaultViewModel(
         navigateTo(R.id.action_fragmentMain_to_fragmentAddGoal)
     }
 
-    fun onGoalMove(goal: Goal, newSortOrder: Int) {
+    fun onGoalMove(goal: GoalSnapshot, newSortOrder: Int) {
 
         viewModelScope.launch {
 
@@ -103,16 +119,29 @@ class MainDefaultViewModel(
         )
     }
 
-    fun onOverdueTasksClick() {
+    fun onOverdueTasksClick(view: View) {
 
-        navigateTo(R.id.action_fragmentMain_to_fragmentOverdueTasks)
+        navigateTo(R.id.action_fragmentMain_to_fragmentOverdueTasks, Bundle().apply {
+
+            putInt(Transitions.CONTAINER_COLOR, view.context.getColor(R.color.tasks_card_overdue))
+        }, FragmentNavigatorExtras(view to view.transitionName))
     }
 
-    fun onTaskCardClicked(taskSnapshot: TaskSnapshot) {
+    fun onTaskCardClicked(taskSnapshot: TaskSnapshot, view: View) {
 
         navigateTo(
             R.id.action_fragmentMain_to_fragmentViewTaskDay,
-            TaskDateBundle(taskSnapshot.date)
+            TaskDateBundle(taskSnapshot.date).apply {
+
+                putInt(
+                    Transitions.CONTAINER_COLOR,
+                    ColorUtil.compositeColorWithBackground(
+                        view.context,
+                        TaskDisplayUtil.getCardBackgroundColor(view.context, taskSnapshot)
+                    )
+                )
+            },
+            FragmentNavigatorExtras(view to view.transitionName)
         )
     }
 

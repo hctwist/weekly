@@ -47,8 +47,7 @@ class GoalHistoryRepository(
         return getAllFor(goal.id, queryFrom.toEpochDay())
     }
 
-    fun getAllFor(goalId: Int, fromDate: Long): LiveData<List<GoalHistory>> {
+    fun getAllFor(goalId: Int, fromDate: Long) = goalHistoryDao.getAllFor(goalId, fromDate)
 
-        return goalHistoryDao.getAllFor(goalId, fromDate)
-    }
+    fun getAverageFor(goalId: Int) = goalHistoryDao.getAverageFor(goalId)
 }

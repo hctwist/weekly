@@ -10,6 +10,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentAddGoalDoneBinding
@@ -90,7 +94,6 @@ class FragmentAddGoalDone : Fragment() {
         }
     }
 
-    // TODO View binding here? Better architecture solution? MaterialDatePicker?
     class EndDatePickerDialog : DialogFragment() {
 
         private val viewModel by FragmentAddGoal.viewModelFromDialog(this)

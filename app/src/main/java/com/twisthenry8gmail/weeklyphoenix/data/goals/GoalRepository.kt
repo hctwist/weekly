@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import java.time.LocalDate
 
 class GoalRepository(
@@ -11,13 +12,7 @@ class GoalRepository(
     private val goalPreferences: SharedPreferences
 ) {
 
-    companion object {
-
-        private const val PREF_TIMED_GOAL_ID = "timed_goal_name"
-        private const val PREF_TIMED_GOAL_START = "timed_goal_start"
-    }
-
-    private var goals: LiveData<List<Goal>>? = null
+    private val goalSnapshots: LiveData<List<GoalSnapshot>>? = null
 
     suspend fun getAllThatRequireReset(): List<Goal> {
 
@@ -52,30 +47,17 @@ class GoalRepository(
         goalsDao.changeSortOrder(goalId, newSortOrder)
     }
 
-    fun getTitles(): LiveData<List<String>> {
+    fun getSnapshots(): LiveData<List<GoalSnapshot>> {
 
-        if (goals == null) return goalsDao.getTitles()
-        return Transformations.map(goals!!) { g ->
-
-            g.map { it.title }
-        }
+        return goalSnapshots ?: goalsDao.getSnapshots()
     }
 
-    fun getAll(): LiveData<List<Goal>> {
+    fun getTitles(): LiveData<List<String>> {
 
-        if (goals == null) goals = goalsDao.getAll()
-        return goals!!
+        return goalSnapshots?.map { list -> list.map { it.title } } ?: goalsDao.getTitles()
     }
 
     fun get(id: Int): LiveData<Goal> {
-
-        goals?.let { goals ->
-
-            return Transformations.map(goals) { goalsList ->
-
-                goalsList.find { it.id == id }
-            }
-        }
 
         return goalsDao.get(id)
     }
@@ -130,27 +112,18 @@ class GoalRepository(
 
     fun getTimingGoal(): LiveData<Goal> {
 
-        val data: LiveData<Goal>
-
         val id = goalPreferences.getInt(PREF_TIMED_GOAL_ID, -1)
-        val cachedGoal = goals?.value?.find { it.id == id }
-
-        if (cachedGoal == null) {
-
-            data = goalsDao.get(id)
-        } else {
-
-            data = MutableLiveData<Goal>().apply {
-
-                value = cachedGoal
-            }
-        }
-
-        return data
+        return goalsDao.get(id)
     }
 
     fun getTimingGoalStartTime(): Long {
 
         return goalPreferences.getLong(PREF_TIMED_GOAL_START, 0)
+    }
+
+    companion object {
+
+        private const val PREF_TIMED_GOAL_ID = "timed_goal_name"
+        private const val PREF_TIMED_GOAL_START = "timed_goal_start"
     }
 }

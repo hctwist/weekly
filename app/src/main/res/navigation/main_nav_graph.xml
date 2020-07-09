@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentMain">
-
+    android:id="@+id/nav_graph">
 
     <fragment
         android:id="@+id/fragmentMain"
@@ -20,22 +17,11 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentGoalSuccess"
             app:destination="@id/fragmentGoalSuccess"
-            app:enterAnim="@anim/scale_enter_animation"
-            app:exitAnim="@anim/scale_exit_animation"
             app:popEnterAnim="@anim/scale_pop_enter_animation"
             app:popExitAnim="@anim/scale_pop_exit_animation" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentViewGoal"
             app:destination="@id/fragmentViewGoal"
-            app:enterAnim="@anim/scale_enter_animation"
-            app:exitAnim="@anim/scale_exit_animation"
-            app:popEnterAnim="@anim/scale_pop_enter_animation"
-            app:popExitAnim="@anim/scale_pop_exit_animation" />
-        <action
-            android:id="@+id/action_fragmentMain_to_fragmentOnboarding"
-            app:destination="@id/fragmentOnboarding"
-            app:enterAnim="@anim/scale_enter_animation"
-            app:exitAnim="@anim/scale_exit_animation"
             app:popEnterAnim="@anim/scale_pop_enter_animation"
             app:popExitAnim="@anim/scale_pop_exit_animation" />
         <action
@@ -48,15 +34,11 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentViewTaskDay"
             app:destination="@id/fragmentViewTaskDay"
-            app:enterAnim="@anim/scale_enter_animation"
-            app:exitAnim="@anim/scale_exit_animation"
             app:popEnterAnim="@anim/scale_pop_enter_animation"
             app:popExitAnim="@anim/scale_pop_exit_animation" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentOverdueTasks"
             app:destination="@id/fragmentOverdueTasks"
-            app:enterAnim="@anim/scale_enter_animation"
-            app:exitAnim="@anim/scale_exit_animation"
             app:popEnterAnim="@anim/scale_pop_enter_animation"
             app:popExitAnim="@anim/scale_pop_exit_animation" />
     </fragment>
@@ -67,7 +49,7 @@
     <fragment
         android:id="@+id/fragmentViewGoal"
         android:name="com.twisthenry8gmail.weeklyphoenix.view.viewgoal.FragmentViewGoal"
-        android:label="FragmentViewGoal" >
+        android:label="FragmentViewGoal">
         <action
             android:id="@+id/action_fragmentViewGoal_to_fragmentGoalTimer"
             app:destination="@id/fragmentGoalTimer"
@@ -161,8 +143,8 @@
         android:label="FragmentViewTaskDay" />
     <fragment
         android:id="@+id/fragmentGoalTimer"
-        android:name="com.twisthenry8gmail.weeklyphoenix.view.FragmentGoalTiming"
-        android:label="FragmentGoalTimer" >
+        android:name="com.twisthenry8gmail.weeklyphoenix.view.goaltiming.FragmentGoalTiming"
+        android:label="FragmentGoalTimer">
         <action
             android:id="@+id/action_fragmentGoalTimer_to_fragmentViewGoal"
             app:destination="@id/fragmentViewGoal"
@@ -180,7 +162,13 @@
     <fragment
         android:id="@+id/fragmentMainTasks"
         android:name="com.twisthenry8gmail.weeklyphoenix.view.main.taskslayout.FragmentMainTasks"
-        android:label="FragmentMainTasks" />
+        android:label="FragmentMainTasks">
+        <action
+            android:id="@+id/action_fragmentMainTasks_to_fragmentViewTaskDay"
+            app:destination="@id/fragmentViewTaskDay"
+            app:popEnterAnim="@anim/scale_pop_enter_animation"
+            app:popExitAnim="@anim/scale_pop_exit_animation" />
+    </fragment>
     <action
         android:id="@+id/action_global_fragmentMainTasks"
         app:destination="@id/fragmentMainTasks"

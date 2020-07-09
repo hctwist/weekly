@@ -6,7 +6,7 @@ import androidx.navigation.fragment.FragmentNavigator
 
 interface NavigationCommand {
 
-    fun navigateWith(navController: NavController)
+    fun navigateFrom(navController: NavController)
 
     fun setNavigatorExtras(extras: FragmentNavigator.Extras) {}
 
@@ -19,7 +19,7 @@ interface NavigationCommand {
     ) :
         NavigationCommand {
 
-        override fun navigateWith(navController: NavController) {
+        override fun navigateFrom(navController: NavController) {
 
             navController.navigate(resId, args, null, navigatorExtras)
         }
@@ -38,7 +38,7 @@ interface NavigationCommand {
     class Back :
         NavigationCommand {
 
-        override fun navigateWith(navController: NavController) {
+        override fun navigateFrom(navController: NavController) {
 
             navController.popBackStack()
         }

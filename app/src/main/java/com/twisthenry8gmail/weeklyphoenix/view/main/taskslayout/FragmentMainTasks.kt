@@ -10,25 +10,23 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.Hold
 import com.twisthenry8gmail.recyclerextensions.StatefulRecyclerHelper
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentMainTasksBinding
 import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
-import com.twisthenry8gmail.weeklyphoenix.view.main.TaskSnapshotAdapter
-import com.twisthenry8gmail.weeklyphoenix.view.main.TaskSnapshotLoadingAdapter
+import com.twisthenry8gmail.weeklyphoenix.view.tasks.TaskSnapshotAdapter
+import com.twisthenry8gmail.weeklyphoenix.view.tasks.TaskSnapshotLoadingAdapter
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.MainTasksViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_main_tasks.*
-import java.time.*
+import java.time.Instant
+import java.time.Month
+import java.time.ZoneId
 import java.time.format.TextStyle
-import java.time.temporal.ChronoField
-import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalField
 import java.util.*
 
-// TODO Change naming of everything 'Main' to 'MainDefault'
 class FragmentMainTasks : Fragment() {
 
     private val viewModel by viewModels<MainTasksViewModel> {
@@ -37,10 +35,13 @@ class FragmentMainTasks : Fragment() {
         )
     }
 
-    private val tasksAdapterHelper = StatefulRecyclerHelper(TaskSnapshotAdapter()).apply {
+    private lateinit var binding: FragmentMainTasksBinding
 
-        loadingAdapter = TaskSnapshotLoadingAdapter()
-    }
+    private val tasksAdapterHelper =
+        StatefulRecyclerHelper(TaskSnapshotAdapter(MainTasksViewModel.MAX_TASKS_DISPLAY)).apply {
+
+            loadingAdapter = TaskSnapshotLoadingAdapter()
+        }
 
     private val monthDisplayNames by lazy {
         Month.values().map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
@@ -52,7 +53,7 @@ class FragmentMainTasks : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentMainTasksBinding.inflate(inflater, container, false)
+        binding = FragmentMainTasksBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -66,7 +67,16 @@ class FragmentMainTasks : Fragment() {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            exitTransition =
+                if (it.getId() == R.id.action_fragmentMainTasks_to_fragmentViewTaskDay) {
+
+                    Hold()
+                } else {
+
+                    null
+                }
+
+            it.navigateFrom(findNavController())
         })
 
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
@@ -80,7 +90,7 @@ class FragmentMainTasks : Fragment() {
 
     private fun setupDropdownButtons() {
 
-        main_tasks_month.setOnClickListener { v ->
+        binding.mainTasksMonth.setOnClickListener { v ->
 
             val monthPopupMenu = PopupMenu(context, v)
 
@@ -100,7 +110,7 @@ class FragmentMainTasks : Fragment() {
             monthPopupMenu.show()
         }
 
-        main_tasks_year.setOnClickListener { v ->
+        binding.mainTasksYear.setOnClickListener { v ->
 
             val yearPopupMenu = PopupMenu(context, v)
 
@@ -132,9 +142,9 @@ class FragmentMainTasks : Fragment() {
         tasksAdapterHelper.mainAdapter.clickHandler = object :
             TaskSnapshotAdapter.ClickHandler {
 
-            override fun onCardClick(taskSnapshot: TaskSnapshot) {
+            override fun onCardClick(taskSnapshot: TaskSnapshot, view: View) {
 
-                viewModel.onClick(taskSnapshot)
+                viewModel.onClick(taskSnapshot, view)
             }
 
             override fun onAdd(taskSnapshot: TaskSnapshot) {
@@ -143,7 +153,7 @@ class FragmentMainTasks : Fragment() {
             }
         }
 
-        main_tasks_list.run {
+        binding.mainTasksList.run {
 
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(LinearMarginItemDecoration(context.resources.getDimension(R.dimen.margin)))

@@ -4,6 +4,10 @@
 
     <data>
 
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DataBinding" />
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.Transitions" />
+
         <import type="com.twisthenry8gmail.weeklyphoenix.view.main.MainLayout" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.util.TaskDisplayUtil" />
@@ -28,7 +32,7 @@
 
             <TextView
                 android:id="@+id/main_title"
-                style="@style/Display"
+                style="@style/Display.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
@@ -42,6 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/main_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/main_title"
@@ -53,20 +58,87 @@
                 style="@style/SectionHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/section_margin"
+                android:layout_marginTop="@dimen/large_section_margin"
                 android:text="Goals"
                 app:layout_constraintStart_toStartOf="@id/main_title"
                 app:layout_constraintTop_toBottomOf="@id/main_title" />
+
+            <Space
+                android:id="@+id/main_goals_space"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/goal_card_size"
+                android:layout_marginTop="@dimen/margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main_goals_header" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/main_goals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:paddingHorizontal="@dimen/horizontal_layout_margin"
-                app:layout_constraintTop_toBottomOf="@id/main_goals_header" />
+                app:layout_constraintBottom_toBottomOf="@id/main_goals_space"
+                app:layout_constraintTop_toTopOf="@id/main_goals_space" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/main_goals_empty_card"
+                style="@style/OutlinedCardView"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/goal_card_size"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:onClick="@{() -> viewmodel.onAddGoal()}"
+                app:layout_constraintBottom_toBottomOf="@id/main_goals_space"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/main_goals_space" />
+
+            <ImageView
+                android:id="@+id/main_goals_empty_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:paddingVertical="@dimen/margin"
+                android:src="@drawable/marv_01"
+                app:layout_constraintBottom_toBottomOf="@id/main_goals_empty_card"
+                app:layout_constraintEnd_toStartOf="@id/main_goals_empty_title"
+                app:layout_constraintStart_toStartOf="@id/main_goals_empty_card"
+                app:layout_constraintTop_toTopOf="@id/main_goals_empty_card" />
+
+            <TextView
+                android:id="@+id/main_goals_empty_title"
+                style="@style/Display.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/margin"
+                android:paddingEnd="@dimen/horizontal_layout_margin"
+                android:text="No goals"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toTopOf="@id/main_goals_empty_body"
+                app:layout_constraintEnd_toEndOf="@id/main_goals_empty_card"
+                app:layout_constraintStart_toEndOf="@id/main_goals_empty_image"
+                app:layout_constraintTop_toTopOf="@id/main_goals_empty_card"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/main_goals_empty_body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:paddingStart="@dimen/margin"
+                android:paddingEnd="@dimen/horizontal_layout_margin"
+                android:text="Add one by tapping here"
+                app:layout_constraintBottom_toBottomOf="@id/main_goals_empty_card"
+                app:layout_constraintEnd_toEndOf="@id/main_goals_empty_card"
+                app:layout_constraintStart_toStartOf="@id/main_goals_empty_title"
+                app:layout_constraintTop_toBottomOf="@id/main_goals_empty_title" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/main_goals_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="main_goals_empty_card, main_goals_empty_image, main_goals_empty_title, main_goals_empty_body" />
 
             <TextView
                 android:id="@+id/main_tasks_header"
@@ -74,13 +146,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
-                android:layout_marginTop="@dimen/section_margin"
+                android:layout_marginTop="@dimen/large_section_margin"
                 android:text="Tasks"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main_goals" />
+                app:layout_constraintTop_toBottomOf="@id/main_goals_space" />
 
             <TextView
-                android:id="@+id/main_tasks_overdue_placeholder"
+                android:id="@+id/main_tasks_date_placeholder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
@@ -89,37 +161,70 @@
                 app:layout_constraintTop_toBottomOf="@id/main_tasks_header" />
 
             <ImageView
+                android:id="@+id/main_tasks_onboarding_icon"
+                goneUnless="@{!viewmodel.hasAddedTask}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:src="@drawable/round_info_24"
+                android:tint="@color/color_primary"
+                app:layout_constraintStart_toStartOf="@id/main_tasks_date_placeholder"
+                app:layout_constraintTop_toBottomOf="@id/main_tasks_header" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/main_tasks_onboarding"
+                goneUnless="@{!viewmodel.hasAddedTask}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:minHeight="@dimen/task_snapshot_min_height"
+                app:cardBackgroundColor="@color/color_primary_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/main_tasks_date_placeholder"
+                app:layout_constraintTop_toTopOf="@id/main_tasks_onboarding_icon">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:text="To add a task for a specific day, click the add button next to the relevant day"
+                    android:textColor="?android:attr/textColorPrimary" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <ImageView
                 android:id="@+id/main_tasks_overdue_icon"
-                goneUnless="@{!viewmodel.overdueTasks.empty}"
+                goneUnless="@{DataBinding.INSTANCE.and(!viewmodel.overdueTasks.empty, viewmodel.overdueTasks != null)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin"
                 android:src="@drawable/round_assignment_late_24"
                 android:tint="@color/red"
-                app:layout_constraintEnd_toEndOf="@id/main_tasks_overdue_placeholder"
-                app:layout_constraintStart_toStartOf="@id/main_tasks_overdue_placeholder"
-                app:layout_constraintTop_toBottomOf="@id/main_tasks_header" />
+                app:layout_constraintStart_toStartOf="@id/main_tasks_date_placeholder"
+                app:layout_constraintTop_toBottomOf="@id/main_tasks_onboarding" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/task_card_card"
-                goneUnless="@{!viewmodel.overdueTasks.empty}"
+                android:id="@+id/main_tasks_overdue"
+                goneUnless="@{DataBinding.INSTANCE.and(!viewmodel.overdueTasks.empty, viewmodel.overdueTasks != null)}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginEnd="@dimen/horizontal_layout_margin"
-                android:onClick="@{() -> viewmodel.onOverdueTasksClick()}"
+                android:minHeight="@dimen/task_snapshot_min_height"
+                android:onClick="@{(view) -> viewmodel.onOverdueTasksClick(view)}"
+                android:transitionName="@{Transitions.Names.VIEW_OVERDUE_TASKS_CONTAINER}"
                 app:cardBackgroundColor="@color/tasks_card_overdue"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/main_tasks_overdue_placeholder"
+                app:layout_constraintStart_toEndOf="@id/main_tasks_date_placeholder"
                 app:layout_constraintTop_toTopOf="@id/main_tasks_overdue_icon">
 
-                <TextView
+                <com.twisthenry8gmail.weeklyphoenix.view.LinedTextView
                     android:id="@+id/task_card_tasks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin"
-                    android:text="@{TaskDisplayUtil.INSTANCE.displayTasks(viewmodel.overdueTasks, viewmodel.MAX_TASK_DISPLAY)}"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    app:lineTextAppearance="@style/TaskRowLine"
+                    bind:lines="@{TaskDisplayUtil.INSTANCE.getTaskLines(viewmodel.overdueTasks, viewmodel.MAX_TASK_DISPLAY)}" />
             </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -131,7 +236,7 @@
                 android:overScrollMode="never"
                 android:paddingHorizontal="@dimen/horizontal_layout_margin"
                 android:paddingBottom="@dimen/vertical_layout_margin"
-                app:layout_constraintTop_toBottomOf="@id/task_card_card" />
+                app:layout_constraintTop_toBottomOf="@id/main_tasks_overdue" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

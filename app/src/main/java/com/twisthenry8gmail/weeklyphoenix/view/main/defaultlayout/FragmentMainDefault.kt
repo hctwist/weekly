@@ -1,6 +1,5 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main.defaultlayout
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,44 +11,45 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.google.android.material.transition.Hold
 import com.twisthenry8gmail.recyclerextensions.StatefulRecyclerHelper
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
-import com.twisthenry8gmail.weeklyphoenix.data.MainRepository
-import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentMainDefaultBinding
 import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapter
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalLoadingAdapter
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalsItemTouchCallback
-import com.twisthenry8gmail.weeklyphoenix.view.main.TaskSnapshotAdapter
+import com.twisthenry8gmail.weeklyphoenix.view.tasks.TaskSnapshotAdapter
+import com.twisthenry8gmail.weeklyphoenix.view.tasks.TaskSnapshotLoadingAdapter
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.MainDefaultViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
-import kotlinx.android.synthetic.main.fragment_main_default.*
 
 class FragmentMainDefault : Fragment() {
 
     private val viewModel by viewModels<MainDefaultViewModel> {
         MainDefaultViewModel.Factory(
             resources,
-            MainRepository(
-                requireActivity().getPreferences(Context.MODE_PRIVATE)
-            ),
+            weeklyApplication().mainRepository,
             weeklyApplication().goalRepository,
             weeklyApplication().taskRepository
         )
     }
+
+    private lateinit var binding: FragmentMainDefaultBinding
 
     private val goalsAdapterHelper = StatefulRecyclerHelper(GoalAdapter()).apply {
 
         loadingAdapter = GoalLoadingAdapter()
     }
 
-    private val tasksAdapterHelper = StatefulRecyclerHelper(TaskSnapshotAdapter()).apply {
+    private val tasksAdapterHelper =
+        StatefulRecyclerHelper(TaskSnapshotAdapter(MainDefaultViewModel.MAX_TASK_DISPLAY)).apply {
 
-        loadingAdapter = TaskSnapshotAdapter()
-    }
+            loadingAdapter = TaskSnapshotLoadingAdapter()
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +57,7 @@ class FragmentMainDefault : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentMainDefaultBinding.inflate(inflater, container, false)
+        binding = FragmentMainDefaultBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -71,7 +71,20 @@ class FragmentMainDefault : Fragment() {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            exitTransition = if (arrayOf(
+                    R.id.action_fragmentMain_to_fragmentViewGoal,
+                    R.id.action_fragmentMain_to_fragmentViewTaskDay,
+                    R.id.action_fragmentMain_to_fragmentOverdueTasks
+                ).contains(it.getId())
+            ) {
+
+                Hold()
+            } else {
+
+                null
+            }
+
+            it.navigateFrom(findNavController())
         })
 
         viewModel.goalsDiffData.observe(viewLifecycleOwner, Observer {
@@ -92,12 +105,14 @@ class FragmentMainDefault : Fragment() {
 
     private fun setupGoals() {
 
+        goalsAdapterHelper.emptyPlaceholder = binding.mainGoalsEmpty
+
         goalsAdapterHelper.mainAdapter.listener = object :
             GoalAdapter.Listener {
 
-            override fun onGoalClick(goal: Goal) {
+            override fun onGoalClick(goal: GoalSnapshot, view: View) {
 
-                viewModel.onGoalClick(goal)
+                viewModel.onGoalClick(goal, view)
             }
 
             override fun onGoalAdd() {
@@ -105,13 +120,13 @@ class FragmentMainDefault : Fragment() {
                 viewModel.onAddGoal()
             }
 
-            override fun onGoalMove(goal: Goal, newSortOrder: Int) {
+            override fun onGoalMove(goal: GoalSnapshot, newSortOrder: Int) {
 
                 viewModel.onGoalMove(goal, newSortOrder)
             }
         }
 
-        main_goals.run {
+        binding.mainGoals.run {
 
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(LinearMarginItemDecoration(resources.getDimension(R.dimen.double_margin)))
@@ -126,9 +141,9 @@ class FragmentMainDefault : Fragment() {
         tasksAdapterHelper.mainAdapter.clickHandler = object :
             TaskSnapshotAdapter.ClickHandler {
 
-            override fun onCardClick(taskSnapshot: TaskSnapshot) {
+            override fun onCardClick(taskSnapshot: TaskSnapshot, view: View) {
 
-                viewModel.onTaskCardClicked(taskSnapshot)
+                viewModel.onTaskCardClicked(taskSnapshot, view)
             }
 
             override fun onAdd(taskSnapshot: TaskSnapshot) {
@@ -137,7 +152,7 @@ class FragmentMainDefault : Fragment() {
             }
         }
 
-        main_task_days.run {
+        binding.mainTaskDays.run {
 
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(LinearMarginItemDecoration(resources.getDimension(R.dimen.margin)))

@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.Transitions" />
+
         <import type="com.twisthenry8gmail.weeklyphoenix.util.DateTimeUtil" />
 
         <variable
@@ -12,7 +14,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:transitionName="@{Transitions.Names.VIEW_OVERDUE_TASKS_CONTAINER}">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -39,7 +42,7 @@
 
                 <TextView
                     android:id="@+id/view_tasks_date"
-                    style="@style/Header"
+                    style="@style/Display.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/horizontal_layout_margin"
@@ -64,15 +67,6 @@
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:layout_constraintTop_toBottomOf="@id/view_tasks_date" />
 
-        <!-- TODO  -->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/overdue_tasks_empty"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:gravity="center"-->
-        <!--            android:text="You have no tasks"-->
-        <!--            android:textAlignment="center"-->
-        <!--            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />-->
+        <!-- TODO Empty state -->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

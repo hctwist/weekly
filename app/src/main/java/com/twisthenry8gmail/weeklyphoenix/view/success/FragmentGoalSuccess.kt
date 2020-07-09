@@ -25,6 +25,8 @@ class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
         )
     }
 
+    private lateinit var binding: FragmentGoalSuccessBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +62,7 @@ class FragmentGoalSuccess : Fragment(R.layout.fragment_goal_success) {
 
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
-            it.navigateWith(findNavController())
+            it.navigateFrom(findNavController())
         })
 
         if (viewModel.shouldAnimateViews) {

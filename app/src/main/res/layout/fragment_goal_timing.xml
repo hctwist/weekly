@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.ColorUtil" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.util.Transitions" />
 
@@ -19,60 +21,71 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/goal_timing_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/goal_timing_title"
-            style="@style/Header"
+            style="@style/Display.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_layout_margin"
             android:text="@{viewmodel.goal.title}"
-            android:transitionName="@{Transitions.ViewGoal.TRANSITION_NAME_TITLE}"
+            android:transitionName="@{Transitions.Names.VIEW_GOAL_TITLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/goal_timing_progress"
-            style="@style/Display"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/half_margin"
-            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, Goal.Type.TIMED, viewmodel.goal.progress)}"
-            android:transitionName="@{Transitions.ViewGoal.TRANSITION_NAME_PROGRESS}"
-            app:layout_constraintBottom_toTopOf="@id/goal_timing_time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/goal_timing_title"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/goal_timing_plus"
-            style="@style/Display"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ "
-            android:textColor="@color/color_primary"
-            app:layout_constraintBaseline_toBaselineOf="@id/goal_timing_time"
-            app:layout_constraintEnd_toStartOf="@id/goal_timing_time" />
-
-        <TextView
             android:id="@+id/goal_timing_time"
-            style="@style/Display"
+            style="@style/Display.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{GoalDisplayUtil.INSTANCE.displayGoalTime(context.resources, viewmodel.durationSeconds)}"
-            android:textColor="@color/color_primary"
-            app:layout_constraintBottom_toTopOf="@id/goal_timing_stop"
+            android:textSize="42sp"
+            app:layout_constraintBottom_toBottomOf="@id/goal_timing_circles"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/goal_timing_progress" />
+            app:layout_constraintTop_toTopOf="@id/goal_timing_circles" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <com.twisthenry8gmail.weeklyphoenix.TimingCirclesView
+            android:id="@+id/goal_timing_circles"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/large_section_margin"
+            android:layout_marginBottom="@dimen/large_section_margin"
+            app:layout_constraintBottom_toTopOf="@id/goal_timing_stop"
+            app:layout_constraintTop_toBottomOf="@id/goal_timing_title"
+            bind:color="@{viewmodel.goal.color}" />
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/goal_timing_progress"-->
+        <!--            style="@style/Display"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@{GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, Goal.Type.TIMED, viewmodel.goal.progress)}"-->
+        <!--            android:textSize="24sp"-->
+        <!--            android:transitionName="@{Transitions.Names.VIEW_GOAL_PROGRESS}"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/goal_timing_plus"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_chainStyle="packed" />-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/goal_timing_plus"-->
+        <!--            style="@style/Display"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="+"-->
+        <!--            android:textSize="24sp"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/goal_timing_time"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/goal_timing_progress" />-->
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/goal_timing_stop"
-            style="@style/Fab"
+            style="@style/RoundedMaterialButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/vertical_layout_margin"

@@ -1,9 +1,11 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
+import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot
 import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardAddBinding
 import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardBinding
 import java.util.*
@@ -11,7 +13,7 @@ import java.util.*
 class GoalAdapter : RecyclerView.Adapter<GoalViewHolder>(),
     GoalsItemTouchCallback.SortableAdapter {
 
-    var goals = listOf<Goal?>()
+    var goals = listOf<GoalSnapshot?>()
     lateinit var listener: Listener
 
     override fun getItemViewType(position: Int): Int {
@@ -77,10 +79,10 @@ class GoalAdapter : RecyclerView.Adapter<GoalViewHolder>(),
 
     interface Listener {
 
-        fun onGoalClick(goal: Goal)
+        fun onGoalClick(goal: GoalSnapshot, view: View)
 
         fun onGoalAdd()
 
-        fun onGoalMove(goal: Goal, newSortOrder: Int)
+        fun onGoalMove(goal: GoalSnapshot, newSortOrder: Int)
     }
 }

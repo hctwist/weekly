@@ -27,17 +27,16 @@
 
         <com.twisthenry8gmail.progresscircles.ProgressLineView
             android:id="@+id/add_goal_progress"
-            progress="@{viewmodel.page}"
-            android:layout_width="0dp"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/double_margin"
             android:layout_marginEnd="@dimen/horizontal_layout_margin"
             app:layout_constraintBottom_toBottomOf="@id/add_goal_back"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/add_goal_back"
             app:layout_constraintTop_toTopOf="@id/add_goal_back"
             bind:backingColor="@{@color/color_primary_light}"
             bind:color="@{@color/color_primary}"
+            bind:progress="@{viewmodel.page.longValue()}"
             bind:target="@{4}" />
 
         <androidx.fragment.app.FragmentContainerView
@@ -45,20 +44,23 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/add_goal_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_goal_back"
             app:navGraph="@navigation/add_goal_nav_graph" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_goal_continue"
-            android:layout_width="match_parent"
+            style="@style/RoundedMaterialButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+            android:layout_marginEnd="@dimen/horizontal_layout_margin"
             android:layout_marginBottom="@dimen/vertical_layout_margin"
             android:enabled="@{viewmodel.canContinue}"
             android:onClick="@{() -> viewmodel.onConfirm()}"
             android:text="@{viewmodel.continueButtonText}"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:icon="@{context.getDrawable(viewmodel.continueButtonIconRes)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

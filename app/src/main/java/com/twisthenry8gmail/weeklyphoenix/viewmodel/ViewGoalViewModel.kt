@@ -3,6 +3,7 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.lifecycle.*
+import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalHistory
@@ -19,12 +20,19 @@ class ViewGoalViewModel(
     private val goalHistoryRepository: GoalHistoryRepository
 ) : NavigatorViewModel() {
 
-    val goal = goalRepository.get(GoalIdBundle.extractId(args))
+    val goalId = GoalIdBundle.extractId(args)
+    val goal = goalRepository.get(goalId)
 
-    val histories: LiveData<List<GoalHistory>> = Transformations.switchMap(goal) {
+    val averageProgress = goalHistoryRepository.getAverageFor(goalId)
+
+    val histories = goal.switchMap {
 
         goalHistoryRepository.getAllFor(it, MAX_HISTORY_POINTS)
     }
+
+    private val _showingInfo = MutableLiveData(Event(false))
+    val showingInfo: LiveData<Event<Boolean>>
+        get() = _showingInfo
 
     fun onClose() {
 
@@ -53,9 +61,9 @@ class ViewGoalViewModel(
                         goalRepository.addProgress(g.id, 1)
                     }
 
-                    if (Goal.wouldBeComplete(g, g.progress + 1)) {
+                    if (Goal.isComplete(g.progress + 1, g.target)) {
 
-                        // TODO
+                        // TODO Success
                     }
                 }
 
@@ -66,6 +74,11 @@ class ViewGoalViewModel(
                 }
             }
         }
+    }
+
+    fun onShowInfoClicked() {
+
+        _showingInfo.value = Event(true)
     }
 
     fun onPauseIncrease() {

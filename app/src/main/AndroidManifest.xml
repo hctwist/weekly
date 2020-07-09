@@ -1,18 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.twisthenry8gmail.weeklyphoenix">
-    
+
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
+        android:name=".WeeklyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".WeeklyApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.Splash">
 
-        <receiver android:name=".services.GoalTimerReceiver" />
+        <service android:name=".services.GoalTimerService" />
 
         <receiver android:name=".services.RebootReceiver">
 
@@ -22,7 +24,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".view.ActivityMain">
+        <activity
+            android:name=".view.ActivityMain"
+            android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
 

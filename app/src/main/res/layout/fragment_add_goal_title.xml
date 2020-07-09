@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/add_goal_title_hint"
-            style="@style/Display"
+            style="@style/Display.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
@@ -27,11 +27,11 @@
 
         <EditText
             android:id="@+id/add_goal_title"
+            style="@style/MainInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
-            android:layout_marginTop="@dimen/section_margin"
-            style="@style/MainInput"
+            android:layout_marginTop="@dimen/large_section_margin"
             android:hint="@{viewmodel.titleHint}"
             android:text="@={viewmodel.title}"
             app:layout_constraintEnd_toEndOf="parent"
