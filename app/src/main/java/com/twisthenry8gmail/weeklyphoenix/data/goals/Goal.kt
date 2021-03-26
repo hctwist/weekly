@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit
 @Entity
 data class Goal(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @field:TypeConverters(Goal::class) val type: Type,
+    @TypeConverters(Goal::class) val type: Type,
     val title: String,
     val progress: Long,
     val target: Long,

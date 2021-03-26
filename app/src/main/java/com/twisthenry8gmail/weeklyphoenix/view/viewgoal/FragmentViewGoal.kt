@@ -1,18 +1,34 @@
 package com.twisthenry8gmail.weeklyphoenix.view.viewgoal
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils.loadAnimation
+import androidx.core.app.SharedElementCallback
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.AutoTransition
+import androidx.transition.ChangeTransform
+import androidx.transition.Transition
+import androidx.transition.TransitionListenerAdapter
+import androidx.vectordrawable.graphics.drawable.AnimationUtilsCompat
+import com.google.android.material.animation.AnimationUtils
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.transition.MaterialContainerTransform
 import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentViewGoalBinding
 import com.twisthenry8gmail.weeklyphoenix.util.ColorUtil
 import com.twisthenry8gmail.weeklyphoenix.util.Transitions
+import com.twisthenry8gmail.weeklyphoenix.util.popIn
+import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
 import com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoalViewModel
 import com.twisthenry8gmail.weeklyphoenix.weeklyApplication
 
@@ -29,16 +45,33 @@ class FragmentViewGoal : Fragment() {
 
     private lateinit var binding: FragmentViewGoalBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val historyAdapter = GoalHistoryAdapter()
 
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-            arguments?.getInt(Transitions.CONTAINER_COLOR)?.let { startContainerColor = it }
-            endContainerColor =
-                ColorUtil.resolveColorAttribute(requireContext(), android.R.attr.colorBackground)
-        }
+    sharedElementEnterTransition = MaterialContainerTransform().apply {
+
+        duration = 7000
+        scrimColor = Color.TRANSPARENT
+        arguments?.getInt(Transitions.CONTAINER_COLOR)?.let { startContainerColor = it }
+        endContainerColor =
+            ColorUtil.resolveColorAttribute(requireContext(), android.R.attr.colorBackground)
+
+        addListener(object: TransitionListenerAdapter() {
+
+            override fun onTransitionStart(transition: Transition) {
+
+                binding.viewGoalIncrement.alpha = 0F
+            }
+
+            override fun onTransitionEnd(transition: Transition) {
+
+                binding.viewGoalIncrement.popIn()
+            }
+        })
     }
+}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,11 +104,27 @@ class FragmentViewGoal : Fragment() {
             it.navigateFrom(findNavController())
         })
 
-        viewModel.showingInfo.observe(viewLifecycleOwner, Event.Observer {
+        viewModel.goal.observe(viewLifecycleOwner, Observer {
 
-            if (it) FragmentViewGoalInfo().show(childFragmentManager, null)
+            historyAdapter.goal = it
         })
+
+        viewModel.histories.observe(viewLifecycleOwner, Observer {
+
+            historyAdapter.histories = it
+            historyAdapter.notifyDataSetChanged()
+        })
+
+        setupHistoryList()
     }
 
+    private fun setupHistoryList() {
 
+        binding.viewGoalHistory.run {
+
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(LinearMarginItemDecoration(resources.getDimension(R.dimen.margin)))
+            adapter = historyAdapter
+        }
+    }
 }

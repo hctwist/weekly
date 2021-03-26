@@ -22,8 +22,7 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentViewGoal"
             app:destination="@id/fragmentViewGoal"
-            app:popEnterAnim="@anim/scale_pop_enter_animation"
-            app:popExitAnim="@anim/scale_pop_exit_animation" />
+ />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentAddGoal"
             app:destination="@id/fragmentAddGoal"

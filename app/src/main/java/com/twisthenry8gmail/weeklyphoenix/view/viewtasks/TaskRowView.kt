@@ -97,12 +97,6 @@ class TaskRowView(context: Context, attrs: AttributeSet) : ViewGroup(context, at
         maxTickSize = tickInterpolator.getInterpolation(maxTickSizeX) * tickSize
     }
 
-    fun setText(text: CharSequence) {
-
-        textView.text = text
-        lineBounds.invalidate()
-    }
-
     fun setChecked(checked: Boolean) {
 
         if (this.checked != checked) {

@@ -18,6 +18,11 @@ object DataBinding {
 
     fun and(vararg booleans: Boolean) = booleans.all { it }
 
+    fun isNullOrEmpty(list: List<*>?): Boolean {
+
+        return list.isNullOrEmpty()
+    }
+
     @BindingAdapter("goneUnless")
     @JvmStatic
     fun goneUnless(view: View, bool: Boolean) {

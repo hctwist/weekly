@@ -32,7 +32,7 @@
         android:clickable="@{!loading}"
         android:onClick="@{(view) -> listener.onGoalClick(goalsnapshot, view)}"
         android:transitionName="@{Transitions.Names.INSTANCE.goalCard(goalsnapshot.id)}"
-        app:cardBackgroundColor="@{loading ? @color/light_grey : ColorUtil.INSTANCE.lightenColor(goalsnapshot.color)}">
+        app:cardBackgroundColor="@{loading ? @color/light_grey : goalsnapshot.color}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/goal_card_root"
@@ -50,7 +50,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:lines="1"
                 android:text="@{goalsnapshot.title}"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textColor="?android:attr/textColorPrimaryInverse"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/goal_card_title"
-                bind:lineColor="@{goalsnapshot.color}" />
+                bind:lineColor="@{@color/goal_progress_active}"
+                bind:inactiveLineColor="@{@color/goal_progress_inactive}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

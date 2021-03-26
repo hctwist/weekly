@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -21,6 +22,8 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
         strokeCap = Paint.Cap.ROUND
         style = Paint.Style.STROKE
     }
+
+    private val linePaintInactive = Paint(linePaint)
 
     private var fillLine = false
     private val fillPaint = Paint().apply {
@@ -40,6 +43,8 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
     private val thumbOffset = context.resources.getDimension(R.dimen.goal_progress_thumb_offset)
 
     private val linePath = Path()
+    private val activePath = Path()
+    private val inactivePath = Path()
     private val linePathMeasure = PathMeasure()
     private val linePointPosAlloc = FloatArray(2)
 
@@ -74,6 +79,12 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
         invalidate()
     }
 
+    fun setInactiveLineColor(color: Int) {
+
+        linePaintInactive.color = color
+        invalidate()
+    }
+
     fun setFillColor(color: Int) {
 
         fillLine = true
@@ -88,7 +99,6 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
     ) {
 
         this.goalId = goalId
-
         updateProgress(goalProgress, goalTarget)
     }
 
@@ -114,25 +124,22 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
 
             animating = true
 
-            if (animator == null) {
+            animator = ValueAnimator.ofFloat(0F, 1F).apply {
 
-                animator = ValueAnimator.ofFloat(0F, 1F).apply {
+                duration = 1000
+                interpolator = FastOutSlowInInterpolator()
 
-                    duration = 1000
-                    interpolator = FastOutSlowInInterpolator()
+                addUpdateListener {
 
-                    addUpdateListener {
+                    val value = it.animatedValue as Float
+                    animatedThumbFraction = thumbStart + (newThumbFraction - thumbStart) * value
+                    lineAnimationFraction = value
+                    invalidate()
+                }
 
-                        val value = it.animatedValue as Float
-                        animatedThumbFraction = thumbStart + (newThumbFraction - thumbStart) * value
-                        lineAnimationFraction = value
-                        invalidate()
-                    }
+                doOnEnd {
 
-                    doOnEnd {
-
-                        animating = false
-                    }
+                    animating = false
                 }
             }
 
@@ -216,14 +223,24 @@ class GoalProgressView(context: Context, attrs: AttributeSet) : View(context, at
                 }
             }
 
-            c.drawPath(linePath, linePaint)
-
             val thumbOffsetFraction = 0.1F
             val drawThumbFraction =
                 thumbOffsetFraction + (if (animating) animatedThumbFraction else thumbFraction) * (1 - 2 * thumbOffsetFraction)
             linePathMeasure.setPath(linePath, false)
+
+            val linePathLength = linePathMeasure.length
+            val thumbPathLength = linePathLength * drawThumbFraction
+
+            activePath.reset()
+            inactivePath.reset()
+            linePathMeasure.getSegment(0F, thumbPathLength, activePath, true)
+            linePathMeasure.getSegment(thumbPathLength, linePathLength, inactivePath, true)
+
+            c.drawPath(activePath, linePaint)
+            c.drawPath(inactivePath, linePaintInactive)
+
             linePathMeasure.getPosTan(
-                linePathMeasure.length * drawThumbFraction,
+                thumbPathLength,
                 linePointPosAlloc,
                 null
             )

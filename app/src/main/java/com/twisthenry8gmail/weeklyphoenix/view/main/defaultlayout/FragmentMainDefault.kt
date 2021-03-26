@@ -1,6 +1,7 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main.defaultlayout
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot
 import com.twisthenry8gmail.weeklyphoenix.data.tasks.TaskSnapshot
 import com.twisthenry8gmail.weeklyphoenix.databinding.FragmentMainDefaultBinding
 import com.twisthenry8gmail.weeklyphoenix.view.LinearMarginItemDecoration
+import com.twisthenry8gmail.weeklyphoenix.view.main.FragmentMainMenu
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalAdapter
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalLoadingAdapter
 import com.twisthenry8gmail.weeklyphoenix.view.main.GoalsItemTouchCallback
@@ -57,6 +59,12 @@ class FragmentMainDefault : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        postponeEnterTransition()
+        Handler().postDelayed({
+
+            startPostponedEnterTransition()
+        }, 1000)
+
         binding = FragmentMainDefaultBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -72,7 +80,6 @@ class FragmentMainDefault : Fragment() {
         viewModel.navigationCommander.observe(viewLifecycleOwner, Event.Observer {
 
             exitTransition = if (arrayOf(
-                    R.id.action_fragmentMain_to_fragmentViewGoal,
                     R.id.action_fragmentMain_to_fragmentViewTaskDay,
                     R.id.action_fragmentMain_to_fragmentOverdueTasks
                 ).contains(it.getId())
@@ -81,10 +88,15 @@ class FragmentMainDefault : Fragment() {
                 Hold()
             } else {
 
-                null
+                Hold()
             }
 
             it.navigateFrom(findNavController())
+        })
+
+        viewModel.showingMenu.observe(viewLifecycleOwner, Event.Observer {
+
+            if (it) FragmentMainMenu().show(childFragmentManager, null)
         })
 
         viewModel.goalsDiffData.observe(viewLifecycleOwner, Observer {

@@ -3,7 +3,7 @@
 
     <color name="color_primary">#7A90DF</color>
     <color name="color_primary_light">#247A90DE</color>
-    <color name="color_accent">#333333</color>
+    <color name="color_accent">#373645</color>
 
     <color name="red">#D5573B</color>
 
@@ -12,6 +12,8 @@
 
     <color name="off_white">#F1F1F1</color>
 
+    <color name="goal_progress_active">#BCFFFFFF</color>
+    <color name="goal_progress_inactive">#41FFFFFF</color>
     <color name="goal_progress_thumb_color">#353535</color>
     <color name="goal_card">#FBFBFE</color>
 

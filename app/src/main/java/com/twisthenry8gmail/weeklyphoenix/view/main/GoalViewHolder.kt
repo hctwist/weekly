@@ -1,11 +1,12 @@
 package com.twisthenry8gmail.weeklyphoenix.view.main
 
+import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.twisthenry8gmail.weeklyphoenix.data.goals.Goal
 import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalSnapshot
-import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardBinding
 import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardAddBinding
+import com.twisthenry8gmail.weeklyphoenix.databinding.GoalCardBinding
 
 sealed class GoalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

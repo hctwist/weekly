@@ -3,13 +3,11 @@ package com.twisthenry8gmail.weeklyphoenix.viewmodel
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
 import com.twisthenry8gmail.weeklyphoenix.DiffLiveData
+import com.twisthenry8gmail.weeklyphoenix.Event
 import com.twisthenry8gmail.weeklyphoenix.R
 import com.twisthenry8gmail.weeklyphoenix.data.MainRepository
 import com.twisthenry8gmail.weeklyphoenix.data.goals.GoalRepository
@@ -65,11 +63,20 @@ class MainDefaultViewModel(
     val taskSnapshots: LiveData<List<TaskSnapshot>>
         get() = _taskSnapshots
 
+    private val _showingMenu = MutableLiveData(Event(false))
+    val showingMenu: LiveData<Event<Boolean>>
+        get() = _showingMenu
+
     init {
 
         val now = LocalDate.now()
         _taskSnapshots =
             taskRepository.getLimitedSnapshotsBetween(MAX_TASK_DISPLAY, now, now.plusDays(6))
+    }
+
+    fun onShowMenu() {
+
+        _showingMenu.value = Event(true)
     }
 
     fun onLayoutSelected(layout: MainLayout) {

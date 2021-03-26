@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/main_add_goal"
-        android:icon="@drawable/round_add_24"
-        android:title="@string/add_goal_title"
-        app:showAsAction="always" />
+        android:id="@+id/main_home"
+        android:checkable="true"
+        android:icon="@drawable/round_hourglass_empty_24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/main_tasks"
+        android:checkable="true"
+        android:icon="@drawable/round_view_list_24"
+        android:title="Tasks" />
 </menu>

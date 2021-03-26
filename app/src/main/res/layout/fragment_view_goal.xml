@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.twisthenry8gmail.weeklyphoenix.util.DataBinding" />
+
         <import type="com.twisthenry8gmail.weeklyphoenix.util.ColorUtil" />
 
         <import type="com.twisthenry8gmail.weeklyphoenix.R" />
@@ -20,127 +22,361 @@
             type="com.twisthenry8gmail.weeklyphoenix.viewmodel.ViewGoalViewModel" />
     </data>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/view_goal_constraint_layout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:transitionName="@{Transitions.Names.INSTANCE.goalCard(viewmodel.goalId)}">
+        android:layout_height="match_parent">
 
-        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
-            android:id="@+id/view_goal_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_layout_margin"
-            android:layout_marginTop="@dimen/horizontal_layout_margin"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:onClick="@{() -> viewmodel.onClose()}"
-            android:src="@drawable/round_close_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:touchPadding="@dimen/accessibility_padding" />
-
-        <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
-            android:id="@+id/view_goal_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/horizontal_layout_margin"
-            android:layout_marginEnd="@dimen/horizontal_layout_margin"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:onClick="@{() -> viewmodel.onShowInfoClicked()}"
-            android:src="@drawable/round_menu_open_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:touchPadding="@dimen/accessibility_padding" />
-
-        <TextView
-            android:id="@+id/view_goal_title"
-            style="@style/Display.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/vertical_layout_margin"
-            android:text="@{viewmodel.goal.title}"
-            android:transitionName="@{Transitions.Names.VIEW_GOAL_TITLE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_goal_close" />
-
-        <TextView
-            android:id="@+id/view_goal_progress_percentage"
-            style="@style/Display.Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/section_margin"
-            android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayProgressPercentageValue(context.resources, viewmodel.goal)}"
-            android:textSize="48sp"
-            android:transitionName="@{Transitions.Names.VIEW_GOAL_PROGRESS}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_goal_title" />
-
-        <TextView
-            style="@style/Display.Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:text="%"
-            android:textSize="18sp"
-            app:layout_constraintBaseline_toBaselineOf="@id/view_goal_progress_percentage"
-            app:layout_constraintStart_toEndOf="@id/view_goal_progress_percentage" />
-
-        <TextView
-            android:id="@+id/view_goal_progress_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin"
-            android:fontFamily="sans-serif-medium"
-            android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayProgressToTarget(context.resources,viewmodel.goal)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_goal_progress_percentage" />
-
-        <View
-            android:id="@+id/view_goal_progress_margin"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/vertical_layout_margin"
-            android:background="@{ColorUtil.INSTANCE.lightenColor(viewmodel.goal.color)}"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <com.twisthenry8gmail.weeklyphoenix.view.goals.GoalProgressView
-            android:id="@+id/view_goal_progress"
-            goalId="@{viewmodel.goal.id}"
-            goalProgress="@{viewmodel.goal.progress}"
-            goalTarget="@{viewmodel.goal.target}"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view_goal_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/view_goal_progress_margin"
-            bind:fillColor="@{ColorUtil.INSTANCE.lightenColor(viewmodel.goal.color)}"
-            bind:lineColor="@{viewmodel.goal.color}" />
+            android:paddingBottom="@dimen/vertical_layout_margin">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/view_goal_increment"
-            style="@style/RoundedMaterialButton"
-            invisibleUnless="@{!viewmodel.goal.complete}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewmodel.onAction()}"
-            android:text="@string/view_goal_add_progress"
-            app:icon="@{viewmodel.goal == null ? null : context.getDrawable(viewmodel.goal.type.actionIconRes)}"
-            app:layout_constraintBottom_toTopOf="@id/view_goal_progress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_goal_progress_text" />
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/view_goal_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/horizontal_layout_margin"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> viewmodel.onClose()}"
+                android:src="@drawable/round_close_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:touchPadding="@dimen/accessibility_padding" />
 
-        <TextView
-            goneUnless="@{viewmodel.goal.complete}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
-            android:fontFamily="sans-serif-medium"
-            android:text="This goal is complete, well done!"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="@id/view_goal_increment"
-            app:layout_constraintTop_toTopOf="@id/view_goal_increment" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/view_goal_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/horizontal_layout_margin"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> viewmodel.onShowInfoClicked()}"
+                android:src="@drawable/round_menu_open_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:touchPadding="@dimen/accessibility_padding" />
+
+            <TextView
+                android:id="@+id/view_goal_title"
+                style="@style/Display.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/vertical_layout_margin"
+                android:text="@{viewmodel.goal.title}"
+                android:transitionName="@{Transitions.Names.VIEW_GOAL_TITLE}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_close" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/view_goal_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/section_margin"
+                android:transitionName="@{Transitions.Names.INSTANCE.goalCard(viewmodel.goalId)}"
+                app:cardBackgroundColor="@{viewmodel.goal.color}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_title">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/view_goal_progress_percentage"
+                        style="@style/Display.ExtraLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/double_margin"
+                        android:layout_marginTop="@dimen/double_margin"
+                        android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayProgressPercentageValue(context.resources, viewmodel.goal)}"
+                        android:textColor="?android:attr/textColorPrimaryInverse"
+                        android:transitionName="@{Transitions.Names.VIEW_GOAL_PROGRESS}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        style="@style/Display.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text="%"
+                        android:textColor="?android:attr/textColorPrimaryInverse"
+                        android:textSize="18sp"
+                        app:layout_constraintBaseline_toBaselineOf="@id/view_goal_progress_percentage"
+                        app:layout_constraintStart_toEndOf="@id/view_goal_progress_percentage" />
+
+                    <TextView
+                        android:id="@+id/view_goal_progress_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/double_margin"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayProgressToTarget(context.resources,viewmodel.goal)}"
+                        android:textColor="?android:attr/textColorPrimaryInverse"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@id/view_goal_progress_percentage"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/view_goal_progress_percentage" />
+
+                    <com.twisthenry8gmail.weeklyphoenix.view.goals.GoalProgressView
+                        android:id="@+id/view_goal_progress"
+                        goalId="@{viewmodel.goal.id}"
+                        goalProgress="@{viewmodel.goal.progress}"
+                        goalTarget="@{viewmodel.goal.target}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/double_margin"
+                        android:layout_marginBottom="@dimen/double_margin"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view_goal_progress_text"
+                        bind:inactiveLineColor="@{@color/goal_progress_inactive}"
+                        bind:lineColor="@{@color/goal_progress_active}" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/view_goal_increment"
+                style="@style/RoundedMaterialButton"
+                invisibleUnless="@{!viewmodel.goal.complete}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_section_margin"
+                android:layout_marginBottom="@dimen/vertical_layout_margin"
+                android:onClick="@{() -> viewmodel.onAction()}"
+                android:text="@string/view_goal_add_progress"
+                app:icon="@{viewmodel.goal == null ? null : context.getDrawable(viewmodel.goal.type.actionIconRes)}"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_card" />
+
+            <TextView
+                android:id="@+id/view_goal_complete"
+                goneUnless="@{viewmodel.goal.complete}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+                android:fontFamily="sans-serif-medium"
+                android:text="This goal is complete, well done!"
+                android:textAlignment="center"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_increment" />
+
+            <TextView
+                android:id="@+id/view_goal_resets_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/large_section_margin"
+                android:text="@string/goal_resets"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_complete" />
+
+            <TextView
+                android:id="@+id/view_goal_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayReset(context.resources, viewmodel.goal.reset)}"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_resets_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/view_goal_resets_label" />
+
+            <TextView
+                android:id="@+id/view_goal_reset_date_label"
+                goneUnless="@{!viewmodel.goal.reset.never}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/double_margin"
+                android:text="@string/goal_next_reset"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_resets_label" />
+
+            <TextView
+                android:id="@+id/view_goal_reset_date"
+                goneUnless="@{!viewmodel.goal.reset.never}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:text="@{viewmodel.goal == null ? null : DateTimeUtil.INSTANCE.displayMediumDate(viewmodel.goal.resetDate)}"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_reset_date_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/view_goal_reset_date_label" />
+
+            <TextView
+                android:id="@+id/view_goal_end_label"
+                goneUnless="@{viewmodel.goal.hasEndDate()}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/double_margin"
+                android:text="@string/goal_end_date"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_reset_date_label" />
+
+            <TextView
+                android:id="@+id/view_goal_end"
+                goneUnless="@{viewmodel.goal.hasEndDate()}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayEndDate(context.resources, viewmodel.goal.endDate)}"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_end_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/view_goal_end_label" />
+
+            <TextView
+                android:id="@+id/view_goal_periodic_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/section_margin"
+                android:text="@string/goal_periodic_increase"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_end_label" />
+
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/view_goal_periodic_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> viewmodel.onPauseIncrease()}"
+                android:src="@{viewmodel.goal.increasePaused ? @drawable/round_play_arrow_24 : @drawable/round_pause_24}"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_periodic_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/view_goal_periodic_label"
+                app:touchPadding="@dimen/accessibility_padding" />
+
+            <TextView
+                android:id="@+id/view_goal_periodic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin"
+                android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.goal.type, viewmodel.goal.increase)}"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_periodic_label"
+                app:layout_constraintEnd_toStartOf="@id/view_goal_periodic_pause"
+                app:layout_constraintTop_toTopOf="@id/view_goal_periodic_label" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/view_goal_increase_group"
+                goneUnless="@{viewmodel.goal.increase > 0}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="
+                view_goal_periodic_label,
+                view_goal_periodic,
+                view_goal_periodic_pause" />
+
+            <com.twisthenry8gmail.progresscircles.ProgressCircleView
+                android:id="@+id/view_goal_info_average"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/large_section_margin"
+                app:layout_constraintEnd_toStartOf="@id/view_goal_info_productive"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_periodic"
+                bind:backingColor="@{ColorUtil.INSTANCE.lightenColor(viewmodel.goal.color)}"
+                bind:color="@{viewmodel.goal.color}"
+                bind:progress="@{viewmodel.averageProgress ?? null}"
+                bind:target="@{viewmodel.goal.target}" />
+
+            <TextView
+                style="@style/Display.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.goal == null ? null : GoalDisplayUtil.INSTANCE.displayProgressValue(context.resources, viewmodel.goal.type, viewmodel.averageProgress)}"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_info_average"
+                app:layout_constraintEnd_toEndOf="@id/view_goal_info_average"
+                app:layout_constraintStart_toStartOf="@id/view_goal_info_average"
+                app:layout_constraintTop_toTopOf="@id/view_goal_info_average" />
+
+            <TextView
+                android:id="@+id/view_goal_info_average_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/double_margin"
+                android:text="Average"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintEnd_toEndOf="@id/view_goal_info_average"
+                app:layout_constraintStart_toStartOf="@id/view_goal_info_average"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_info_average" />
+
+            <View
+                android:id="@+id/view_goal_info_productive"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/large_section_margin"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:background="@drawable/circle"
+                android:backgroundTint="@{ColorUtil.INSTANCE.lightenColor(viewmodel.goal.color)}"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/view_goal_info_average"
+                app:layout_constraintTop_toTopOf="@id/view_goal_info_average" />
+
+            <TextView
+                style="@style/Display.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mon"
+                app:layout_constraintBottom_toBottomOf="@id/view_goal_info_productive"
+                app:layout_constraintEnd_toEndOf="@id/view_goal_info_productive"
+                app:layout_constraintStart_toStartOf="@id/view_goal_info_productive"
+                app:layout_constraintTop_toTopOf="@id/view_goal_info_productive" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/double_margin"
+                android:text="Most productive"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintEnd_toEndOf="@id/view_goal_info_productive"
+                app:layout_constraintStart_toStartOf="@id/view_goal_info_productive"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_info_productive" />
+
+            <TextView
+                android:id="@+id/view_goal_history_label"
+                style="@style/Display.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/large_section_margin"
+                android:text="@string/goal_history"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_info_average_label" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/view_goal_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_layout_margin"
+                android:layout_marginTop="@dimen/margin"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/view_goal_history_label" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/view_goal_histories_group"
+                goneUnless="@{!DataBinding.INSTANCE.isNullOrEmpty(viewmodel.histories)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="
+                view_goal_history_label,
+                view_goal_history" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

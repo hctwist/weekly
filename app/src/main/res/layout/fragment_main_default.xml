@@ -30,9 +30,22 @@
             android:layout_height="match_parent"
             android:clipChildren="false">
 
+            <com.twisthenry8gmail.buttons.AccessibleTouchImageButton
+                android:id="@+id/main_default_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/horizontal_layout_margin"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> viewmodel.onShowMenu()}"
+                android:src="@drawable/round_more_vert_24"
+                app:layout_constraintBottom_toBottomOf="@id/main_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/main_title"
+                app:touchPadding="@dimen/accessibility_padding" />
+
             <TextView
                 android:id="@+id/main_title"
-                style="@style/Display.Medium"
+                style="@style/Display.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
@@ -55,7 +68,7 @@
 
             <TextView
                 android:id="@+id/main_goals_header"
-                style="@style/SectionHeader"
+                style="@style/Display.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/large_section_margin"
@@ -142,7 +155,7 @@
 
             <TextView
                 android:id="@+id/main_tasks_header"
-                style="@style/SectionHeader"
+                style="@style/Display.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/horizontal_layout_margin"
